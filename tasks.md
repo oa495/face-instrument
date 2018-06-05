@@ -1,5 +1,5 @@
-- update minimum values for face toggle 
-- implement face sliders
+- [ ] update minimum values for face toggle 
+- [ ]implement face sliders
 - different sounds for different parts of the face, make a set of notes that sound good together
 - whole face movement controls ... something
 - sequencer (?) e.g from the pose thing
