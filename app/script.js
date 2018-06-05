@@ -173,7 +173,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
   }
 
-  function FaceSection(p1, p2, minX, minY) {
+  function SliderInstrument() {
+
+  }
+  
+  function ToggleInstrument(p1, p2, minX, minY) {
     this.p1 = p1;
     this.p2 = p2;
     this.minX = minX;
@@ -212,13 +216,13 @@ document.addEventListener("DOMContentLoaded", function() {
   const synth = new Tone.AMSynth().toMaster();
 
   var face = {};
-  face.mouth = new FaceSection('upper_mouth', 'lower_mouth', 10, 10);
-  face.pupil = new FaceSection('pupil_left', 'pupil_right', 10, 10);
-  face.eyebrow = new FaceSection('eyebrow_left', 'eyebrow_right', 10, 10);
-  //face.nose = new FaceSection('nose', 10, 10);
-  //face.bridge = new FaceSection('bridge', 10, 10);
-  face.lip = new FaceSection('upper_lip', 'lower_lip', 10, 10);
-  face.eye = new FaceSection('eye_left', 'eye_right', 10, 10);
+  face.mouth = new ToggleInstrument('upper_mouth', 'lower_mouth', 10, 10);
+  face.pupil = new ToggleInstrument('pupil_left', 'pupil_right', 10, 10);
+  face.eyebrow = new ToggleInstrument('eyebrow_left', 'eyebrow_right', 10, 10);
+  face.nose = new ToggleInstrument('nose', 10, 10);
+  face.bridge = new ToggleInstrument('bridge', 10, 10);
+  face.lip = new ToggleInstrument('upper_lip', 'lower_lip', 10, 10);
+  face.eye = new ToggleInstrument('eye_left', 'eye_right', 10, 10);
 
 
   function drawLoop() {
