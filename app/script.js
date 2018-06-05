@@ -173,57 +173,53 @@ document.addEventListener("DOMContentLoaded", function() {
 
   }
 
-  var synth = new Tone.AMSynth().toMaster();
+  function FaceSection(p1, p2, minX, minY) {
+    this.p1 = p1;
+    this.p2 = p2;
+    this.minX = minX;
+    this.minY = minY;
+    var shouldPlay = false;
+    var noteToPlay = 'f';
+    var octave = 2;
 
-  setInterval(function() {
-    // synth.trigerAttackRelease("f4", "2n", "2n");
+    this.getNote = function() {
+      return noteToPlay;
+    };
 
-    // console.log("MAKING A NOISE");
+    this.getOctave = function() {
+      return octave;
+    }
 
-    synth.triggerAttackRelease("f4", "4n", "8n");
+    // two types of movement:
+    //
+    //
+    // delta between two objects:
+    //    emits activated event / de-activated event
+    // delta from center of face
+    // ???
+    //
+    this.check_delta = function(face) {
+      var pa1 = getAverage(face[this.p1]);
+      var pa2 = getAverage(face[this.p2]);
 
-    return true;
+      var delta_x = Math.abs(pa1[0] - pa2[0]);
+      var delta_y = Math.abs(pa1[1] - pa2[1]);
 
-
-  }, 1000)
-
-  var NOTES = "abcdefgabcdefg";
-
-  function makeToggle(pos1, pos2) {
-  }
-
-  function Face() {
-
-    var should_play = false;
-    var note_to_play = "f";
-
-    var ocatave = 8;
-
-    return {
-      // two types of movement:
-      //
-      //
-      // delta between two objects:
-      //    emits activated event / de-activated event
-      // delta from center of face
-      // ???
-      //
-      check_delta(pos1, pos2, min_x, min_y) {
-        var pa1 = getAverage(pos1);
-        var pa2 = getAverage(pos2);
-
-        var delta_x = Math.abs(pa1[0] - pa2[0]);
-        var delta_y = Math.abs(pa1[1] - pa2[1]);
-
-        return (delta_y > min_y && min_y >= 0) || (delta_x > min_x && min_x >= 0);
-      },
+      return (delta_y > this.minY && this.minY >= 0) || (delta_x > this.minX && this.minX >= 0);
     };
   }
 
+  const synth = new Tone.AMSynth().toMaster();
 
+  var face = {};
+  face.mouth = new FaceSection('upper_mouth', 'lower_mouth', 10, 10);
+  face.pupil = new FaceSection('pupil_left', 'pupil_right', 10, 10);
+  face.eyebrow = new FaceSection('eyebrow_left', 'eyebrow_right', 10, 10);
+  //face.nose = new FaceSection('nose', 10, 10);
+  //face.bridge = new FaceSection('bridge', 10, 10);
+  face.lip = new FaceSection('upper_lip', 'lower_lip', 10, 10);
+  face.eye = new FaceSection('eye_left', 'eye_right', 10, 10);
 
-
-  var faceStrum = Face();
 
   function drawLoop() {
     requestAnimFrame(drawLoop);
@@ -231,12 +227,13 @@ document.addEventListener("DOMContentLoaded", function() {
     if (ctrack.getCurrentPosition()) {
       ctrack.draw(overlay);
       var positions = ctrack.getCurrentPosition();
-
-      var face = positionsToFace(positions);
-
-      if (faceStrum.check_delta(face.lower_mouth, face.upper_mouth, -1, 20)) {
-        console.log("TRIGGERING SYNTH");
-        synth.triggerAttackRelease('C4', '8n');
+      var faceWithPositions = positionsToFace(positions, face);
+      for (facePart in face) {
+        var ff = face[facePart];
+        if (ff.check_delta(faceWithPositions)) {
+          console.log("TRIGGERING SYNTH");
+          synth.triggerAttackRelease(`${ff.getNote()}${ff.getOctave()}`);
+        }
       }
     }
   }
