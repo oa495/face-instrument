@@ -242,7 +242,3 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 });
-
-
-
-//
