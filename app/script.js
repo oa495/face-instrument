@@ -79,40 +79,40 @@ document.addEventListener("DOMContentLoaded", function() {
     // start loop to draw face
     drawLoop();
   }
-  
-  // TODO: normalize face positions so that they are scaled proportionally to 
+
+  // TODO: normalize face positions so that they are scaled proportionally to
   // the center of mass of the face. maybe this would help with the recognized face
   // jumping around
   function positionsToFace(positions) {
       var face = { };
-    
+
       var avg = getAverage(positions);
       var variance = getVariance(positions, avg);
-            
+
       face.upper_mouth = positions.slice(59, 62) // slice is not inclusive
       face.lower_mouth = positions.slice(56, 59) // slice is not inclusive
       face.pupil_left = positions[27];
       face.pupil_right = positions[32]
-    
+
       face.eyebrow_left = positions.slice(19, 23);
       face.eyebrow_right = positions.slice(15, 19);
-    
+
       face.nose = positions.slice(34, 41);
       face.bridge = [positions[33], positions[41], positions[60]];
       face.upper_lip = positions.slice(44, 51);
       face.lower_lip = positions.slice(50, 58);
-    
+
       // the eye has the upper, the lower and the middle portions
       // Q: can each part can correspond to an instrument piece?
       face.eye_left = [];
       face.eye_right = [];
-    
-      
-    
+
+
+
       return face;
-    
+
   }
-  
+
   function getVariance(points, avg) {
     // do we make variance a single number or two numbers?
     var x_sse = 0;
@@ -120,32 +120,32 @@ document.addEventListener("DOMContentLoaded", function() {
     for (var p in points) {
         x_sse += Math.pow(points[p][0] - avg[0], 2)
         y_sse += Math.pow(points[p][1] - avg[1], 2)
-      
+
     }
-    
+
     x_sse /= points.length;
     y_sse /= points.length;
-    
+
     return [x_sse, y_sse];
-    
+
   }
-  
+
   function getAverage(points) {
     var x = 0;
     var y = 0;
-    
+
     for (var n in points) {
       x += points[n][0];
       y += points[n][1];
     }
-    
+
     x /= points.length;
     y /= points.length;
-    
+
     return [x,y];
-    
+
   }
-  
+
   var prevFace = {};
   function calcDeltas(face, center) {
     var faceDelta = {};
@@ -155,39 +155,75 @@ document.addEventListener("DOMContentLoaded", function() {
           if (!prevFace[field]) {
               continue;
           }
-          // each part of face is actually an array. 
+          // each part of face is actually an array.
           // maybe we should take the center of mass for each face
           // position
-          
+
           var f = getAverage(face[field]);
-        
-          
+
+
           faceDelta[field] = [center[0] - f[0], center[1] - f[1]];
-      
+
       }
-      
+
     }
     prevFace = face;
-    
+
     return faceDelta;
-    
+
   }
-  
+
   var synth = new Tone.AMSynth().toMaster();
-  
+
   setInterval(function() {
     // synth.trigerAttackRelease("f4", "2n", "2n");
-    
+
     // console.log("MAKING A NOISE");
 
     synth.triggerAttackRelease("f4", "4n", "8n");
-    
+
     return true;
 
-    
+
   }, 1000)
 
+  var NOTES = "abcdefgabcdefg";
 
+  function makeToggle(pos1, pos2) {
+  }
+
+  function Face() {
+
+    var should_play = false;
+    var note_to_play = "f";
+
+    var ocatave = 8;
+
+    return {
+      // two types of movement:
+      //
+      //
+      // delta between two objects:
+      //    emits activated event / de-activated event
+      // delta from center of face
+      // ???
+      //
+      check_delta(pos1, pos2, min_x, min_y) {
+        var pa1 = getAverage(pos1);
+        var pa2 = getAverage(pos2);
+
+        var delta_x = Math.abs(pa1[0] - pa2[0]);
+        var delta_y = Math.abs(pa1[1] - pa2[1]);
+
+        return (delta_y > min_y && min_y >= 0) || (delta_x > min_x && min_x >= 0);
+      },
+    };
+  }
+
+
+
+
+  var faceStrum = Face();
 
   function drawLoop() {
     requestAnimFrame(drawLoop);
@@ -195,12 +231,10 @@ document.addEventListener("DOMContentLoaded", function() {
     if (ctrack.getCurrentPosition()) {
       ctrack.draw(overlay);
       var positions = ctrack.getCurrentPosition();
-      var upper_mouth = positions[57][1];
-      var lower_mouth = positions[60][1];      
-          
-      
-      var distance = Math.abs(upper_mouth - lower_mouth);
-      if (distance > 10) {
+
+      var face = positionsToFace(positions);
+
+      if (faceStrum.check_delta(face.lower_mouth, face.upper_mouth, -1, 20)) {
         console.log("TRIGGERING SYNTH");
         synth.triggerAttackRelease('C4', '8n');
       }
