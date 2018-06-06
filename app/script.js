@@ -238,6 +238,8 @@ document.addEventListener("DOMContentLoaded", function() {
     this.p2 = p2;
     this.minX = minX;
     this.minY = minY;
+
+    this.debug = false;
     var noteToPlay = 'f';
     var octave = 2;
 
@@ -278,6 +280,10 @@ document.addEventListener("DOMContentLoaded", function() {
       var deltaX = Math.abs(pa1[0] - pa2[0]);
       var deltaY = Math.abs(pa1[1] - pa2[1]);
 
+      if (this.debug) {
+        console.log("DELTA", p1, p2, deltaX, deltaY);
+      }
+
       return (deltaY > this.minY && this.minY >= 0) || (deltaX > this.minX && this.minX >= 0);
     };
 
@@ -295,11 +301,15 @@ document.addEventListener("DOMContentLoaded", function() {
   var face = {};
   face.mouth = new ToggleInstrument('upperMouth', 'lowerMouth', -1, 0.15);
   face.pupil = new ToggleInstrument('pupilLeft', 'pupilRight', 0.02, -1);
+
   face.eyebrowLeft = new ToggleInstrument('eyebrowLeft', 'bridge', -1, 0.44);
   face.eyebrowRight = new ToggleInstrument('eyebrowRight', 'bridge', -1, 0.44);
+
   face.nose = new SliderInstrument('nose');
   face.bridge = new SliderInstrument('bridge');
   face.lip = new ToggleInstrument('upperLip', 'lowerLip', -1, 0.1);
+
+  window.FACE = face;
 
 
   function drawLoop() {
