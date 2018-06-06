@@ -176,7 +176,7 @@ document.addEventListener("DOMContentLoaded", function() {
   function SliderInstrument() {
 
   }
-  
+
   function ToggleInstrument(p1, p2, minX, minY) {
     this.p1 = p1;
     this.p2 = p2;
@@ -189,6 +189,27 @@ document.addEventListener("DOMContentLoaded", function() {
     this.getNote = function() {
       return noteToPlay;
     };
+
+    this.activate = function() {
+      if (this.active) {
+        return;
+      }
+
+      this.active = true;
+      console.log("TRIGGERING SYNTH");
+      synth.triggerAttackRelease(`${ff.getNote()}${ff.getOctave()}`);
+
+    }
+
+    this.deactivate = function() {
+      if (!this.active) {
+        return;
+      }
+
+      console.log("DEACTIVATING SYNTH");
+
+      this.active = false;
+    }
 
     this.getOctave = function() {
       return octave;
@@ -216,13 +237,12 @@ document.addEventListener("DOMContentLoaded", function() {
   const synth = new Tone.AMSynth().toMaster();
 
   var face = {};
-  face.mouth = new ToggleInstrument('upper_mouth', 'lower_mouth', 10, 10);
-  face.pupil = new ToggleInstrument('pupil_left', 'pupil_right', 10, 10);
-  face.eyebrow = new ToggleInstrument('eyebrow_left', 'eyebrow_right', 10, 10);
-  face.nose = new ToggleInstrument('nose', 10, 10);
-  face.bridge = new ToggleInstrument('bridge', 10, 10);
-  face.lip = new ToggleInstrument('upper_lip', 'lower_lip', 10, 10);
-  face.eye = new ToggleInstrument('eye_left', 'eye_right', 10, 10);
+  face.mouth = new ToggleInstrument('upper_mouth', 'lower_mouth', -1, 20);
+  face.pupil = new ToggleInstrument('pupil_left', 'pupil_right', 2, -1);
+  face.eyebrow = new ToggleInstrument('eyebrow_left', 'eyebrow_right', -1, 10);
+//  face.nose = new ToggleInstrument('nose', -1, 10);
+//  face.bridge = new ToggleInstrument('bridge', -1, 10);
+  face.lip = new ToggleInstrument('upper_lip', 'lower_lip', -1, 10);
 
 
   function drawLoop() {
@@ -235,8 +255,9 @@ document.addEventListener("DOMContentLoaded", function() {
       for (facePart in face) {
         var ff = face[facePart];
         if (ff.check_delta(faceWithPositions)) {
-          console.log("TRIGGERING SYNTH");
-          synth.triggerAttackRelease(`${ff.getNote()}${ff.getOctave()}`);
+          ff.activate();
+        } else {
+          ff.deactivate();
         }
       }
     }
