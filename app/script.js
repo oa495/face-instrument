@@ -259,6 +259,8 @@ document.addEventListener("DOMContentLoaded", function() {
     this.noteToPlay = options.note || 'a';
     this.duration = options.duration || '8n';
 
+    this.debug = false;
+    
     this.getNote = function() {
       return this.noteToPlay;
     };
@@ -293,6 +295,10 @@ document.addEventListener("DOMContentLoaded", function() {
       var deltaX = Math.abs(pa1[0] - pa2[0]);
       var deltaY = Math.abs(pa1[1] - pa2[1]);
 
+      if (this.debug) {
+        console.log("DELTA", p1, p2, deltaX, deltaY);
+      }
+
       return (deltaY > this.minY && this.minY >= 0) || (deltaX > this.minX && this.minX >= 0);
     };
 
@@ -316,6 +322,9 @@ document.addEventListener("DOMContentLoaded", function() {
   face.nose = new SliderInstrument('nose');
   face.bridge = new SliderInstrument('bridge');
   face.lip = new ToggleInstrument('upperLip', 'lowerLip', -1, 0.1, { note: 'g'});
+
+  window.FACE = face;
+
 
   function drawLoop() {
     requestAnimFrame(drawLoop);
