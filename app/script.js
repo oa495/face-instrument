@@ -1,8 +1,8 @@
 /* global clm, Tone, requestAnimFrame */
 document.addEventListener("DOMContentLoaded", function() {
   var vid = document.getElementById('videoel');
-  var vid_width = vid.width;
-  var vid_height = vid.height;
+  var vidWidth = vid.width;
+  var vidHeight = vid.height;
   var overlay = document.getElementById('overlay');
   var overlayCC = overlay.getContext('2d');
 
@@ -19,9 +19,9 @@ document.addEventListener("DOMContentLoaded", function() {
     // resize overlay and video if proportions of video are not 4:3
     // keep same height, just change width
     var proportion = vid.videoWidth/vid.videoHeight;
-    vid_width = Math.round(vid_height * proportion);
-    vid.width = vid_width;
-    overlay.width = vid_width;
+    vidWidth = Math.round(vidHeight * proportion);
+    vid.width = vidWidth;
+    overlay.width = vidWidth;
   }
 
   // gum = get user media
@@ -89,23 +89,23 @@ document.addEventListener("DOMContentLoaded", function() {
       var avg = getAverage(positions);
       var variance = getVariance(positions, avg);
 
-      face.upper_mouth = positions.slice(59, 62) // slice is not inclusive
-      face.lower_mouth = positions.slice(56, 59) // slice is not inclusive
-      face.pupil_left = positions[27];
-      face.pupil_right = positions[32]
+      face.upperMouth = positions.slice(59, 62) // slice is not inclusive
+      face.lowerMouth = positions.slice(56, 59) // slice is not inclusive
+      face.pupilLeft = [positions[27]];
+      face.pupilRight = [positions[32]];
 
-      face.eyebrow_left = positions.slice(19, 23);
-      face.eyebrow_right = positions.slice(15, 19);
+      face.eyebrowLeft = positions.slice(19, 23);
+      face.eyebrowRight = positions.slice(15, 19);
 
       face.nose = positions.slice(34, 41);
       face.bridge = [positions[33], positions[41], positions[60]];
-      face.upper_lip = positions.slice(44, 51);
-      face.lower_lip = positions.slice(50, 58);
+      face.upperLip = positions.slice(44, 51);
+      face.lowerLip = positions.slice(50, 58);
 
       // the eye has the upper, the lower and the middle portions
       // Q: can each part can correspond to an instrument piece?
-      face.eye_left = [];
-      face.eye_right = [];
+      face.eyeLeft = [];
+      face.eyeRight = [];
 
 
 
@@ -115,22 +115,26 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function getVariance(points, avg) {
     // do we make variance a single number or two numbers?
-    var x_sse = 0;
-    var y_sse = 0;
+    var xSse = 0;
+    var ySse = 0;
     for (var p in points) {
-        x_sse += Math.pow(points[p][0] - avg[0], 2)
-        y_sse += Math.pow(points[p][1] - avg[1], 2)
+        xSse += Math.pow(points[p][0] - avg[0], 2)
+        ySse += Math.pow(points[p][1] - avg[1], 2)
 
     }
 
-    x_sse /= points.length;
-    y_sse /= points.length;
+    xSse /= points.length;
+    ySse /= points.length;
 
-    return [x_sse, y_sse];
+    return [xSse, ySse];
 
   }
 
   function getAverage(points) {
+    if (points.length == 1) {
+      return points[0];
+    }
+
     var x = 0;
     var y = 0;
 
@@ -196,8 +200,8 @@ document.addEventListener("DOMContentLoaded", function() {
       }
 
       this.active = true;
-      console.log("TRIGGERING SYNTH");
-      synth.triggerAttackRelease(`${ff.getNote()}${ff.getOctave()}`);
+      console.log("TRIGGERING SYNTH FOR", p1, p2);
+      synth.triggerAttackRelease(`${this.getNote()}${this.getOctave()}`);
 
     }
 
@@ -206,7 +210,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return;
       }
 
-      console.log("DEACTIVATING SYNTH");
+      console.log("DEACTIVATING SYNTH FOR", p1, p2);
 
       this.active = false;
     }
@@ -215,46 +219,40 @@ document.addEventListener("DOMContentLoaded", function() {
       return octave;
     }
 
-    // two types of movement:
-    //
-    //
-    // delta between two objects:
-    //    emits activated event / de-activated event
-    // delta from center of face
-    // ???
-    //
-    this.check_delta = function(face) {
-      var pa1 = getAverage(face[this.p1]);
-      var pa2 = getAverage(face[this.p2]);
+    this.checkDelta = function(face) {
+      var pa1 = getAverage(face[p1]);
+      var pa2 = getAverage(face[p2]);
 
-      var delta_x = Math.abs(pa1[0] - pa2[0]);
-      var delta_y = Math.abs(pa1[1] - pa2[1]);
 
-      return (delta_y > this.minY && this.minY >= 0) || (delta_x > this.minX && this.minX >= 0);
+      var deltaX = Math.abs(pa1[0] - pa2[0]);
+      var deltaY = Math.abs(pa1[1] - pa2[1]);
+
+      return (deltaY > this.minY && this.minY >= 0) || (deltaX > this.minX && this.minX >= 0);
     };
   }
 
   const synth = new Tone.AMSynth().toMaster();
 
   var face = {};
-  face.mouth = new ToggleInstrument('upper_mouth', 'lower_mouth', -1, 20);
-  face.pupil = new ToggleInstrument('pupil_left', 'pupil_right', 2, -1);
-  face.eyebrow = new ToggleInstrument('eyebrow_left', 'eyebrow_right', -1, 10);
+  face.mouth = new ToggleInstrument('upperMouth', 'lowerMouth', -1, 20);
+  face.pupil = new ToggleInstrument('pupilLeft', 'pupilRight', 2, -1);
+  face.eyebrowLeft = new ToggleInstrument('eyebrowLeft', 'pupilLeft', -1, 10);
+  face.eyebrowRight = new ToggleInstrument('eyebrowRight', 'pupilRight', -1, 10);
 //  face.nose = new ToggleInstrument('nose', -1, 10);
 //  face.bridge = new ToggleInstrument('bridge', -1, 10);
-  face.lip = new ToggleInstrument('upper_lip', 'lower_lip', -1, 10);
+  face.lip = new ToggleInstrument('upperLip', 'lowerLip', -1, 10);
 
 
   function drawLoop() {
     requestAnimFrame(drawLoop);
-    overlayCC.clearRect(0, 0, vid_width, vid_height);
+    overlayCC.clearRect(0, 0, vidWidth, vidHeight);
     if (ctrack.getCurrentPosition()) {
       ctrack.draw(overlay);
       var positions = ctrack.getCurrentPosition();
       var faceWithPositions = positionsToFace(positions, face);
       for (facePart in face) {
         var ff = face[facePart];
-        if (ff.check_delta(faceWithPositions)) {
+        if (ff.checkDelta(faceWithPositions)) {
           ff.activate();
         } else {
           ff.deactivate();
