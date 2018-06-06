@@ -5,6 +5,10 @@ document.addEventListener("DOMContentLoaded", function() {
   var vidHeight = vid.height;
   var overlay = document.getElementById('overlay');
   var overlayCC = overlay.getContext('2d');
+  var width = vid.offsetWidth;
+  var height = vid.offsetHeight;
+  var k = 5;
+  var bucketSize = width / k;
 
   /* Setup of video/webcam and checking for webGL support */
   function enablestart() {
@@ -46,6 +50,17 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 
+  function getCenterOfElement(el) {
+    const offsetTop = el.offsetTop;
+    const offsetLeft = el.offsetLeft;
+    var width = el.offsetWidth;
+    var height = el.offsetHeight;
+    return {
+      'centerX': offsetLeft + width / 2,
+      'centerY': offsetTop + height / 2
+    };
+  }
+
   function gumFail() {
     document.getElementById('gum').className = "hide";
     document.getElementById('nogum').className = "nohide";
@@ -83,41 +98,39 @@ document.addEventListener("DOMContentLoaded", function() {
   // TODO: normalize face positions so that they are scaled proportionally to
   // the center of mass of the face. maybe this would help with the recognized face
   // jumping around
+
+  function normalizeFace(positions) {
+    positions = positions.slice();
+
+    // TODO: normalize all the points on the face
+    var minX = positions[0][0],
+        maxX = positions[0][0],
+        minY = positions[0][1],
+        maxY = positions[0][1];
+
+    for (var i = 0; i < positions.length; i++) {
+      minX = Math.min(minX, positions[i][0]);
+      minY = Math.min(minX, positions[i][1]);
+      maxX = Math.max(maxX, positions[i][0]);
+      maxY = Math.max(maxY, positions[i][1]);
+
+    }
+
+    var deltaX = maxX - minX;
+    var deltaY = maxY - minY;
+
+    for (var i = 0; i < positions.length; i++) {
+      var p = [(positions[i][0] - minX) / deltaX,
+               (positions[i][1] - minY) / deltaY];
+
+      positions[i] = p;
+
+    }
+    return positionsToFace(positions);
+  }
+
   function positionsToFace(positions) {
-      positions = positions.slice();
-
-      // TODO: normalize all the points on the face
-      var minX = positions[0][0],
-          maxX = positions[0][0],
-          minY = positions[0][1],
-          maxY = positions[0][1];
-
-      for (var i = 0; i < positions.length; i++) {
-        minX = Math.min(minX, positions[i][0]);
-        minY = Math.min(minX, positions[i][1]);
-        maxX = Math.max(maxX, positions[i][0]);
-        maxY = Math.max(maxY, positions[i][1]);
-
-      }
-
-      var deltaX = maxX - minX;
-      var deltaY = maxY - minY;
-
-      for (var i = 0; i < positions.length; i++) {
-        var p = [(positions[i][0] - minX) / deltaX,
-                 (positions[i][1] - minY) / deltaY];
-
-        positions[i] = p;
-
-      }
-
-
-
-
       var face = { };
-
-      var avg = getAverage(positions);
-      var variance = getVariance(positions, avg);
 
       face.upperMouth = positions.slice(59, 62) // slice is not inclusive
       face.lowerMouth = positions.slice(56, 59) // slice is not inclusive
@@ -128,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function() {
       face.eyebrowRight = positions.slice(15, 19);
 
       face.nose = positions.slice(34, 41);
-      face.bridge = [positions[33], positions[41], positions[60]];
+      face.bridge = [positions[33], positions[41], positions[62]];
       face.upperLip = positions.slice(44, 51);
       face.lowerLip = positions.slice(50, 58);
 
@@ -138,9 +151,7 @@ document.addEventListener("DOMContentLoaded", function() {
       face.eyeRight = [];
 
       face.positions = positions;
-
       return face;
-
   }
 
   function getVariance(points, avg) {
@@ -207,13 +218,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
   }
 
+
   function SliderInstrument(part) {
-    this.centerX = 0; // TODO: figure this out from video media
-    this.centerY = 0; // TODO: ^^
+
+    let { centerX, centerY } = getCenterOfElement(vid);
 
     this.deltaX = 0;
     this.deltaY = 0;
 
+    // octave 2 - 6
     this.getNote = function() {
 
     };
@@ -223,26 +236,31 @@ document.addEventListener("DOMContentLoaded", function() {
     };
 
     this.update = function(facePositions) {
+      overlayCC.fillStyle="#FF0a00";
+      overlayCC.fillRect(centerX, centerY, 5, 5);
+
       var avg = getAverage(facePositions[part]);
+      this.deltaX = Math.floor(centerX - avg[0]);
+      this.deltaY = Math.floor(centerY - avg[1]);
 
-      this.deltaX = this.centerX - avg[0];
-      this.deltaY = this.centerY - avg[1];
+      var bucket = Math.floor(this.deltaX / bucketSize);
+      octave = bucket + 5;
+      console.log(octave);
+
+
     };
-
-
-
   }
 
-  function ToggleInstrument(p1, p2, minX, minY) {
+  function ToggleInstrument(p1, p2, minX, minY, options) {
     this.p1 = p1;
     this.p2 = p2;
     this.minX = minX;
     this.minY = minY;
-    var noteToPlay = 'f';
-    var octave = 2;
+    this.noteToPlay = options.note || 'a';
+    this.duration = options.duration || '8n';
 
     this.getNote = function() {
-      return noteToPlay;
+      return this.noteToPlay;
     };
 
     this.activate = function() {
@@ -251,18 +269,15 @@ document.addEventListener("DOMContentLoaded", function() {
       }
 
       this.active = true;
-      console.log("TRIGGERING TOGGLE FOR", p1, p2);
-      synth.triggerAttackRelease(`${this.getNote()}${this.getOctave()}`);
-
+      console.log("TRIGGERING TOGGLE FOR", this.p1, this.p2);
+      synth.triggerAttackRelease(`${this.getNote()}${this.getOctave()}`, this.duration);
     }
 
     this.deactivate = function() {
       if (!this.active) {
         return;
       }
-
-      console.log("DEACTIVATING TOGGLE FOR", p1, p2);
-
+      console.log("DEACTIVATING TOGGLE FOR", this.p1, this.p2);
       this.active = false;
     }
 
@@ -271,8 +286,8 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     this.checkDelta = function(face) {
-      var pa1 = getAverage(face[p1]);
-      var pa2 = getAverage(face[p2]);
+      var pa1 = getAverage(face[this.p1]);
+      var pa2 = getAverage(face[this.p2]);
 
 
       var deltaX = Math.abs(pa1[0] - pa2[0]);
@@ -281,8 +296,8 @@ document.addEventListener("DOMContentLoaded", function() {
       return (deltaY > this.minY && this.minY >= 0) || (deltaX > this.minX && this.minX >= 0);
     };
 
-    this.update = function(face) {
-      if (this.checkDelta(face)) {
+    this.update = function(face, normalizedFace) {
+      if (this.checkDelta(normalizedFace)) {
         this.activate();
       } else {
         this.deactivate();
@@ -291,16 +306,16 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   const synth = new Tone.AMSynth().toMaster();
+  var octave = 3;
 
   var face = {};
-  face.mouth = new ToggleInstrument('upperMouth', 'lowerMouth', -1, 0.15);
-  face.pupil = new ToggleInstrument('pupilLeft', 'pupilRight', 0.02, -1);
-  face.eyebrowLeft = new ToggleInstrument('eyebrowLeft', 'bridge', -1, 0.44);
-  face.eyebrowRight = new ToggleInstrument('eyebrowRight', 'bridge', -1, 0.44);
+  face.mouth = new ToggleInstrument('upperMouth', 'lowerMouth', -1, 0.15, { note: 'a'});
+  face.pupil = new ToggleInstrument('pupilLeft', 'pupilRight', 0.02, -1, { note: 'c' });
+  face.eyebrowLeft = new ToggleInstrument('eyebrowLeft', 'pupilLeft', -1, 0.44, { note: 'd'});
+  face.eyebrowRight = new ToggleInstrument('eyebrowRight', 'pupilRight', -1, 0.44, { note: 'e'});
   face.nose = new SliderInstrument('nose');
   face.bridge = new SliderInstrument('bridge');
-  face.lip = new ToggleInstrument('upperLip', 'lowerLip', -1, 0.1);
-
+  face.lip = new ToggleInstrument('upperLip', 'lowerLip', -1, 0.1, { note: 'g'});
 
   function drawLoop() {
     requestAnimFrame(drawLoop);
@@ -308,11 +323,13 @@ document.addEventListener("DOMContentLoaded", function() {
     if (ctrack.getCurrentPosition()) {
       ctrack.draw(overlay);
       var positions = ctrack.getCurrentPosition();
-      var faceWithPositions = positionsToFace(positions, face);
+      var faceWithPositions = positionsToFace(positions);
+      var normalizedPositions = normalizeFace(positions);
+
       for (facePart in face) {
         var ff = face[facePart];
         if (ff) {
-          ff.update(faceWithPositions);
+          ff.update(faceWithPositions, normalizedPositions);
         }
       }
     }
