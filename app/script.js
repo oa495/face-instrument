@@ -107,6 +107,8 @@ document.addEventListener("DOMContentLoaded", function() {
       face.eyeLeft = [];
       face.eyeRight = [];
 
+      face.positions = positions;
+
 
 
       return face;
@@ -177,7 +179,29 @@ document.addEventListener("DOMContentLoaded", function() {
 
   }
 
-  function SliderInstrument() {
+  function SliderInstrument(part) {
+    this.centerX = 0; // TODO: figure this out from video media
+    this.centerY = 0; // TODO: ^^
+
+    this.deltaX = 0;
+    this.deltaY = 0;
+
+    this.getNote = function() {
+
+    };
+
+    this.getValue = function() {
+
+    };
+
+    this.update = function(facePositions) {
+      var avg = getAverage(facePositions[part]);
+
+      this.deltaX = this.centerX - avg[0];
+      this.deltaY = this.centerY - avg[1];
+    };
+
+
 
   }
 
@@ -186,7 +210,6 @@ document.addEventListener("DOMContentLoaded", function() {
     this.p2 = p2;
     this.minX = minX;
     this.minY = minY;
-    var shouldPlay = false;
     var noteToPlay = 'f';
     var octave = 2;
 
@@ -200,7 +223,7 @@ document.addEventListener("DOMContentLoaded", function() {
       }
 
       this.active = true;
-      console.log("TRIGGERING SYNTH FOR", p1, p2);
+      console.log("TRIGGERING TOGGLE FOR", p1, p2);
       synth.triggerAttackRelease(`${this.getNote()}${this.getOctave()}`);
 
     }
@@ -210,7 +233,7 @@ document.addEventListener("DOMContentLoaded", function() {
         return;
       }
 
-      console.log("DEACTIVATING SYNTH FOR", p1, p2);
+      console.log("DEACTIVATING TOGGLE FOR", p1, p2);
 
       this.active = false;
     }
@@ -229,6 +252,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
       return (deltaY > this.minY && this.minY >= 0) || (deltaX > this.minX && this.minX >= 0);
     };
+
+    this.update = function(face) {
+      if (this.checkDelta(face)) {
+        this.activate();
+      } else {
+        this.deactivate();
+      }
+    }
   }
 
   const synth = new Tone.AMSynth().toMaster();
@@ -238,8 +269,8 @@ document.addEventListener("DOMContentLoaded", function() {
   face.pupil = new ToggleInstrument('pupilLeft', 'pupilRight', 2, -1);
   face.eyebrowLeft = new ToggleInstrument('eyebrowLeft', 'pupilLeft', -1, 10);
   face.eyebrowRight = new ToggleInstrument('eyebrowRight', 'pupilRight', -1, 10);
-//  face.nose = new ToggleInstrument('nose', -1, 10);
-//  face.bridge = new ToggleInstrument('bridge', -1, 10);
+  face.nose = new SliderInstrument('nose');
+  face.bridge = new SliderInstrument('bridge');
   face.lip = new ToggleInstrument('upperLip', 'lowerLip', -1, 10);
 
 
@@ -252,10 +283,8 @@ document.addEventListener("DOMContentLoaded", function() {
       var faceWithPositions = positionsToFace(positions, face);
       for (facePart in face) {
         var ff = face[facePart];
-        if (ff.checkDelta(faceWithPositions)) {
-          ff.activate();
-        } else {
-          ff.deactivate();
+        if (ff) {
+          ff.update(faceWithPositions);
         }
       }
     }
