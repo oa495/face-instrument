@@ -84,6 +84,36 @@ document.addEventListener("DOMContentLoaded", function() {
   // the center of mass of the face. maybe this would help with the recognized face
   // jumping around
   function positionsToFace(positions) {
+      positions = positions.slice();
+
+      // TODO: normalize all the points on the face
+      var minX = positions[0][0],
+          maxX = positions[0][0],
+          minY = positions[0][1],
+          maxY = positions[0][1];
+
+      for (var i = 0; i < positions.length; i++) {
+        minX = Math.min(minX, positions[i][0]);
+        minY = Math.min(minX, positions[i][1]);
+        maxX = Math.max(maxX, positions[i][0]);
+        maxY = Math.max(maxY, positions[i][1]);
+
+      }
+
+      var deltaX = maxX - minX;
+      var deltaY = maxY - minY;
+
+      for (var i = 0; i < positions.length; i++) {
+        var p = [(positions[i][0] - minX) / deltaX,
+                 (positions[i][1] - minY) / deltaY];
+
+        positions[i] = p;
+
+      }
+
+
+
+
       var face = { };
 
       var avg = getAverage(positions);
@@ -108,8 +138,6 @@ document.addEventListener("DOMContentLoaded", function() {
       face.eyeRight = [];
 
       face.positions = positions;
-
-
 
       return face;
 
@@ -265,13 +293,13 @@ document.addEventListener("DOMContentLoaded", function() {
   const synth = new Tone.AMSynth().toMaster();
 
   var face = {};
-  face.mouth = new ToggleInstrument('upperMouth', 'lowerMouth', -1, 20);
-  face.pupil = new ToggleInstrument('pupilLeft', 'pupilRight', 2, -1);
-  face.eyebrowLeft = new ToggleInstrument('eyebrowLeft', 'pupilLeft', -1, 10);
-  face.eyebrowRight = new ToggleInstrument('eyebrowRight', 'pupilRight', -1, 10);
+  face.mouth = new ToggleInstrument('upperMouth', 'lowerMouth', -1, 0.15);
+  face.pupil = new ToggleInstrument('pupilLeft', 'pupilRight', 0.02, -1);
+  face.eyebrowLeft = new ToggleInstrument('eyebrowLeft', 'bridge', -1, 0.44);
+  face.eyebrowRight = new ToggleInstrument('eyebrowRight', 'bridge', -1, 0.44);
   face.nose = new SliderInstrument('nose');
   face.bridge = new SliderInstrument('bridge');
-  face.lip = new ToggleInstrument('upperLip', 'lowerLip', -1, 10);
+  face.lip = new ToggleInstrument('upperLip', 'lowerLip', -1, 0.1);
 
 
   function drawLoop() {

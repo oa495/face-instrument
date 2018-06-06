@@ -1,8 +1,10 @@
 - [ ] update minimum values for face toggle 
 - [ ] implement face sliders
 - [ ] different sounds for different parts of the face, make a set of notes that sound good together
-- [ ] whole face movement controls ... something
+- [ ] whole face movement controls the octave of the instruments
 - [ ] sequencer (?) e.g from the pose thing
 - [ ] can download as .webm file
 - [ ] visuals / style the page
 - [ ] increase size of video
+- [ ] refactor the files so script.js isn't one large file, add video.js, face.js, etc
+- [ ] normalize distances to work at any camera distance
