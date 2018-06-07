@@ -320,11 +320,13 @@ document.addEventListener("DOMContentLoaded", function() {
   var octave = 3;
   var volume = 1;
   var face = {};
-  face.mouth = new ToggleInstrument('upperMouth', 'lowerMouth', -1, 0.15, { note: 'a'});
+
+  // these numbers are relative to nose height. 1 = one nose height
+  face.mouth = new ToggleInstrument('upperMouth', 'lowerMouth', -1, 0.65, { note: 'a'});
   face.pupilLeft = new ToggleInstrument('bridge', 'pupilLeft', 0.02, -1, { note: 'c' });
   face.pupilRight = new ToggleInstrument('bridge', 'pupilRight', 0.02, -1, { note: 'c' });
-  face.eyebrowLeft = new ToggleInstrument('eyebrowLeft', 'pupilLeft', -1, 0.10, { note: 'd'});
-  face.eyebrowRight = new ToggleInstrument('eyebrowRight', 'pupilRight', -1, 0.10, { note: 'e'});
+  face.eyebrowLeft = new ToggleInstrument('eyebrowLeft', 'pupilLeft', -1, 0.50, { note: 'd'});
+  face.eyebrowRight = new ToggleInstrument('eyebrowRight', 'pupilRight', -1, 0.50, { note: 'e'});
   face.lip = new ToggleInstrument('upperLip', 'lowerLip', -1, 0.1, { note: 'g'});
   face.bridge = new SliderInstrument('bridge');
 
@@ -356,7 +358,7 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   var POSITIONS;
-  var STABLE_THRESHOLD = 10;
+  var STABLE_THRESHOLD = 15;
 
   var lastFew = [];
 
@@ -388,7 +390,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   setInterval(function() {
     if (!faceIsStable) {
-      console.log("FACE IS UNSTABLE", faceIsStable);
+      console.log("FACE IS UNSTABLE");
     }
   }, 100);
 
