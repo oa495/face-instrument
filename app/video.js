@@ -67,8 +67,6 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   function gumFail() {
-    document.getElementById('gum').className = "hide";
-    document.getElementById('nogum').className = "nohide";
     alert("There was some problem trying to fetch video from your webcam.");
   }
 
