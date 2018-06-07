@@ -103,10 +103,10 @@ document.addEventListener("DOMContentLoaded", function() {
     positions = positions.slice();
 
     // TODO: normalize all the points on the face
-    var minX = positions[0][0],
-        maxX = positions[0][0],
-        minY = positions[0][1],
-        maxY = positions[0][1];
+    var minX = positions[35][0],
+        maxX = positions[39][0],
+        minY = positions[33][1],
+        maxY = positions[62][1];
 
     for (var i = 0; i < positions.length; i++) {
       minX = Math.min(minX, positions[i][0]);
@@ -245,9 +245,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
       var bucket = Math.floor(this.deltaX / bucketSize);
       octave = bucket + 5;
-      console.log(octave);
-
-
     };
   }
 
@@ -316,8 +313,8 @@ document.addEventListener("DOMContentLoaded", function() {
   var face = {};
   face.mouth = new ToggleInstrument('upperMouth', 'lowerMouth', -1, 0.15, { note: 'a'});
   face.pupil = new ToggleInstrument('pupilLeft', 'pupilRight', 0.02, -1, { note: 'c' });
-  face.eyebrowLeft = new ToggleInstrument('eyebrowLeft', 'pupilLeft', -1, 0.44, { note: 'd'});
-  face.eyebrowRight = new ToggleInstrument('eyebrowRight', 'pupilRight', -1, 0.44, { note: 'e'});
+  face.eyebrowLeft = new ToggleInstrument('eyebrowLeft', 'pupilLeft', -1, 0.10, { note: 'd'});
+  face.eyebrowRight = new ToggleInstrument('eyebrowRight', 'pupilRight', -1, 0.10, { note: 'e'});
   face.lip = new ToggleInstrument('upperLip', 'lowerLip', -1, 0.1, { note: 'g'});
   face.bridge = new SliderInstrument('bridge');
 

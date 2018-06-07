@@ -2,9 +2,10 @@
 - [ ] normalize distances to work at any camera distance
 - [ ] increase size of video
 - [ ] can download as .webm file
-- [ ] base sound
+- [ ] base sound (accompaniment, beat, etc)
 - [ ] distance gives volume
 - [ ] stabilization period
+- [ ] pick watch / restart method for notifying on file changes?
 
 ## later
 - [ ] visualizer
