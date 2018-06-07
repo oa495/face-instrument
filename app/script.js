@@ -327,7 +327,7 @@ document.addEventListener("DOMContentLoaded", function() {
       var faceWithPositions = positionsToFace(positions);
       var normalizedPositions = normalizeFace(positions);
       var faceHeight = positions[7][1] - positions[33][1];
-      var distanceFromScreen = faceHeight / height;
+      var distanceFromScreen = faceHeight / vidHeight;
       volume = distanceFromScreen.toFixed(2);
 
       POSITIONS = positions;

@@ -1,4 +1,4 @@
-var vid, overlay, overlayCC, width, height, vidHeight, vidWidth;
+var vid, overlay, overlayCC, vidHeight, vidWidth;
 document.addEventListener("DOMContentLoaded", function() {
   vid = document.getElementById('videoel');
   vidWidth = vid.width;
