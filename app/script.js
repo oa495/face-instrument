@@ -328,20 +328,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
   function SliderInstrument(part) {
+    this.slider = true
 
     let { centerX, centerY } = getCenterOfElement(vid);
 
     this.deltaX = 0;
     this.deltaY = 0;
 
-    // octave 2 - 6
-    this.getNote = function() {
+    this.setContainer = function(div) {
+      this.$el = document.createElement("div");
+      div.append(this.$el);
+    };
+
+    this.render = function() {
+      this.$el.textContent = parseInt(this.deltaX*100) + ":" + parseInt(this.deltaY*100);
 
     };
 
-    this.getValue = function() {
-
-    };
 
     this.update = function(facePositions) {
       overlayCC.fillStyle="#FF0a00";
@@ -364,6 +367,8 @@ document.addEventListener("DOMContentLoaded", function() {
     this.noteToPlay = options.note || 'a';
     this.duration = options.duration || '8n';
 
+    this.toggle = true
+
     this.debug = false;
 
     this.getNote = function() {
@@ -376,9 +381,7 @@ document.addEventListener("DOMContentLoaded", function() {
       }
 
       this.active = true;
-      if (this.debug) {
-        console.log("TRIGGERING TOGGLE FOR", this.p1, this.p2);
-      }
+      console.log("TRIGGERING TOGGLE FOR", this.p1, this.p2);
 
       if (faceIsStable) {
         synth.triggerAttackRelease(`${this.getNote()}${this.getOctave()}`, this.duration, Tone.now(), volume);
@@ -390,10 +393,9 @@ document.addEventListener("DOMContentLoaded", function() {
         return;
       }
 
-      if (this.debug) {
-        console.log("DEACTIVATING TOGGLE FOR", this.p1, this.p2);
-      }
+      console.log("DEACTIVATING TOGGLE FOR", this.p1, this.p2);
       this.active = false;
+      synth.triggerRelease([`${this.getNote()}${this.getOctave()}`]);
     }
 
     this.getOctave = function() {
@@ -407,12 +409,31 @@ document.addEventListener("DOMContentLoaded", function() {
       var deltaX = Math.abs(pa1[0] - pa2[0]);
       var deltaY = Math.abs(pa1[1] - pa2[1]);
 
+      this.deltaX = deltaX;
+      this.deltaY = deltaY;
+
       if (this.debug) {
         console.log("DELTA", p1, p2, deltaX, deltaY);
       }
 
       return (deltaY > this.minY && this.minY >= 0) || (deltaX > this.minX && this.minX >= 0);
     };
+
+    this.setContainer = function(div) {
+      this.$el = document.createElement("div");
+      div.append(this.$el);
+    }
+
+    this.render = function() {
+      this.$el.textContent = this.p1 + ":" + this.p2 + " " +
+        parseInt(this.deltaX*100) + "," + parseInt(this.deltaY*100);
+      if (this.active) {
+        this.$el.className = "active";
+      } else {
+        this.$el.className = "";
+      }
+
+    }
 
     this.update = function(face, normalizedFace) {
       if (this.checkDelta(normalizedFace)) {
@@ -427,16 +448,27 @@ document.addEventListener("DOMContentLoaded", function() {
     return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
   }
 
-  const synth = new Tone.AMSynth().toMaster();
+  // CAN SWAP THESE TO SWITCH BETEWEN MONO AND POLY SYNTH
+  const monosynth = new Tone.AMSynth().toMaster();
+  const polysynth = new Tone.PolySynth(4, Tone.Synth).toMaster();
+  const synth = new Tone.PolySynth(4, Tone.Synth).toMaster();
+
   var octave = 3;
   var volume = 1;
   var face = {};
-  face.mouth = new ToggleInstrument('upperMouth', 'lowerMouth', -1, 0.15, { note: 'a'});
-  face.pupil = new ToggleInstrument('pupilLeft', 'pupilRight', 0.02, -1, { note: 'c' });
-  face.eyebrowLeft = new ToggleInstrument('eyebrowLeft', 'pupilLeft', -1, 0.10, { note: 'd'});
-  face.eyebrowRight = new ToggleInstrument('eyebrowRight', 'pupilRight', -1, 0.10, { note: 'e'});
-  face.lip = new ToggleInstrument('upperLip', 'lowerLip', -1, 0.1, { note: 'g'});
+
+  // these numbers are relative to nose height. 1 = one nose height
+  face.mouth = new ToggleInstrument('upperMouth', 'lowerMouth', -1, 0.65, { note: 'a'});
+  face.pupilLeft = new ToggleInstrument('bridge', 'pupilLeft', 0.12, -1, { note: 'f' });
+  face.pupilRight = new ToggleInstrument('bridge', 'pupilRight', 0.12, -1, { note: 'b' });
+  face.eyebrowLeft = new ToggleInstrument('eyebrowLeft', 'pupilLeft', -1, 0.60, { note: 'd'});
+  face.eyebrowRight = new ToggleInstrument('eyebrowRight', 'pupilRight', -1, 0.60, { note: 'e'});
+  face.lip = new ToggleInstrument('upperLip', 'lowerLip', -1, 0.8, { note: 'g'});
   face.bridge = new SliderInstrument('bridge');
+
+
+  var c = document.getElementById("instruments");
+  for (var f in face) { face[f].setContainer(c); }
 
   window.FACE = face;
 
@@ -462,7 +494,7 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   var POSITIONS;
-  var STABLE_THRESHOLD = 10;
+  var STABLE_THRESHOLD = 20;
 
   var lastFew = [];
 
@@ -481,7 +513,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var avg = getAverage(lastFew);
 
     while (lastFew.length > 15) {
-      lastFew.pop(0);
+      lastFew.shift();
     }
 
 //    console.log("AVG", avg[0], avg[1], curSize.deltaX, curSize.deltaY);
@@ -493,27 +525,39 @@ document.addEventListener("DOMContentLoaded", function() {
   }, 100);
 
   setInterval(function() {
-    console.log("FACE IS STABLE?", faceIsStable);
-  }, 1000);
+    if (!faceIsStable) {
+      console.log("FACE IS UNSTABLE");
+    }
+  }, 100);
+
+  function drawMeters() {
+    for (facePart in face) { face[facePart].render(); }
+  }
 
   function drawLoop() {
     requestAnimFrame(drawLoop);
     overlayCC.clearRect(0, 0, vidWidth, vidHeight);
     if (ctrack.getCurrentPosition()) {
+      drawMeters();
+
       ctrack.draw(overlay);
       var positions = ctrack.getCurrentPosition();
-      POSITIONS = positions;
       var faceWithPositions = positionsToFace(positions);
       var normalizedPositions = normalizeFace(positions);
       var faceHeight = positions[7][1] - positions[33][1];
       var distanceFromScreen = faceHeight / height;
       volume = distanceFromScreen.toFixed(2);
+
+      POSITIONS = positions;
+
       for (facePart in face) {
         var ff = face[facePart];
         if (ff) {
           ff.update(faceWithPositions, normalizedPositions);
         }
       }
+    } else {
+      POSITIONS = null;
     }
   }
 });

@@ -4,6 +4,11 @@ body {
   margin: 0px auto;
   max-width: 1150px;
 }
+
+.active {
+  background-color: #050;
+}
+
 #overlay {
   position: absolute;
   top: 0px;
