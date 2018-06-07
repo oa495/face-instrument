@@ -80,11 +80,12 @@ document.addEventListener("DOMContentLoaded", function() {
       mediaRecorder.ondataavailable = handleDataAvailable;
       mediaRecorder.start(10); // collect 10ms of data
       console.log('MediaRecorder started', mediaRecorder);
-    }
+    m}
 
     function stopRecording() {
       mediaRecorder.stop();
       console.log('Recorded Blobs: ', recordedBlobs);
+      recordedVideo.classList.remove('hide');
       recordedVideo.controls = true;
     }
 
