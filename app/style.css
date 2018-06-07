@@ -5,8 +5,24 @@ body {
   max-width: 1150px;
 }
 
+button {
+  font-family: 'Lato';
+  font-size: 12px;
+}
+
+h2 {
+  font-weight : 400;
+}
+
 .active {
   background-color: #050;
+}
+
+.hide {
+  display : none;
+}
+.nohide {
+  display : block;
 }
 
 #overlay {
@@ -19,6 +35,7 @@ body {
   -ms-filter : fliph; /*IE*/
   filter : fliph; /*IE*/
 }
+
 #videoel {
   -o-transform : scaleX(-1);
   -webkit-transform : scaleX(-1);
@@ -26,29 +43,12 @@ body {
   -ms-filter : fliph; /*IE*/
   filter : fliph; /*IE*/
 }
+
+video#recorded {
+  width: 400px;
+}
+
 #container {
-  position : relative;
-  /*margin : 0px auto;*/
-}
-#content {
-  margin-top : 70px;
-  margin-left : 100px;
-  margin-right : 100px;
-  max-width: 950px;
-}
-h2 {
-  font-weight : 400;
-}
-.nogum {
-  display : none;
-}
-.btn {
-  font-family: 'Lato';
-  font-size: 16px;
-}
-.hide {
-  display : none;
-}
-.nohide {
-  display : block;
+  display: flex;
+  justify-content: space-around;
 }

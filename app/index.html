@@ -9,17 +9,17 @@
   </head>
   <body>
 			<div id="container">
-				<video id="videoel" width="800" height="600" preload="auto" loop playsinline autoplay>
+				<video id="videoel" width="800" height="600" preload="auto" loop playsinline autoplay muted>
 				</video>
 				<canvas id="overlay" width="800" height="600"></canvas>
-        <video id="recorded" loop controls></video>
+        <video id="recorded" class="hide" loop controls></video>
 			</div>
 			<br/>
       <div>
         <button id="record" disabled>Start Recording</button>
         <button id="play" disabled>Play</button>
         <button id="download" disabled>Download</button>
-        <input class="btn" type="button" value="wait, loading video" disabled="disabled" id="startbutton"/>
+        <button id="startbutton" disabled>wait, loading video </>
       </div>
 			<div id="text"></div>
       <div id="instruments"></div>
