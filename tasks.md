@@ -1,9 +1,10 @@
 ## now
 - [ ] normalize distances to work at any camera distance
 - [ ] can download as .webm file
+* [ ] record sounds with .webm
 - [ ] stabilization period
 - [ ] pick watch / restart method for notifying on file changes?
-- [ ] implement meters and controls for the different instruments
+- [ ] implement controls for the different instruments
 - [ ] add slider instrument that maps to distortion. (perhaps eyebrows to mouth)
 
 ## later
@@ -11,9 +12,11 @@
 - [ ] visuals / style the page
 
 - [ ] sequencer (?) e.g from the pose thing
-- [ ] slider controls
-- [ ] angle of eyes control something?
+- [ ] slider controls distortion
+- [ ] angle of eyes / face controls a slider
 - [ ] quantize notes to have different rhythms
+* [ ] investigate chords (based on emotion or face arrangement)
+* [ ] melody vs chord mode
 
 
 ## done-ish
@@ -26,3 +29,4 @@
 - [X] distance gives volume
 - [X] stabilization period
 - [X] refactor the files so script.js isn't one large file, add video.js, face.js, etc
+- [X] implement meters for the different instruments
