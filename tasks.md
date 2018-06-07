@@ -5,6 +5,7 @@
 - [ ] distance gives volume
 - [ ] stabilization period
 - [ ] pick watch / restart method for notifying on file changes?
+- [ ] implement meters and controls for the different instruments
 
 ## later
 - [ ] visualizer

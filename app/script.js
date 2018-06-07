@@ -387,8 +387,10 @@ document.addEventListener("DOMContentLoaded", function() {
   }, 100);
 
   setInterval(function() {
-    console.log("FACE IS STABLE?", faceIsStable);
-  }, 1000);
+    if (!faceIsStable) {
+      console.log("FACE IS UNSTABLE", faceIsStable);
+    }
+  }, 100);
 
   function drawMeters() {
     for (facePart in face) { face[facePart].render(); }
@@ -402,12 +404,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
       ctrack.draw(overlay);
       var positions = ctrack.getCurrentPosition();
-      POSITIONS = positions;
       var faceWithPositions = positionsToFace(positions);
       var normalizedPositions = normalizeFace(positions);
       var faceHeight = positions[7][1] - positions[33][1];
       var distanceFromScreen = faceHeight / height;
       volume = distanceFromScreen.toFixed(2);
+
+      POSITIONS = positions;
+
       for (facePart in face) {
         var ff = face[facePart];
         if (ff) {
