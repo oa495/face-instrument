@@ -95,33 +95,14 @@ document.addEventListener("DOMContentLoaded", function() {
     drawLoop();
   }
 
-  // TODO: normalize face positions so that they are scaled proportionally to
-  // the center of mass of the face. maybe this would help with the recognized face
-  // jumping around
-
   function normalizeFace(positions) {
     positions = positions.slice();
 
-    // TODO: normalize all the points on the face
-    var minX = positions[35][0],
-        maxX = positions[39][0],
-        minY = positions[33][1],
-        maxY = positions[62][1];
+    var size = getSize(positions);
 
     for (var i = 0; i < positions.length; i++) {
-      minX = Math.min(minX, positions[i][0]);
-      minY = Math.min(minX, positions[i][1]);
-      maxX = Math.max(maxX, positions[i][0]);
-      maxY = Math.max(maxY, positions[i][1]);
-
-    }
-
-    var deltaX = maxX - minX;
-    var deltaY = maxY - minY;
-
-    for (var i = 0; i < positions.length; i++) {
-      var p = [(positions[i][0] - minX) / deltaX,
-               (positions[i][1] - minY) / deltaY];
+      var p = [(positions[i][0] - size.minX) / size.deltaX,
+               (positions[i][1] - size.minY) / size.deltaY];
 
       positions[i] = p;
 
@@ -268,15 +249,23 @@ document.addEventListener("DOMContentLoaded", function() {
       }
 
       this.active = true;
-      console.log("TRIGGERING TOGGLE FOR", this.p1, this.p2);
-      synth.triggerAttackRelease(`${this.getNote()}${this.getOctave()}`, this.duration);
+      if (this.debug) {
+        console.log("TRIGGERING TOGGLE FOR", this.p1, this.p2);
+      }
+
+      if (faceIsStable) {
+        synth.triggerAttackRelease(`${this.getNote()}${this.getOctave()}`, this.duration);
+      }
     }
 
     this.deactivate = function() {
       if (!this.active) {
         return;
       }
-      console.log("DEACTIVATING TOGGLE FOR", this.p1, this.p2);
+
+      if (this.debug) {
+        console.log("DEACTIVATING TOGGLE FOR", this.p1, this.p2);
+      }
       this.active = false;
     }
 
@@ -320,6 +309,61 @@ document.addEventListener("DOMContentLoaded", function() {
 
   window.FACE = face;
 
+  // detect face stability
+  var prevSize;
+
+  // returns the size of the face as a function of the nose bridge
+  function getSize(positions) {
+
+    var minX = positions[35][0];
+    var maxX = positions[39][0];
+    var minY = positions[33][1];
+    var maxY = positions[62][1];
+
+    return {
+      minX : minX,
+      maxX : maxX,
+      minY : minY,
+      maxY : maxY,
+      deltaX: maxX - minX,
+      deltaY: maxY - minY
+    };
+  }
+
+  var POSITIONS;
+  var STABLE_THRESHOLD = 10;
+
+  var lastFew = [];
+
+  var faceIsStable = false;
+  setInterval(function() {
+    if (!POSITIONS || !POSITIONS.length) {
+      return;
+    }
+
+    faceIsStable = false;
+
+    var curSize = getSize(POSITIONS);
+    var curPos = getAverage(POSITIONS);
+
+    lastFew.push([curSize.deltaX, curSize.deltaY]);
+    var avg = getAverage(lastFew);
+
+    while (lastFew.length > 15) {
+      lastFew.pop(0);
+    }
+
+//    console.log("AVG", avg[0], avg[1], curSize.deltaX, curSize.deltaY);
+
+    if (Math.abs(curSize.deltaX - avg[0]) > STABLE_THRESHOLD) { return; }
+    if (Math.abs(curSize.deltaY - avg[1]) > STABLE_THRESHOLD) { return; }
+
+    faceIsStable = true;
+  }, 100);
+
+  setInterval(function() {
+    console.log("FACE IS STABLE?", faceIsStable);
+  }, 1000);
 
   function drawLoop() {
     requestAnimFrame(drawLoop);
@@ -327,6 +371,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (ctrack.getCurrentPosition()) {
       ctrack.draw(overlay);
       var positions = ctrack.getCurrentPosition();
+      POSITIONS = positions;
       var faceWithPositions = positionsToFace(positions);
       var normalizedPositions = normalizeFace(positions);
 
