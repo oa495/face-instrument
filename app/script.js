@@ -260,7 +260,7 @@ document.addEventListener("DOMContentLoaded", function() {
     this.duration = options.duration || '8n';
 
     this.debug = false;
-    
+
     this.getNote = function() {
       return this.noteToPlay;
     };
@@ -291,7 +291,6 @@ document.addEventListener("DOMContentLoaded", function() {
       var pa1 = getAverage(face[this.p1]);
       var pa2 = getAverage(face[this.p2]);
 
-
       var deltaX = Math.abs(pa1[0] - pa2[0]);
       var deltaY = Math.abs(pa1[1] - pa2[1]);
 
@@ -319,9 +318,8 @@ document.addEventListener("DOMContentLoaded", function() {
   face.pupil = new ToggleInstrument('pupilLeft', 'pupilRight', 0.02, -1, { note: 'c' });
   face.eyebrowLeft = new ToggleInstrument('eyebrowLeft', 'pupilLeft', -1, 0.44, { note: 'd'});
   face.eyebrowRight = new ToggleInstrument('eyebrowRight', 'pupilRight', -1, 0.44, { note: 'e'});
-  face.nose = new SliderInstrument('nose');
-  face.bridge = new SliderInstrument('bridge');
   face.lip = new ToggleInstrument('upperLip', 'lowerLip', -1, 0.1, { note: 'g'});
+  face.bridge = new SliderInstrument('bridge');
 
   window.FACE = face;
 
