@@ -254,7 +254,7 @@ document.addEventListener("DOMContentLoaded", function() {
       }
 
       if (faceIsStable) {
-        synth.triggerAttackRelease(`${this.getNote()}${this.getOctave()}`, this.duration);
+        synth.triggerAttackRelease(`${this.getNote()}${this.getOctave()}`, this.duration, Tone.now(), volume);
       }
     }
 
@@ -296,9 +296,13 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 
+  function map (num, in_min, in_max, out_min, out_max) {
+    return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+  }
+
   const synth = new Tone.AMSynth().toMaster();
   var octave = 3;
-
+  var volume = 1;
   var face = {};
   face.mouth = new ToggleInstrument('upperMouth', 'lowerMouth', -1, 0.15, { note: 'a'});
   face.pupil = new ToggleInstrument('pupilLeft', 'pupilRight', 0.02, -1, { note: 'c' });
@@ -374,7 +378,9 @@ document.addEventListener("DOMContentLoaded", function() {
       POSITIONS = positions;
       var faceWithPositions = positionsToFace(positions);
       var normalizedPositions = normalizeFace(positions);
-
+      var faceHeight = positions[7][1] - positions[33][1];
+      var distanceFromScreen = faceHeight / height;
+      volume = distanceFromScreen.toFixed(2);
       for (facePart in face) {
         var ff = face[facePart];
         if (ff) {
