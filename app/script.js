@@ -1,226 +1,12 @@
 /* global clm, Tone, requestAnimFrame */
+var ctrack, trackingStarted;
+
 document.addEventListener("DOMContentLoaded", function() {
-  var vid = document.getElementById('videoel');
-  var recordedVideo = document.querySelector('video#recorded');
-  var mediaSource = new MediaSource();
-  mediaSource.addEventListener('sourceopen', handleSourceOpen, false);
-  var mediaRecorder;
-  var recordedBlobs;
-  var sourceBuffer;
-  var vidWidth = vid.width;
-  var vidHeight = vid.height;
-  var overlay = document.getElementById('overlay');
-  var overlayCC = overlay.getContext('2d');
-  var width = vid.offsetWidth;
-  var height = vid.offsetHeight;
-  var k = 5;
-  var bucketSize = width / k;
-
-
-  var constraints = {
-    audio: true,
-    video: true
-  };
-
-  var recordButton = document.querySelector('button#record');
-  var playButton = document.querySelector('button#play');
-  var downloadButton = document.querySelector('button#download');
-  recordButton.onclick = toggleRecording;
-  playButton.onclick = play;
-  downloadButton.onclick = download;
-
-  /* Setup of video/webcam and checking for webGL support */
-  function enablestart() {
-    var startbutton = document.getElementById('startbutton');
-    startbutton.value = "start";
-    startbutton.disabled = null;
-    startbutton.addEventListener("click", startVideo);
-  }
-
-
-  function adjustVideoProportions() {
-    // resize overlay and video if proportions of video are not 4:3
-    // keep same height, just change width
-    var proportion = vid.videoWidth/vid.videoHeight;
-    vidWidth = Math.round(vidHeight * proportion);
-    vid.width = vidWidth;
-    overlay.width = vidWidth;
-  }
-
-  // gum = get user media
-  function gumSuccess(stream) {
-    // add camera stream if getUserMedia succeeded
-    recordButton.disabled = false;
-    window.stream = stream;
-    if ("srcObject" in vid) {
-      vid.srcObject = stream;
-    } else {
-      vid.src = (window.URL && window.URL.createObjectURL(stream));
-    }
-    vid.onloadedmetadata = function() {
-      adjustVideoProportions();
-      vid.play();
-    }
-    vid.onresize = function() {
-      adjustVideoProportions();
-      if (trackingStarted) {
-        ctrack.stop();
-        ctrack.reset();
-        ctrack.start(vid);
-      }
-    }
-  }
-
-  function getCenterOfElement(el) {
-    const offsetTop = el.offsetTop;
-    const offsetLeft = el.offsetLeft;
-    var width = el.offsetWidth;
-    var height = el.offsetHeight;
-    return {
-      'centerX': offsetLeft + width / 2,
-      'centerY': offsetTop + height / 2
-    };
-  }
-
-  function gumFail() {
-    document.getElementById('gum').className = "hide";
-    document.getElementById('nogum').className = "nohide";
-    alert("There was some problem trying to fetch video from your webcam.");
-  }
-
-  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-  window.URL = window.URL || window.webkitURL || window.msURL || window.mozURL;
-  // set up video
-  if (navigator.mediaDevices) {
-    navigator.mediaDevices.getUserMedia(constraints).then(gumSuccess).catch(gumFail);
-  } else if (navigator.getUserMedia) {
-    navigator.getUserMedia({video : true}, gumSuccess, gumFail);
-  } else {
-    gumFail();
-  }
-
-  vid.addEventListener('canplay', enablestart, false);
-
-    function handleSourceOpen(event) {
-    console.log('MediaSource opened');
-    sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vp8"');
-    console.log('Source buffer: ', sourceBuffer);
-  }
-
-  recordedVideo.addEventListener('error', function(ev) {
-    console.error('MediaRecording.recordedMedia.error()');
-    alert('Your browser can not play\n\n' + recordedVideo.src
-      + '\n\n media clip. event: ' + JSON.stringify(ev));
-  }, true);
-
-  function handleDataAvailable(event) {
-    if (event.data && event.data.size > 0) {
-      recordedBlobs.push(event.data);
-    }
-  }
-
-  function handleStop(event) {
-    console.log('Recorder stopped: ', event);
-  }
-
-  function toggleRecording() {
-    if (recordButton.textContent === 'Start Recording') {
-      startRecording();
-    } else {
-      stopRecording();
-      recordButton.textContent = 'Start Recording';
-      playButton.disabled = false;
-      downloadButton.disabled = false;
-    }
-  }
-
-  function startRecording() {
-    recordedBlobs = [];
-    var options = {mimeType: 'video/webm;codecs=vp9'};
-    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-      console.log(options.mimeType + ' is not Supported');
-      options = {mimeType: 'video/webm;codecs=vp8'};
-      if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-        console.log(options.mimeType + ' is not Supported');
-        options = {mimeType: 'video/webm'};
-        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-          console.log(options.mimeType + ' is not Supported');
-          options = {mimeType: ''};
-        }
-      }
-    }
-    try {
-      mediaRecorder = new MediaRecorder(window.stream, options);
-    } catch (e) {
-      console.error('Exception while creating MediaRecorder: ' + e);
-      alert('Exception while creating MediaRecorder: '
-        + e + '. mimeType: ' + options.mimeType);
-      return;
-    }
-    console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
-    recordButton.textContent = 'Stop Recording';
-    playButton.disabled = true;
-    downloadButton.disabled = true;
-    mediaRecorder.onstop = handleStop;
-    mediaRecorder.ondataavailable = handleDataAvailable;
-    mediaRecorder.start(10); // collect 10ms of data
-    console.log('MediaRecorder started', mediaRecorder);
-  }
-
-  function stopRecording() {
-    mediaRecorder.stop();
-    console.log('Recorded Blobs: ', recordedBlobs);
-    recordedVideo.controls = true;
-  }
-
-  function play() {
-    var superBuffer = new Blob(recordedBlobs, {type: 'video/webm'});
-    recordedVideo.src = window.URL.createObjectURL(superBuffer);
-    // workaround for non-seekable video taken from
-    // https://bugs.chromium.org/p/chromium/issues/detail?id=642012#c23
-    recordedVideo.addEventListener('loadedmetadata', function() {
-      if (recordedVideo.duration === Infinity) {
-        recordedVideo.currentTime = 1e101;
-        recordedVideo.ontimeupdate = function() {
-          recordedVideo.currentTime = 0;
-          recordedVideo.ontimeupdate = function() {
-            delete recordedVideo.ontimeupdate;
-            recordedVideo.play();
-          };
-        };
-      }
-    });
-  }
-
-  function download() {
-    var blob = new Blob(recordedBlobs, {type: 'video/webm'});
-    var url = window.URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.style.display = 'none';
-    a.href = url;
-    a.download = 'test.webm';
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(function() {
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-    }, 100);
-  }
-
   /** Code for face tracking **/
-  var ctrack = new clm.tracker();
+  ctrack = new clm.tracker();
   ctrack.init();
-  var trackingStarted = false;
+  trackingStarted = false;
 
-  function startVideo() {
-    // start video
-    vid.play();
-    // start tracking
-    ctrack.start(vid);
-    trackingStarted = true;
-    // start loop to draw face
-    drawLoop();
-  }
 
   function normalizeFace(positions) {
     positions = positions.slice();
@@ -444,10 +230,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 
-  function map (num, in_min, in_max, out_min, out_max) {
-    return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-  }
-
   // CAN SWAP THESE TO SWITCH BETEWEN MONO AND POLY SYNTH
   const monosynth = new Tone.AMSynth().toMaster();
   const polysynth = new Tone.PolySynth(4, Tone.Synth).toMaster();
@@ -534,7 +316,7 @@ document.addEventListener("DOMContentLoaded", function() {
     for (facePart in face) { face[facePart].render(); }
   }
 
-  function drawLoop() {
+  window.drawLoop = function() {
     requestAnimFrame(drawLoop);
     overlayCC.clearRect(0, 0, vidWidth, vidHeight);
     if (ctrack.getCurrentPosition()) {
