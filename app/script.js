@@ -266,10 +266,9 @@ document.addEventListener("DOMContentLoaded", function() {
         return;
       }
 
-      if (this.debug) {
-        console.log("DEACTIVATING TOGGLE FOR", this.p1, this.p2);
-      }
+      console.log("DEACTIVATING TOGGLE FOR", this.p1, this.p2);
       this.active = false;
+      synth.triggerRelease([`${this.getNote()}${this.getOctave()}`]);
     }
 
     this.getOctave = function() {
@@ -301,6 +300,12 @@ document.addEventListener("DOMContentLoaded", function() {
     this.render = function() {
       this.$el.textContent = this.p1 + ":" + this.p2 + " " +
         parseInt(this.deltaX*100) + "," + parseInt(this.deltaY*100);
+      if (this.active) {
+        this.$el.className = "active";
+      } else {
+        this.$el.className = "";
+      }
+
     }
 
     this.update = function(face, normalizedFace) {
@@ -316,18 +321,22 @@ document.addEventListener("DOMContentLoaded", function() {
     return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
   }
 
-  const synth = new Tone.AMSynth().toMaster();
+  // CAN SWAP THESE TO SWITCH BETEWEN MONO AND POLY SYNTH
+  const monosynth = new Tone.AMSynth().toMaster();
+  const polysynth = new Tone.PolySynth(4, Tone.Synth).toMaster();
+  const synth = new Tone.PolySynth(4, Tone.Synth).toMaster();
+
   var octave = 3;
   var volume = 1;
   var face = {};
 
   // these numbers are relative to nose height. 1 = one nose height
   face.mouth = new ToggleInstrument('upperMouth', 'lowerMouth', -1, 0.65, { note: 'a'});
-  face.pupilLeft = new ToggleInstrument('bridge', 'pupilLeft', 0.02, -1, { note: 'c' });
-  face.pupilRight = new ToggleInstrument('bridge', 'pupilRight', 0.02, -1, { note: 'c' });
-  face.eyebrowLeft = new ToggleInstrument('eyebrowLeft', 'pupilLeft', -1, 0.50, { note: 'd'});
-  face.eyebrowRight = new ToggleInstrument('eyebrowRight', 'pupilRight', -1, 0.50, { note: 'e'});
-  face.lip = new ToggleInstrument('upperLip', 'lowerLip', -1, 0.1, { note: 'g'});
+  face.pupilLeft = new ToggleInstrument('bridge', 'pupilLeft', 0.12, -1, { note: 'f' });
+  face.pupilRight = new ToggleInstrument('bridge', 'pupilRight', 0.12, -1, { note: 'b' });
+  face.eyebrowLeft = new ToggleInstrument('eyebrowLeft', 'pupilLeft', -1, 0.60, { note: 'd'});
+  face.eyebrowRight = new ToggleInstrument('eyebrowRight', 'pupilRight', -1, 0.60, { note: 'e'});
+  face.lip = new ToggleInstrument('upperLip', 'lowerLip', -1, 0.8, { note: 'g'});
   face.bridge = new SliderInstrument('bridge');
 
 
@@ -358,7 +367,7 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   var POSITIONS;
-  var STABLE_THRESHOLD = 15;
+  var STABLE_THRESHOLD = 20;
 
   var lastFew = [];
 
@@ -377,7 +386,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var avg = getAverage(lastFew);
 
     while (lastFew.length > 15) {
-      lastFew.pop(0);
+      lastFew.shift();
     }
 
 //    console.log("AVG", avg[0], avg[1], curSize.deltaX, curSize.deltaY);
