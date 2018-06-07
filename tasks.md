@@ -1,6 +1,5 @@
 ## now
 - [ ] normalize distances to work at any camera distance
-- [ ] increase size of video
 - [ ] can download as .webm file
 - [ ] base sound (accompaniment, beat, etc)
 - [ ] distance gives volume
@@ -17,6 +16,7 @@
 
 
 ## done-ish
+- [X] increase size of video
 - [X] update minimum values for face toggle
 - [X] different sounds for different parts of the face, make a set of notes that sound good together
 - [X] whole face movement controls the octave of the instruments
