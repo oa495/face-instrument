@@ -4,6 +4,7 @@
 - [ ] can download as .webm file
 - [ ] base sound
 - [ ] distance gives volume
+- [ ] stabilization period
 
 ## later
 - [ ] visualizer
@@ -11,6 +12,8 @@
 - [ ] refactor the files so script.js isn't one large file, add video.js, face.js, etc
 - [ ] sequencer (?) e.g from the pose thing
 - [ ] slider controls
+- [ ] angle of eyes control something?
+
 
 ## done-ish
 - [X] update minimum values for face toggle
