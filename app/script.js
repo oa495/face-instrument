@@ -6,7 +6,8 @@ document.addEventListener("DOMContentLoaded", function() {
   ctrack = new clm.tracker();
   ctrack.init();
   trackingStarted = false;
-
+  var k = 5;
+  var bucketSize = vidWidth / k;
 
   function normalizeFace(positions) {
     positions = positions.slice();
