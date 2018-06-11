@@ -366,6 +366,8 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
 	function makeLoops() {
+      var vol = new Tone.Volume(-12);
+
 			//DRUMS//
 			//and a compressor
 			var drumCompress = new Tone.Compressor({
@@ -384,7 +386,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				"volume" : -10,
 				"retrigger" : true,
 				"fadeOut" : 0.05
-			}).chain(distortion, drumCompress);
+			}).chain(distortion, drumCompress, vol);
 			var hatsLoop = new Tone.Loop({
 				"callback" : function(time){
 					hats.start(time).stop(time + 0.05);
@@ -397,7 +399,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				"url" : "./audio/505/snare.[mp3|ogg]",
 				"retrigger" : true,
 				"fadeOut" : 0.1
-			}).chain(distortion, drumCompress);
+			}).chain(distortion, drumCompress, vol);
 			var snarePart = new Tone.Sequence(function(time, velocity){
 				snare.volume.value = Tone.gainToDb(velocity);
 				snare.start(time).stop(time + 0.1);
@@ -440,13 +442,18 @@ document.addEventListener("DOMContentLoaded", function() {
 						"type" : "square"
 					},
 					"envelope" : {
-						"attack" : 0.1,
+						"attack" : 0.05,
 						"decay" : 0.2,
 						"sustain" : 0.3,
 						"release" : 0.01
 					},
 				}
 			}).toMaster();
+
+      // VOLUME for the bass part is lowered so we can hear
+      // the main notes
+      bass.volume.value = -10;
+
 			var bassPart = new Tone.Part(function(time, event){
         //console.log("TIME", time, event);
 				if (Math.random() < event.prob){
