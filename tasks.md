@@ -2,24 +2,41 @@ MVP:
 
 * an app people can go to and make face music
 
+features:
+
+* can record webm with sound
+* plays a backing beat
+
 ## now
 
-- [ ] implement controls for the different instruments
-- [ ] adjust volume for the base sound
+- [ ] implement calibration controls for the different instruments
 - [ ] visuals / style the page
+- [ ] add eyes as instruments (in addition to eyebrows)
+- [ ] pick a set of good sounding chords
+- [ ] investigate chords (based on emotion or face arrangement)
+
+## soon
+
+- [ ] get feedback
 
 ## later
+
+- [ ] add instructions
 - [ ] visualizer
 - [ ] angle of eyes / face controls a slider
 - [ ] quantize notes to have different rhythms
-- [ ] investigate chords (based on emotion or face arrangement)
 - [ ] add different scales to play
+- [ ] ability to pick different backing beats
 - [ ] melody vs chord mode
+- [ ] way to bend notes
 - [ ] test in different browsers
 - [ ] add slider instrument that maps to distortion. (perhaps eyebrows to mouth)
+- [ ] adjustable backing beats
+- [ ] record overlay and visualization for playback
 
 
 ## done-ish
+- [X] adjust volume for the bass sound
 - [X] increase size of video
 - [X] update minimum values for face toggle
 - [X] different sounds for different parts of the face, make a set of notes that sound good together
