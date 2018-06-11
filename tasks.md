@@ -1,14 +1,19 @@
+MVP:
+
+* an app people can go to and make face music
+
 ## now
-- [ ] pick watch / restart method for notifying on file changes?
+
 - [ ] implement controls for the different instruments
 - [ ] adjust volume for the base sound
+- [ ] visuals / style the page
 
 ## later
 - [ ] visualizer
-- [ ] visuals / style the page
 - [ ] angle of eyes / face controls a slider
 - [ ] quantize notes to have different rhythms
 - [ ] investigate chords (based on emotion or face arrangement)
+- [ ] add different scales to play
 - [ ] melody vs chord mode
 - [ ] test in different browsers
 - [ ] add slider instrument that maps to distortion. (perhaps eyebrows to mouth)
@@ -27,3 +32,8 @@
 - [X] implement meters for the different instruments
 - [X] record sounds with .webm
 - [X] can download as .webm file
+
+## punted
+
+
+- [ ] pick watch / restart method for notifying on file changes?
