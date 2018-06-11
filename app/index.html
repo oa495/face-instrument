@@ -9,20 +9,22 @@
   </head>
   <body>
 			<div id="container">
-				<video id="videoel" width="800" height="600" preload="auto" loop playsinline autoplay muted>
+				<video id="videoel" width="750" height="600" preload="auto" loop playsinline autoplay muted>
 				</video>
-				<canvas id="overlay" width="800" height="600"></canvas>
+				<canvas id="overlay" width="750" height="600"></canvas>
         <video id="recorded" class="hide" loop controls></video>
 			</div>
 			<br/>
-      <div>
+      <div class="controls">
         <button id="record" disabled>Start Recording</button>
         <button id="play" disabled>Play</button>
         <button id="download" disabled>Download</button>
-        <input type="button" id="startbutton" disabled="disabled" value=">wait, loading video"/>
+        <input type="button" id="startbutton" disabled="disabled" value=">Wait, loading video"/>
       </div>
-			<div id="text"></div>
-      <div id="instruments"></div>
+      <div>
+        <ul id="instruments"></ul>
+        <button class="hide" id="calibrate" disabled>Set All</button>
+      </div>
     <script src="clmtrackr.js"></script>
     <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
     <script src="/utils.js"></script>

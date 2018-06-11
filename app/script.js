@@ -113,9 +113,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
   }
 
+  function setThreshold() {
+    for (var part in face) {
+      face[part].setThreshold();
+    }
+  }
 
   function SliderInstrument(part) {
-    this.slider = true
+    this.slider = true;
 
     let { centerX, centerY } = getCenterOfElement(vid);
 
@@ -129,9 +134,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     this.render = function() {
       this.$el.textContent = parseInt(this.deltaX*100) + ":" + parseInt(this.deltaY*100);
-
     };
-
 
     this.update = function(facePositions) {
       overlayCC.fillStyle="#FF0a00";
@@ -168,7 +171,7 @@ document.addEventListener("DOMContentLoaded", function() {
       }
 
       this.active = true;
-      console.log("TRIGGERING TOGGLE FOR", this.p1, this.p2);
+      // console.log("TRIGGERING TOGGLE FOR", this.p1, this.p2);
 
       if (faceIsStable) {
         synth.triggerAttackRelease(`${this.getNote()}${this.getOctave()}`, this.duration, Tone.now(), volume);
@@ -180,13 +183,18 @@ document.addEventListener("DOMContentLoaded", function() {
         return;
       }
 
-      console.log("DEACTIVATING TOGGLE FOR", this.p1, this.p2);
+      // console.log("DEACTIVATING TOGGLE FOR", this.p1, this.p2);
       this.active = false;
       synth.triggerRelease([`${this.getNote()}${this.getOctave()}`]);
     }
 
     this.getOctave = function() {
       return octave;
+    }
+
+    this.setThreshold = function() {
+      this.minX = this.deltaX || this.minX;
+      this.minY = this.deltaY || this.minY;
     }
 
     this.checkDelta = function(face) {
@@ -202,24 +210,34 @@ document.addEventListener("DOMContentLoaded", function() {
       if (this.debug) {
         console.log("DELTA", p1, p2, deltaX, deltaY);
       }
-
       return (deltaY > this.minY && this.minY >= 0) || (deltaX > this.minX && this.minX >= 0);
     };
 
-    this.setContainer = function(div) {
-      this.$el = document.createElement("div");
-      div.append(this.$el);
+    this.setContainer = function(list) {
+      this.$el = document.createElement("li");
+      var button = document.createElement("button");
+      var span = document.createElement("span");
+      button.textContent = "Set ...";
+      button.className = "hide";
+      var self = this;
+      button.addEventListener('click', function() {
+        self.setThreshold();
+      }, false);
+      this.$el.append(span);
+      this.$el.append(button);
+      list.append(this.$el);
     }
 
     this.render = function() {
-      this.$el.textContent = this.p1 + ":" + this.p2 + " " +
+      var delta = this.$el.querySelector('span');
+      var button = this.$el.querySelector('button');
+      delta.textContent = this.p1 + ":" + this.p2 + " " +
         parseInt(this.deltaX*100) + "," + parseInt(this.deltaY*100);
       if (this.active) {
         this.$el.className = "active";
       } else {
         this.$el.className = "";
       }
-
     }
 
     this.update = function(face, normalizedFace) {
@@ -230,6 +248,7 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     }
   }
+
 
   // CAN SWAP THESE TO SWITCH BETEWEN MONO AND POLY SYNTH
   const monosynth = new Tone.AMSynth().toMaster();
@@ -250,8 +269,10 @@ document.addEventListener("DOMContentLoaded", function() {
   face.bridge = new SliderInstrument('bridge');
 
 
-  var c = document.getElementById("instruments");
-  for (var f in face) { face[f].setContainer(c); }
+  var instruments = document.getElementById("instruments");
+  var calibrate = document.getElementById('calibrate');
+  calibrate.addEventListener('click', setThreshold, false);
+  for (var f in face) { face[f].setContainer(instruments); }
 
   window.FACE = face;
 
@@ -309,7 +330,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   setInterval(function() {
     if (!faceIsStable) {
-      console.log("FACE IS UNSTABLE");
+      //console.log("FACE IS UNSTABLE");
     }
   }, 100);
 
@@ -427,7 +448,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				}
 			}).toMaster();
 			var bassPart = new Tone.Part(function(time, event){
-        console.log("TIME", time, event);
+        //console.log("TIME", time, event);
 				if (Math.random() < event.prob){
 					bass.triggerAttackRelease(event.note, event.dur, time);
 				}

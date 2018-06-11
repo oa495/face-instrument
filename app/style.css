@@ -2,7 +2,7 @@ body {
   font-family: 'Lato';
   background-color: #f0f0f0;
   margin: 0px auto;
-  max-width: 1150px;
+  padding: 0;
 }
 
 button {
@@ -12,6 +12,15 @@ button {
 
 h2 {
   font-weight : 400;
+}
+
+ul {
+  list-style: none;
+}
+
+video {
+   background: #222;
+   align-self: flex-end;
 }
 
 .active {
@@ -27,8 +36,6 @@ h2 {
 
 #overlay {
   position: absolute;
-  top: 0px;
-  left: 0px;
   -o-transform : scaleX(-1);
   -webkit-transform : scaleX(-1);
   transform : scaleX(-1);
@@ -45,10 +52,16 @@ h2 {
 }
 
 video#recorded {
-  width: 400px;
+  width: 375px;
+  height: 300px;
+  margin-left: 20px;
 }
 
-#container {
+#container, .controls {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+}
+
+#instruments {
+  position: absolute;
 }

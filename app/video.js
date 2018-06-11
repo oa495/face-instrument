@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
   /* Setup of video/webcam and checking for webGL support */
   function enablestart() {
     var startbutton = document.getElementById('startbutton');
-    startbutton.value = "start";
+    startbutton.value = "Start";
     startbutton.disabled = null;
     startbutton.addEventListener("click", startVideo);
   }
@@ -89,7 +89,19 @@ document.addEventListener("DOMContentLoaded", function() {
     // start tracking
     ctrack.start(vid);
     trackingStarted = true;
+    var calibrateButtons = document.querySelectorAll('#instruments button');
+    for (var i = 0; i < calibrateButtons.length; i++) {
+      removeClass(calibrateButtons[i], 'hide');
+    }
+    var calibrateButton = document.getElementById('calibrate');
+    removeClass(calibrateButton, 'hide');
+    calibrateButton.disabled = null;
+
     // start loop to draw face
     drawLoop();
+  }
+
+  function removeClass(el, c) {
+    if (el) el.className = el.className.replace(new RegExp('(?:^|s)' + c + '(?!S)'), '');
   }
 });
