@@ -396,7 +396,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				"retrigger" : true,
 				"fadeOut" : 0.1
 			}).chain(distortion, drumCompress, vol);
-			snarePart = new Tone.Sequence(function(time, velocity){
+			var snarePart = new Tone.Sequence(function(time, velocity){
 				snare.volume.value = Tone.gainToDb(velocity);
 				snare.start(time).stop(time + 0.1);
 			}, [null, 1, null, [1, 0.3]]).start(0);
@@ -412,7 +412,7 @@ document.addEventListener("DOMContentLoaded", function() {
 					"sustain" : 0
 				}
 			}).connect(drumCompress);
-			kickPart = new Tone.Sequence(function(time, probability){
+			var kickPart = new Tone.Sequence(function(time, probability){
 				if (Math.random() < probability){
 					kick.triggerAttack("C1", time);
 				}
@@ -450,19 +450,21 @@ document.addEventListener("DOMContentLoaded", function() {
       // the main notes
       bass.volume.value = -10;
 
-			bassPart = new Tone.Part(function(time, event){
+			// TODO: automatic bassline generation, i think it would be interesting (using music theory)
+			var bassPart = new Tone.Part(function(time, event){
         //console.log("TIME", time, event);
 				if (Math.random() < event.prob){
 					bass.triggerAttackRelease(event.note, event.dur, time);
 				}
-			}, [{time : "0:0", note : "C2", dur : "4n.", prob: 1}, {time : "0:2", note : "C2", dur : "8n", prob : 0.6},
-				{time : "0:2.6666", note : "C2", dur : "8n", prob : 0.4}, {time : "0:3.33333", note : "C2", dur : "8n", prob : 0.9},
-				{time : "1:0", note : "C2", dur : "4n.", prob : 1}, {time : "1:2", note : "C2", dur : "8n", prob : 0.6},
-				{time : "1:2.6666", note : "C2", dur : "8n", prob : 0.4}, {time : "1:3.33333", note : "E2", dur : "8n", prob : 0.9},
-				{time : "2:0", note : "F2", dur : "4n.", prob : 1}, {time : "2:2", note : "F2", dur : "8n", prob : 0.6},
-				{time : "2:2.6666", note : "F2", dur : "8n", prob : 0.4}, {time : "2:3.33333", note : "F2", dur : "8n", prob : 0.9},
-				{time : "3:0", note : "F2", dur : "4n.", prob : 1}, {time : "3:2", note : "F2", dur : "8n", prob : 0.6},
-				{time : "3:2.6666", note : "F2", dur : "8n", prob : 0.4}, {time : "3:3.33333", note : "B1", dur : "8n", prob : 0.9}]).start(0);
+			}, [{time : "0:0", note : "E1", dur : "4n.", prob: 1},
+					{time : "0:.5", note : "E2", dur : "8n", prob : 0.6},
+					{time : "0:1", note : "D1", dur : "8n", prob : 0.4},
+					{time : "0:1.5", note : "F2", dur : "8n", prob : 0.9},
+					{time : "0:2", note : "B2", dur : "4n.", prob : 1},
+					{time : "0:2.5", note : "F2", dur : "8n", prob : 0.6},
+					{time : "0:3", note : "E2", dur : "8n", prob : 0.4},
+					{time : "0:3.5", note : "A2", dur : "8n", prob : 0.9},
+			]).start(0);
 			bassPart.loop = true;
 			bassPart.loopEnd = "4m";
 
