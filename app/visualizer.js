@@ -89,8 +89,8 @@ function draw() {
       ellipse(circlePos.xPos, circlePos.yPos, circlePos.radius/10, circlePos.radius);
       stroke('red');
       for (var i = 0; i < 3; i++) {
-          var squarePos = funkySquare[i].update(snare.volume.value);
-          rect(squarePos.xPos, squarePos.yPos, squarePos.radius/10, squarePos.radius);
+          var squarePos = funkySquare[i].update(SYNTH.voices[i].getLevelAtTime());
+          rect(squarePos.xPos, squarePos.yPos, squarePos.radius/10, squarePos.radius*3);
       }
   }
 }

@@ -251,6 +251,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const monosynth = new Tone.AMSynth().toMaster();
   const polysynth = new Tone.PolySynth(4, Tone.Synth).toMaster();
   const synth = new Tone.PolySynth(4, Tone.Synth).toMaster();
+  window.SYNTH = synth;
 
   var octave = 3;
   var volume = 1;
