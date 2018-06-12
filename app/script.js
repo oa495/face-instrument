@@ -1,5 +1,5 @@
 /* global clm, Tone, requestAnimFrame */
-var ctrack, trackingStarted;
+var ctrack, trackingStarted, bass, snare, kick;
 
 document.addEventListener("DOMContentLoaded", function() {
   /** Code for face tracking **/
@@ -137,9 +137,6 @@ document.addEventListener("DOMContentLoaded", function() {
     };
 
     this.update = function(facePositions) {
-      overlayCC.fillStyle="#FF0a00";
-      overlayCC.fillRect(centerX, centerY, 5, 5);
-
       var avg = getAverage(facePositions[part]);
       this.deltaX = Math.floor(centerX - avg[0]);
       this.deltaY = Math.floor(centerY - avg[1]);
@@ -340,11 +337,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
   window.drawLoop = function() {
     requestAnimFrame(drawLoop);
-    overlayCC.clearRect(0, 0, vidWidth, vidHeight);
+
     if (ctrack.getCurrentPosition()) {
       drawMeters();
-
-      ctrack.draw(overlay);
+      ctrack.draw(canvas);
       var positions = ctrack.getCurrentPosition();
       var faceWithPositions = positionsToFace(positions);
       var normalizedPositions = normalizeFace(positions);
@@ -395,16 +391,16 @@ document.addEventListener("DOMContentLoaded", function() {
 				"probability" : 0.8
 			}).start("1m");
 			//SNARE PART
-			var snare = new Tone.Player({
+			snare = new Tone.Player({
 				"url" : "./audio/505/snare.[mp3|ogg]",
 				"retrigger" : true,
 				"fadeOut" : 0.1
 			}).chain(distortion, drumCompress, vol);
-			var snarePart = new Tone.Sequence(function(time, velocity){
+			snarePart = new Tone.Sequence(function(time, velocity){
 				snare.volume.value = Tone.gainToDb(velocity);
 				snare.start(time).stop(time + 0.1);
 			}, [null, 1, null, [1, 0.3]]).start(0);
-			var kick = new Tone.MembraneSynth({
+			kick = new Tone.MembraneSynth({
 				"pitchDecay" : 0.01,
 				"octaves" : 6,
 				"oscillator" : {
@@ -416,14 +412,14 @@ document.addEventListener("DOMContentLoaded", function() {
 					"sustain" : 0
 				}
 			}).connect(drumCompress);
-			var kickPart = new Tone.Sequence(function(time, probability){
+			kickPart = new Tone.Sequence(function(time, probability){
 				if (Math.random() < probability){
 					kick.triggerAttack("C1", time);
 				}
 			}, [1, [1, [null, 0.3]], 1, [1, [null, 0.5]], 1, 1, 1, [1, [null, 0.8]]], "2n").start(0);
 
 			// BASS
-			var bass = new Tone.FMSynth({
+			bass = new Tone.FMSynth({
 				"harmonicity" : 1,
 				"modulationIndex" : 3.5,
 				"carrier" : {
@@ -454,7 +450,7 @@ document.addEventListener("DOMContentLoaded", function() {
       // the main notes
       bass.volume.value = -10;
 
-			var bassPart = new Tone.Part(function(time, event){
+			bassPart = new Tone.Part(function(time, event){
         //console.log("TIME", time, event);
 				if (Math.random() < event.prob){
 					bass.triggerAttackRelease(event.note, event.dur, time);

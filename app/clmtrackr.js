@@ -82,16 +82,16 @@ numeric.prettyPrint = function prettyPrint(x) {
             return false;
         }
         if(x === null) { ret.push("null"); return false; }
-        if(typeof x === "function") { 
+        if(typeof x === "function") {
             ret.push(x.toString());
             var flag = false;
-            for(k in x) { if(x.hasOwnProperty(k)) { 
+            for(k in x) { if(x.hasOwnProperty(k)) {
                 if(flag) ret.push(',\n');
                 else ret.push('\n{');
-                flag = true; 
-                ret.push(k); 
-                ret.push(': \n'); 
-                foo(x[k]); 
+                flag = true;
+                ret.push(k);
+                ret.push(': \n');
+                foo(x[k]);
             } }
             if(flag) ret.push('}\n');
             return true;
@@ -203,45 +203,45 @@ numeric.imageURL = function imageURL(img) {
         if(typeof from === "undefined") { from = 0; }
         if(typeof to === "undefined") { to = a.length; }
         var table = [0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA, 0x076DC419, 0x706AF48F, 0xE963A535, 0x9E6495A3,
-                     0x0EDB8832, 0x79DCB8A4, 0xE0D5E91E, 0x97D2D988, 0x09B64C2B, 0x7EB17CBD, 0xE7B82D07, 0x90BF1D91, 
+                     0x0EDB8832, 0x79DCB8A4, 0xE0D5E91E, 0x97D2D988, 0x09B64C2B, 0x7EB17CBD, 0xE7B82D07, 0x90BF1D91,
                      0x1DB71064, 0x6AB020F2, 0xF3B97148, 0x84BE41DE, 0x1ADAD47D, 0x6DDDE4EB, 0xF4D4B551, 0x83D385C7,
-                     0x136C9856, 0x646BA8C0, 0xFD62F97A, 0x8A65C9EC, 0x14015C4F, 0x63066CD9, 0xFA0F3D63, 0x8D080DF5, 
-                     0x3B6E20C8, 0x4C69105E, 0xD56041E4, 0xA2677172, 0x3C03E4D1, 0x4B04D447, 0xD20D85FD, 0xA50AB56B, 
-                     0x35B5A8FA, 0x42B2986C, 0xDBBBC9D6, 0xACBCF940, 0x32D86CE3, 0x45DF5C75, 0xDCD60DCF, 0xABD13D59, 
+                     0x136C9856, 0x646BA8C0, 0xFD62F97A, 0x8A65C9EC, 0x14015C4F, 0x63066CD9, 0xFA0F3D63, 0x8D080DF5,
+                     0x3B6E20C8, 0x4C69105E, 0xD56041E4, 0xA2677172, 0x3C03E4D1, 0x4B04D447, 0xD20D85FD, 0xA50AB56B,
+                     0x35B5A8FA, 0x42B2986C, 0xDBBBC9D6, 0xACBCF940, 0x32D86CE3, 0x45DF5C75, 0xDCD60DCF, 0xABD13D59,
                      0x26D930AC, 0x51DE003A, 0xC8D75180, 0xBFD06116, 0x21B4F4B5, 0x56B3C423, 0xCFBA9599, 0xB8BDA50F,
                      0x2802B89E, 0x5F058808, 0xC60CD9B2, 0xB10BE924, 0x2F6F7C87, 0x58684C11, 0xC1611DAB, 0xB6662D3D,
                      0x76DC4190, 0x01DB7106, 0x98D220BC, 0xEFD5102A, 0x71B18589, 0x06B6B51F, 0x9FBFE4A5, 0xE8B8D433,
-                     0x7807C9A2, 0x0F00F934, 0x9609A88E, 0xE10E9818, 0x7F6A0DBB, 0x086D3D2D, 0x91646C97, 0xE6635C01, 
-                     0x6B6B51F4, 0x1C6C6162, 0x856530D8, 0xF262004E, 0x6C0695ED, 0x1B01A57B, 0x8208F4C1, 0xF50FC457, 
-                     0x65B0D9C6, 0x12B7E950, 0x8BBEB8EA, 0xFCB9887C, 0x62DD1DDF, 0x15DA2D49, 0x8CD37CF3, 0xFBD44C65, 
-                     0x4DB26158, 0x3AB551CE, 0xA3BC0074, 0xD4BB30E2, 0x4ADFA541, 0x3DD895D7, 0xA4D1C46D, 0xD3D6F4FB, 
-                     0x4369E96A, 0x346ED9FC, 0xAD678846, 0xDA60B8D0, 0x44042D73, 0x33031DE5, 0xAA0A4C5F, 0xDD0D7CC9, 
-                     0x5005713C, 0x270241AA, 0xBE0B1010, 0xC90C2086, 0x5768B525, 0x206F85B3, 0xB966D409, 0xCE61E49F, 
-                     0x5EDEF90E, 0x29D9C998, 0xB0D09822, 0xC7D7A8B4, 0x59B33D17, 0x2EB40D81, 0xB7BD5C3B, 0xC0BA6CAD, 
-                     0xEDB88320, 0x9ABFB3B6, 0x03B6E20C, 0x74B1D29A, 0xEAD54739, 0x9DD277AF, 0x04DB2615, 0x73DC1683, 
-                     0xE3630B12, 0x94643B84, 0x0D6D6A3E, 0x7A6A5AA8, 0xE40ECF0B, 0x9309FF9D, 0x0A00AE27, 0x7D079EB1, 
-                     0xF00F9344, 0x8708A3D2, 0x1E01F268, 0x6906C2FE, 0xF762575D, 0x806567CB, 0x196C3671, 0x6E6B06E7, 
-                     0xFED41B76, 0x89D32BE0, 0x10DA7A5A, 0x67DD4ACC, 0xF9B9DF6F, 0x8EBEEFF9, 0x17B7BE43, 0x60B08ED5, 
-                     0xD6D6A3E8, 0xA1D1937E, 0x38D8C2C4, 0x4FDFF252, 0xD1BB67F1, 0xA6BC5767, 0x3FB506DD, 0x48B2364B, 
-                     0xD80D2BDA, 0xAF0A1B4C, 0x36034AF6, 0x41047A60, 0xDF60EFC3, 0xA867DF55, 0x316E8EEF, 0x4669BE79, 
-                     0xCB61B38C, 0xBC66831A, 0x256FD2A0, 0x5268E236, 0xCC0C7795, 0xBB0B4703, 0x220216B9, 0x5505262F, 
-                     0xC5BA3BBE, 0xB2BD0B28, 0x2BB45A92, 0x5CB36A04, 0xC2D7FFA7, 0xB5D0CF31, 0x2CD99E8B, 0x5BDEAE1D, 
-                     0x9B64C2B0, 0xEC63F226, 0x756AA39C, 0x026D930A, 0x9C0906A9, 0xEB0E363F, 0x72076785, 0x05005713, 
-                     0x95BF4A82, 0xE2B87A14, 0x7BB12BAE, 0x0CB61B38, 0x92D28E9B, 0xE5D5BE0D, 0x7CDCEFB7, 0x0BDBDF21, 
-                     0x86D3D2D4, 0xF1D4E242, 0x68DDB3F8, 0x1FDA836E, 0x81BE16CD, 0xF6B9265B, 0x6FB077E1, 0x18B74777, 
-                     0x88085AE6, 0xFF0F6A70, 0x66063BCA, 0x11010B5C, 0x8F659EFF, 0xF862AE69, 0x616BFFD3, 0x166CCF45, 
-                     0xA00AE278, 0xD70DD2EE, 0x4E048354, 0x3903B3C2, 0xA7672661, 0xD06016F7, 0x4969474D, 0x3E6E77DB, 
-                     0xAED16A4A, 0xD9D65ADC, 0x40DF0B66, 0x37D83BF0, 0xA9BCAE53, 0xDEBB9EC5, 0x47B2CF7F, 0x30B5FFE9, 
-                     0xBDBDF21C, 0xCABAC28A, 0x53B39330, 0x24B4A3A6, 0xBAD03605, 0xCDD70693, 0x54DE5729, 0x23D967BF, 
+                     0x7807C9A2, 0x0F00F934, 0x9609A88E, 0xE10E9818, 0x7F6A0DBB, 0x086D3D2D, 0x91646C97, 0xE6635C01,
+                     0x6B6B51F4, 0x1C6C6162, 0x856530D8, 0xF262004E, 0x6C0695ED, 0x1B01A57B, 0x8208F4C1, 0xF50FC457,
+                     0x65B0D9C6, 0x12B7E950, 0x8BBEB8EA, 0xFCB9887C, 0x62DD1DDF, 0x15DA2D49, 0x8CD37CF3, 0xFBD44C65,
+                     0x4DB26158, 0x3AB551CE, 0xA3BC0074, 0xD4BB30E2, 0x4ADFA541, 0x3DD895D7, 0xA4D1C46D, 0xD3D6F4FB,
+                     0x4369E96A, 0x346ED9FC, 0xAD678846, 0xDA60B8D0, 0x44042D73, 0x33031DE5, 0xAA0A4C5F, 0xDD0D7CC9,
+                     0x5005713C, 0x270241AA, 0xBE0B1010, 0xC90C2086, 0x5768B525, 0x206F85B3, 0xB966D409, 0xCE61E49F,
+                     0x5EDEF90E, 0x29D9C998, 0xB0D09822, 0xC7D7A8B4, 0x59B33D17, 0x2EB40D81, 0xB7BD5C3B, 0xC0BA6CAD,
+                     0xEDB88320, 0x9ABFB3B6, 0x03B6E20C, 0x74B1D29A, 0xEAD54739, 0x9DD277AF, 0x04DB2615, 0x73DC1683,
+                     0xE3630B12, 0x94643B84, 0x0D6D6A3E, 0x7A6A5AA8, 0xE40ECF0B, 0x9309FF9D, 0x0A00AE27, 0x7D079EB1,
+                     0xF00F9344, 0x8708A3D2, 0x1E01F268, 0x6906C2FE, 0xF762575D, 0x806567CB, 0x196C3671, 0x6E6B06E7,
+                     0xFED41B76, 0x89D32BE0, 0x10DA7A5A, 0x67DD4ACC, 0xF9B9DF6F, 0x8EBEEFF9, 0x17B7BE43, 0x60B08ED5,
+                     0xD6D6A3E8, 0xA1D1937E, 0x38D8C2C4, 0x4FDFF252, 0xD1BB67F1, 0xA6BC5767, 0x3FB506DD, 0x48B2364B,
+                     0xD80D2BDA, 0xAF0A1B4C, 0x36034AF6, 0x41047A60, 0xDF60EFC3, 0xA867DF55, 0x316E8EEF, 0x4669BE79,
+                     0xCB61B38C, 0xBC66831A, 0x256FD2A0, 0x5268E236, 0xCC0C7795, 0xBB0B4703, 0x220216B9, 0x5505262F,
+                     0xC5BA3BBE, 0xB2BD0B28, 0x2BB45A92, 0x5CB36A04, 0xC2D7FFA7, 0xB5D0CF31, 0x2CD99E8B, 0x5BDEAE1D,
+                     0x9B64C2B0, 0xEC63F226, 0x756AA39C, 0x026D930A, 0x9C0906A9, 0xEB0E363F, 0x72076785, 0x05005713,
+                     0x95BF4A82, 0xE2B87A14, 0x7BB12BAE, 0x0CB61B38, 0x92D28E9B, 0xE5D5BE0D, 0x7CDCEFB7, 0x0BDBDF21,
+                     0x86D3D2D4, 0xF1D4E242, 0x68DDB3F8, 0x1FDA836E, 0x81BE16CD, 0xF6B9265B, 0x6FB077E1, 0x18B74777,
+                     0x88085AE6, 0xFF0F6A70, 0x66063BCA, 0x11010B5C, 0x8F659EFF, 0xF862AE69, 0x616BFFD3, 0x166CCF45,
+                     0xA00AE278, 0xD70DD2EE, 0x4E048354, 0x3903B3C2, 0xA7672661, 0xD06016F7, 0x4969474D, 0x3E6E77DB,
+                     0xAED16A4A, 0xD9D65ADC, 0x40DF0B66, 0x37D83BF0, 0xA9BCAE53, 0xDEBB9EC5, 0x47B2CF7F, 0x30B5FFE9,
+                     0xBDBDF21C, 0xCABAC28A, 0x53B39330, 0x24B4A3A6, 0xBAD03605, 0xCDD70693, 0x54DE5729, 0x23D967BF,
                      0xB3667A2E, 0xC4614AB8, 0x5D681B02, 0x2A6F2B94, 0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D];
-     
+
         var crc = -1, y = 0, n = a.length,i;
 
         for (i = from; i < to; i++) {
             y = (crc ^ a[i]) & 0xFF;
             crc = (crc >>> 8) ^ table[y];
         }
-     
+
         return crc ^ (-1);
     }
 
@@ -249,7 +249,7 @@ numeric.imageURL = function imageURL(img) {
     var stream = [
                   137, 80, 78, 71, 13, 10, 26, 10,                           //  0: PNG signature
                   0,0,0,13,                                                  //  8: IHDR Chunk length
-                  73, 72, 68, 82,                                            // 12: "IHDR" 
+                  73, 72, 68, 82,                                            // 12: "IHDR"
                   (w >> 24) & 255, (w >> 16) & 255, (w >> 8) & 255, w&255,   // 16: Width
                   (h >> 24) & 255, (h >> 16) & 255, (h >> 8) & 255, h&255,   // 20: Height
                   8,                                                         // 24: bit depth
@@ -704,7 +704,7 @@ numeric.mapreducers = {
                 if(numeric.opseq.hasOwnProperty(i+'eq')) {
                     codeeq = function(x,y) { return x+' '+o+'= '+y; };
                 } else {
-                    codeeq = function(x,y) { return x+' = '+x+' '+o+' '+y; };                    
+                    codeeq = function(x,y) { return x+' = '+x+' '+o+' '+y; };
                 }
             }
             numeric[i+'VV'] = numeric.pointwise2(['x[i]','y[i]'],code('ret[i]','x[i]','y[i]'),setup);
@@ -821,7 +821,7 @@ numeric.inv = function inv(x) {
         Aj = A[i0]; A[i0] = A[j]; A[j] = Aj;
         Ij = I[i0]; I[i0] = I[j]; I[j] = Ij;
         x = Aj[j];
-        for(k=j;k!==n;++k)    Aj[k] /= x; 
+        for(k=j;k!==n;++k)    Aj[k] /= x;
         for(k=n-1;k!==-1;--k) Ij[k] /= x;
         for(i=m-1;i!==-1;--i) {
             if(i!==j) {
@@ -1685,7 +1685,7 @@ numeric.ccsDFS.prototype.dfs = function dfs(J,Ai,Aj,x,xj,Pinv) {
 numeric.ccsLPSolve = function ccsLPSolve(A,B,x,xj,I,Pinv,dfs) {
     var Ai = A[0], Aj = A[1], Av = A[2],m = Ai.length-1, n=0;
     var Bi = B[0], Bj = B[1], Bv = B[2];
-    
+
     var i,i0,i1,j,J,j0,j1,k,l,l0,l1,a;
     i0 = Bi[I];
     i1 = Bi[I+1];
@@ -1792,7 +1792,7 @@ numeric.ccsDFS0.prototype.dfs = function dfs(J,Ai,Aj,x,xj,Pinv,P) {
 numeric.ccsLPSolve0 = function ccsLPSolve0(A,B,y,xj,I,Pinv,P,dfs) {
     var Ai = A[0], Aj = A[1], Av = A[2],m = Ai.length-1, n=0;
     var Bi = B[0], Bj = B[1], Bv = B[2];
-    
+
     var i,i0,i1,j,J,j0,j1,k,l,l0,l1,a;
     i0 = Bi[I];
     i1 = Bi[I+1];
@@ -1955,7 +1955,7 @@ numeric.ccsLUPSolve = function ccsLUPSolve(LUP,B) {
         k = 0;
         j0 = Bi[i];
         j1 = Bi[i+1];
-        for(j=j0;j<j1;++j) { 
+        for(j=j0;j<j1;++j) {
             J = LUP.Pinv[Bj[j]];
             bj[k] = J;
             b[J] = Bv[j];
@@ -2363,7 +2363,7 @@ numeric.cgrid = function grid(n,shape) {
         }
     }
     count=0;
-    for(i=1;i<n[0]-1;i++) for(j=1;j<n[1]-1;j++) 
+    for(i=1;i<n[0]-1;i++) for(j=1;j<n[1]-1;j++)
         if(shape(i,j)) {
             ret[i][j] = count;
             count++;
@@ -2503,7 +2503,7 @@ numeric.Spline.prototype.roots = function roots() {
                 t1 = stops[k+1];
                 z1 = this._at(t1,j);
                 if(z0 === 0) {
-                    ri.push(t0); 
+                    ri.push(t0);
                     t0 = t1;
                     z0 = z1;
                     continue;
@@ -2546,7 +2546,7 @@ numeric.spline = function spline(x,y,k1,kn) {
     var i;
     var sub = numeric.sub,mul = numeric.mul,add = numeric.add;
     for(i=n-2;i>=0;i--) { dx[i] = x[i+1]-x[i]; dy[i] = sub(y[i+1],y[i]); }
-    if(typeof k1 === "string" || typeof kn === "string") { 
+    if(typeof k1 === "string" || typeof kn === "string") {
         k1 = kn = "periodic";
     }
     // Build sparse tridiagonal system
@@ -3244,7 +3244,7 @@ numeric.MPStoLP = function MPStoLP(MPS) {
         }
         switch(state) {
         case 0: case 1: err('Unexpected line');
-        case 2: 
+        case 2:
             switch(w[0]) {
             case 'N': if(N===0) N = w[1]; else err('Two or more N rows'); break;
             case 'L': rows[w[1]] = rl; sign[rl] = 1; b[rl] = 0; ++rl; break;
@@ -3341,18 +3341,18 @@ numeric.MPStoLP = function MPStoLP(MPS) {
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
-// 
+//
 //   1. Redistributions of source code must retain the above copyright
 //      notice, this list of conditions and the following disclaimer.
 //
 //   2. Redistributions in binary form must reproduce the above copyright
 //      notice, this list of conditions and the following disclaimer in the
 //      documentation and/or other materials provided with the distribution.
-// 
+//
 //   3. Neither the name of this module nor the names of its contributors may
 //      be used to endorse or promote products derived from this software
 //      without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 // "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 // LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -3368,7 +3368,7 @@ numeric.MPStoLP = function MPStoLP(MPS) {
 /**
  * All code is in an anonymous closure to keep the global namespace clean.
  *
- * @param {number=} overflow 
+ * @param {number=} overflow
  * @param {number=} startdenom
  */
 
@@ -3484,7 +3484,7 @@ function ARC4(key) {
 // flatten()
 // Converts an object tree to nested arrays of strings.
 //
-/** @param {Object=} result 
+/** @param {Object=} result
   * @param {string=} prop
   * @param {string=} typ */
 function flatten(obj, depth, result, prop, typ) {
@@ -3505,7 +3505,7 @@ function flatten(obj, depth, result, prop, typ) {
 // Mixes a string seed into a key that is an array of integers, and
 // returns a shortened string seed that is equivalent to the result key.
 //
-/** @param {number=} smear 
+/** @param {number=} smear
   * @param {number=} j */
 function mixkey(seed, key, smear, j) {
   seed += '';                         // Ensure the seed is a string
@@ -4153,27 +4153,27 @@ numeric.svd= function svd(A) {
 	var j=0;
 	var k=0;
 	var l=0;
-	
+
 	var u= numeric.clone(A);
 	var m= u.length;
-	
+
 	var n= u[0].length;
-	
+
 	if (m < n) throw "Need more rows than columns"
-	
+
 	var e = new Array(n);
 	var q = new Array(n);
 	for (i=0; i<n; i++) e[i] = q[i] = 0.0;
 	var v = numeric.rep([n,n],0);
 //	v.zero();
-	
+
  	function pythag(a,b)
  	{
 		a = Math.abs(a);
 		b = Math.abs(b);
 		if (a > b)
 			return a*Math.sqrt(1.0+(b*b/a/a))
-		else if (b == 0.0) 
+		else if (b == 0.0)
 			return a
 		return b*Math.sqrt(1.0+(a*a/b/b))
 	}
@@ -4187,18 +4187,18 @@ numeric.svd= function svd(A) {
 	var y= 0.0;
 	var z= 0.0;
 	var s= 0.0;
-	
+
 	for (i=0; i < n; i++)
-	{	
+	{
 		e[i]= g;
 		s= 0.0;
 		l= i+1;
-		for (j=i; j < m; j++) 
+		for (j=i; j < m; j++)
 			s += (u[j][i]*u[j][i]);
 		if (s <= tolerance)
 			g= 0.0;
 		else
-		{	
+		{
 			f= u[i][i];
 			g= Math.sqrt(s);
 			if (f >= 0.0) g= -g;
@@ -4207,21 +4207,21 @@ numeric.svd= function svd(A) {
 			for (j=l; j < n; j++)
 			{
 				s= 0.0;
-				for (k=i; k < m; k++) 
+				for (k=i; k < m; k++)
 					s += u[k][i]*u[k][j];
 				f= s/h;
-				for (k=i; k < m; k++) 
+				for (k=i; k < m; k++)
 					u[k][j]+=f*u[k][i];
 			}
 		}
 		q[i]= g;
 		s= 0.0;
-		for (j=l; j < n; j++) 
+		for (j=l; j < n; j++)
 			s= s + u[i][j]*u[i][j];
 		if (s <= tolerance)
 			g= 0.0;
 		else
-		{	
+		{
 			f= u[i][i+1];
 			g= Math.sqrt(s);
 			if (f >= 0.0) g= -g;
@@ -4229,35 +4229,35 @@ numeric.svd= function svd(A) {
 			u[i][i+1] = f-g;
 			for (j=l; j < n; j++) e[j]= u[i][j]/h;
 			for (j=l; j < m; j++)
-			{	
+			{
 				s=0.0;
-				for (k=l; k < n; k++) 
+				for (k=l; k < n; k++)
 					s += (u[j][k]*u[i][k]);
-				for (k=l; k < n; k++) 
+				for (k=l; k < n; k++)
 					u[j][k]+=s*e[k];
-			}	
+			}
 		}
 		y= Math.abs(q[i])+Math.abs(e[i]);
-		if (y>x) 
+		if (y>x)
 			x=y;
 	}
-	
+
 	// accumulation of right hand gtransformations
 	for (i=n-1; i != -1; i+= -1)
-	{	
+	{
 		if (g != 0.0)
 		{
 		 	h= g*u[i][i+1];
-			for (j=l; j < n; j++) 
+			for (j=l; j < n; j++)
 				v[j][i]=u[i][j]/h;
 			for (j=l; j < n; j++)
-			{	
+			{
 				s=0.0;
-				for (k=l; k < n; k++) 
+				for (k=l; k < n; k++)
 					s += u[i][k]*v[k][j];
-				for (k=l; k < n; k++) 
+				for (k=l; k < n; k++)
 					v[k][j]+=(s*v[k][i]);
-			}	
+			}
 		}
 		for (j=l; j < n; j++)
 		{
@@ -4268,13 +4268,13 @@ numeric.svd= function svd(A) {
 		g= e[i];
 		l= i;
 	}
-	
+
 	// accumulation of left hand transformations
 	for (i=n-1; i != -1; i+= -1)
-	{	
+	{
 		l= i+1;
 		g= q[i];
-		for (j=l; j < n; j++) 
+		for (j=l; j < n; j++)
 			u[i][j] = 0;
 		if (g != 0.0)
 		{
@@ -4292,7 +4292,7 @@ numeric.svd= function svd(A) {
 			for (j=i; j < m; j++) u[j][i] = 0;
 		u[i][i] += 1;
 	}
-	
+
 	// diagonalization of the bidiagonal form
 	prec= prec*x;
 	for (k=n-1; k != -1; k+= -1)
@@ -4301,13 +4301,13 @@ numeric.svd= function svd(A) {
 		{	// test f splitting
 			var test_convergence = false;
 			for (l=k; l != -1; l+= -1)
-			{	
+			{
 				if (Math.abs(e[l]) <= prec)
 				{	test_convergence= true;
-					break 
+					break
 				}
 				if (Math.abs(q[l-1]) <= prec)
-					break 
+					break
 			}
 			if (!test_convergence)
 			{	// cancellation of e[l] if l>0
@@ -4315,7 +4315,7 @@ numeric.svd= function svd(A) {
 				s= 1.0;
 				var l1= l-1;
 				for (i =l; i<k+1; i++)
-				{	
+				{
 					f= s*e[i];
 					e[i]= c*e[i];
 					if (Math.abs(f) <= prec)
@@ -4326,13 +4326,13 @@ numeric.svd= function svd(A) {
 					c= g/h;
 					s= -f/h;
 					for (j=0; j < m; j++)
-					{	
+					{
 						y= u[j][l1];
 						z= u[j][i];
 						u[j][l1] =  y*c+(z*s);
 						u[j][i] = -y*s+(z*c);
-					} 
-				}	
+					}
+				}
 			}
 			// test f convergence
 			z= q[k];
@@ -4363,7 +4363,7 @@ numeric.svd= function svd(A) {
 			c= 1.0;
 			s= 1.0;
 			for (i=l+1; i< k+1; i++)
-			{	
+			{
 				g= e[i];
 				y= q[i];
 				h= s*g;
@@ -4377,7 +4377,7 @@ numeric.svd= function svd(A) {
 				h= y*s;
 				y= y*c;
 				for (j=0; j < n; j++)
-				{	
+				{
 					x= v[j][i-1];
 					z= v[j][i];
 					v[j][i-1] = x*c+z*s;
@@ -4400,17 +4400,17 @@ numeric.svd= function svd(A) {
 			e[l]= 0.0;
 			e[k]= f;
 			q[k]= x;
-		} 
+		}
 	}
-		
+
 	//vt= transpose(v)
 	//return (u,q,vt)
-	for (i=0;i<q.length; i++) 
+	for (i=0;i<q.length; i++)
 	  if (q[i] < prec) q[i] = 0;
-	  
-	//sort eigenvalues	
+
+	//sort eigenvalues
 	for (i=0; i< n; i++)
-	{	 
+	{
 	//writeln(q)
 	 for (j=i-1; j >= 0; j--)
 	 {
@@ -4424,11 +4424,11 @@ numeric.svd= function svd(A) {
 	   for(k=0;k<v.length;k++) { temp = v[k][i]; v[k][i] = v[k][j]; v[k][j] = temp; }
 //	   u.swapCols(i,j)
 //	   v.swapCols(i,j)
-	   i = j;	   
+	   i = j;
 	  }
-	 }	
+	 }
 	}
-	
+
 	return {U:u,S:q,V:v}
 };
 });
@@ -4555,7 +4555,7 @@ var promise = createCommonjsModule(function (module) {
   var setTimeoutFunc = setTimeout;
 
   function noop() {}
-  
+
   // Polyfill for Function.prototype.bind
   function bind(fn, thisArg) {
     return function () {
@@ -4773,7 +4773,7 @@ var promise = createCommonjsModule(function (module) {
   Promise._setUnhandledRejectionFn = function _setUnhandledRejectionFn(fn) {
     Promise._unhandledRejectionFn = fn;
   };
-  
+
   if ('object' !== 'undefined' && module.exports) {
     module.exports = Promise;
   } else if (!root.Promise) {
@@ -4807,18 +4807,18 @@ function emitEvent(eventName) {
 /**
  * Fast Fourier Transform
  * 1D-FFT/IFFT, 2D-FFT/IFFT (radix-2)
- * 
+ *
  * @author ryo / github.com/wellflat
  * Based on https://github.com/wellflat/jslib with some tiny optimizations
  */
 
 function FFT() {
-  
+
   var _n = 0,          // order
       _bitrev = null,  // bit reversal table
       _cstb = null;    // sin/cos table
   var _tre, _tim;
-  
+
   this.init = function (n) {
     if(n !== 0 && (n & (n - 1)) === 0) {
       _n = n;
@@ -4829,12 +4829,12 @@ function FFT() {
       throw new Error("init: radix-2 required");
     }
   };
-    
+
   // 1D-FFT
   this.fft1d = function (re, im) {
     fft(re, im, 1);
   };
-    
+
   // 1D-IFFT
   this.ifft1d = function (re, im) {
     var n = 1/_n;
@@ -4844,7 +4844,7 @@ function FFT() {
       im[i] *= n;
     }
   };
-  
+
   // 2D-FFT
   this.fft2d = function (re, im) {
     var i = 0;
@@ -4876,7 +4876,7 @@ function FFT() {
       }
     }
   };
-  
+
   // 2D-IFFT
   this.ifft2d = function (re, im) {
     var i = 0;
@@ -4908,7 +4908,7 @@ function FFT() {
       }
     }
   };
-  
+
   // core operation of FFT
   function fft(re, im, inv) {
     var d, h, ik, m, tmp, wr, wi, xr, xi,
@@ -4945,7 +4945,7 @@ function FFT() {
       }
     }
   }
-  
+
   // set variables
   function _setVariables() {
     if(typeof Uint8Array !== 'undefined') {
@@ -4963,7 +4963,7 @@ function FFT() {
       _tim = new Array(_n*_n);
     }
   }
-  
+
   // make bit reversal table
   function _makeBitReversal() {
     var i = 0,
@@ -4980,7 +4980,7 @@ function FFT() {
       _bitrev[i] = j;
     }
   }
-  
+
   // make trigonometric function table
   function _makeCosSinTable() {
     var n2 = _n >> 1,
@@ -5038,7 +5038,7 @@ var face_filter = {"real": [2.5919359538538909, 1.3480085770312511, -0.204829450
  */
 
 function mosseFilter(params) {
-    
+
     var _filter, _top, _bottom;
     var _fft;
     var _w,_h;
@@ -5046,11 +5046,11 @@ function mosseFilter(params) {
     var _arrlen;
     var _cc;
     var _image_array;
-    
+
     this.psr_prev = undefined;
     this.peak_prev = undefined;
     var updateable = false;
-    
+
     if (!params) params = {};
     // setup of canvas for drawing responses, if given
     if (params.drawResponse === undefined) {
@@ -5065,7 +5065,7 @@ function mosseFilter(params) {
     if (params.psrThreshold === undefined) params.psrThreshold = 10;
     if (params.eta === undefined) params.eta = 0.10;
     if (params.convertToGrayscale === undefined) params.convertToGrayscale = true;
-    
+
     this.load = function(filter) {
         // initialize filter width and height
         _w = filter.width;
@@ -5078,11 +5078,11 @@ function mosseFilter(params) {
           _top = [filter.top.real, filter.top.imag];
           _bottom = [filter.bottom.real, filter.bottom.imag];
         }
-        
+
         // initialize fft to given width
         _fft = new FFT();
         _fft.init(filter.width);
-        
+
         // set up temporary variables
         if(typeof Float64Array !== 'undefined') {
             _im_part = new Float64Array(_arrlen);
@@ -5096,13 +5096,13 @@ function mosseFilter(params) {
         canvas.setAttribute('height', _h);
         _cc = canvas.getContext('2d');
     };
-    
+
     this.init = function(w,h) {
         // initialize filter width and height for a blank filter
         _w = w;
         _h = h;
         _arrlen = _w*_h;
-        
+
         _filter = [[],[]];
         _top = [[],[]];
         _bottom = [[],[]];
@@ -5115,11 +5115,11 @@ function mosseFilter(params) {
             _bottom[1][i] = 0;
         }
         updateable = true;
-        
+
         // initialize fft to given width
         _fft = new FFT();
         _fft.init(w);
-        
+
         // set up temporary variables
         if(typeof Float64Array !== 'undefined') {
             _im_part = new Float64Array(_arrlen);
@@ -5131,32 +5131,32 @@ function mosseFilter(params) {
         canvas.setAttribute('height', _h);
         _cc = canvas.getContext('2d');
     };
-    
+
     // fft function
     this.fft = function(array) {
         // not in-place
-        
+
         var cn = new Array(_arrlen);
         for (var i = 0;i < _arrlen;i++) {
           cn[i] = 0.0;
         }
-        
+
         _fft.fft2d(array,cn);
         return [array, cn];
     };
-    
+
     // fft function
     this.fft_inplace = function(array) {
         // in-place
-        
+
         for (var i = 0;i < _arrlen;i++) {
           _im_part[i] = 0.0;
         }
-        
+
         _fft.fft2d(array,_im_part);
         return [array, _im_part];
     };
-    
+
     this.ifft = function(rn, cn) {
         // in-place
         _fft.ifft2d(rn, cn);
@@ -5182,7 +5182,7 @@ function mosseFilter(params) {
                 }
             }
         }
-        
+
         // subtract values around peak
         for (var x = -5;x < 6;x++) {
             for (var y = -5;y < 6;y++) {
@@ -5193,41 +5193,41 @@ function mosseFilter(params) {
                 }
             }
         }
-        
+
         var mean = sum/array.length;
         var sd = Math.sqrt((sdo/array.length)-(mean*mean));
-        
+
         // get mean/variance of output around peak
         var psr = (max-mean)/sd;
         return psr;
     };
-    
+
     this.getResponse = function(imageData) {
         // in-place
-        
+
         // preprocess
         var prepImage = preprocess(imageData);
         prepImage = cosine_window(prepImage);
-        
+
         // filter
         var res = this.fft_inplace(prepImage);
-        
+
         // elementwise multiplication with filter
         complex_mult_inplace(res, _filter);
-        
+
         // do inverse 2d fft
         var filtered = this.ifft(res[0],res[1]);
         return filtered;
     };
-    
+
     this.track = function(input, left, top, width, height, updateFilter, gaussianPrior, calcPSR) {
         // finds position of filter in input image
-        
+
         if (!_filter) {
             console.log("Mosse-filter needs to be initialized or trained before starting tracking.");
             return false;
         }
-        
+
         if (input.tagName == "VIDEO" || input.tagName == "IMG") {
             // scale selection according to original source image
             var videoLeft = Math.round((left/input.width)*input.videoWidth);
@@ -5238,40 +5238,40 @@ function mosseFilter(params) {
         } else if (input.tagName == "CANVAS") {
             _cc.drawImage(input, left, top, width, height, 0, 0, _w, _h);
         }
-        
+
         var image = _cc.getImageData(0,0,_w,_h);
         var id = image.data;
-        
+
         if (params.convertToGrayscale) {
             // convert to grayscale
             for (var i = 0;i < _arrlen;i++) {
                 _image_array[i] = id[(4*i)]*0.3;
                 _image_array[i] += id[(4*i)+1]*0.59;
                 _image_array[i] += id[(4*i)+2]*0.11;
-            } 
+            }
         } else {
             // use only one channel
             for (var i = 0;i < _arrlen;i++) {
                 _image_array[i] = id[(4*i)];
-            } 
+            }
         }
-        
+
         // preprocess
         var prepImage = preprocess(_image_array);
         prepImage = cosine_window(prepImage);
-        
+
         // filter
         var res = this.fft_inplace(prepImage);
         // elementwise multiplication with filter
         var nures = complex_mult(res, _filter);
         // do inverse 2d fft
         var filtered = this.ifft(nures[0],nures[1]);
-        
+
         // find max and min
         var max = 0;
         var min = 0;
         var maxpos = [0, 0];
-        
+
         //method using centered gaussian prior
         if (gaussianPrior) {
             var prior, dx, dy;
@@ -5304,7 +5304,7 @@ function mosseFilter(params) {
             }
         }
         this.peak_prev = max;
-        
+
         if (params.drawResponse) {
             // draw response
             var diff = max-min;
@@ -5327,11 +5327,11 @@ function mosseFilter(params) {
             dcc.putImageData(psci, 0, 0);
             responseContext.drawImage(dc, left, top, width, width);
         }
-        
+
         if (calcPSR) {
           this.psr_prev = this.psr(filtered);
         }
-        
+
         if (updateFilter) {
             if (!updateable) {
                 console.log("The loaded filter does not support updating. Ignoring parameter 'updateFilter'.");
@@ -5341,7 +5341,7 @@ function mosseFilter(params) {
                 } else {
                   var psr = this.psr(filtered);
                 }
-                
+
                 if (psr > params.psrThreshold) {
                     // create target
                     var target = [];
@@ -5352,15 +5352,15 @@ function mosseFilter(params) {
                             target[(y*_w)+x] = Math.exp(-(((x-nux)*(x-nux))+((y-nuy)*(y-nuy)))/(2*2));
                         }
                     }
-                    
+
                     //fft target
                     target = this.fft(target);
-                    
+
                     // create filter
                     var res_conj = complex_conj(res);
                     var fuTop = complex_mult(target,res_conj);
                     var fuBottom = complex_mult(res,res_conj);
-                    
+
                     // add up
                     var eta = params.eta;
                     for (var i = 0;i < _arrlen;i++) {
@@ -5369,19 +5369,19 @@ function mosseFilter(params) {
                         _bottom[0][i] = eta*fuBottom[0][i] + (1-eta)*_bottom[0][i];
                         _bottom[1][i] = eta*fuBottom[1][i] + (1-eta)*_bottom[1][i];
                     }
-                    
+
                     _filter = complex_div(_top,_bottom);
                 }
             }
         }
-        
+
         /*if (psr < 5) {
-          maxpos = [_w/2,_h/2]; 
+          maxpos = [_w/2,_h/2];
         }*/
-        
+
         maxpos[0] = maxpos[0]*(width/_w);
         maxpos[1] = maxpos[1]*(width/_h);
-        
+
         // check if output is strong enough
         // if not, return false?
         if (max < 0) {
@@ -5390,14 +5390,14 @@ function mosseFilter(params) {
           return maxpos;
         }
     };
-    
+
     this.train = function(input, left, top, width, height) {
-        
+
         if (!updateable) {
           console.log("The loaded filter does not support updating. Unable to do training.");
           return false;
         }
-        
+
         if (input.tagName == "VIDEO" || input.tagName == "IMG") {
             // scale selection according to original source image
             var videoLeft = Math.round((left/input.width)*input.videoWidth);
@@ -5408,21 +5408,21 @@ function mosseFilter(params) {
         } else if (input.tagName == "CANVAS") {
             _cc.drawImage(input, left, top, width, height, 0, 0, _w, _h);
         }
-        
+
         var image = _cc.getImageData(0,0,_w,_h);
         var id = image.data;
-         
+
         // convert to grayscale
         for (var i = 0;i < _arrlen;i++) {
             _image_array[i] = id[(4*i)]*0.3;
             _image_array[i] += id[(4*i)+1]*0.59;
             _image_array[i] += id[(4*i)+2]*0.11;
         }
-        
+
         // preprocess
         var prepImage = preprocess(_image_array);
         prepImage = cosine_window(prepImage);
-        
+
         // create target
         var target = [];
         var nux = _w/2;
@@ -5432,17 +5432,17 @@ function mosseFilter(params) {
                 target[(y*_w)+x] = Math.exp(-(((x-nux)*(x-nux))+((y-nuy)*(y-nuy)))/(2*2));
             }
         }
-        
+
         //fft target
         target = this.fft(target);
-        
+
         // filter
         var res = this.fft(prepImage);
         // create filter
         var res_conj = complex_conj(res);
         var fuTop = complex_mult(target,res_conj);
         var fuBottom = complex_mult(res,res_conj);
-        
+
         // add up
         var eta = params.eta;
         for (var i = 0;i < _arrlen;i++) {
@@ -5451,27 +5451,27 @@ function mosseFilter(params) {
             _bottom[0][i] = eta*fuBottom[0][i] + (1-eta)*_bottom[0][i];
             _bottom[1][i] = eta*fuBottom[1][i] + (1-eta)*_bottom[1][i];
         }
-        
+
         _filter = complex_div(_top,_bottom);
-        
+
         return true;
     };
-    
+
     var preprocess = function(array) {
         // in-place
-        
+
         // log adjusting
         for (var i = 0;i < _arrlen;i++) {
           array[i] = Math.log(array[i]+1);
         }
-        
+
         // normalize to mean 0 and norm 1
         var mean = 0;
         for (var i = 0;i < _arrlen;i++) {
           mean += array[i];
         }
         mean /= _arrlen;
-        
+
         for (var i = 0;i < _arrlen;i++) {
           array[i] -= mean;
         }
@@ -5485,10 +5485,10 @@ function mosseFilter(params) {
               array[i] /= norm;
             }
         }
-        
+
         return array;
     };
-    
+
     var cosine_window = function(array) {
         // calculate rect cosine window (in-place)
         var pos = 0;
@@ -5501,10 +5501,10 @@ function mosseFilter(params) {
                 pos++;
             }
         }
-        
+
         return array;
     };
-    
+
     var complex_mult = function(cn1, cn2) {
         // not in-place
         var re_part = new Array(_w);
@@ -5516,7 +5516,7 @@ function mosseFilter(params) {
         }
         return nucn;
     };
-    
+
     var complex_mult_inplace = function(cn1, cn2) {
         // in-place
         var temp1, temp2;
@@ -5527,7 +5527,7 @@ function mosseFilter(params) {
             cn1[1][r] = temp2;
         }
     };
-    
+
     var complex_conj = function(cn) {
         // not in-place (TODO)
         var nucn = [[],[]];
@@ -5537,7 +5537,7 @@ function mosseFilter(params) {
         }
         return nucn;
     };
-    
+
     var complex_div = function(cn1, cn2) {
         // not in-place (TODO)
         var nucn = [[],[]];
@@ -5628,7 +5628,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
         function data_t(size_in_bytes, buffer) {
             // we need align size to multiple of 8
             this.size = ((size_in_bytes + 7) | 0) & -8;
-            if (typeof buffer === "undefined") { 
+            if (typeof buffer === "undefined") {
                 this.buffer = new ArrayBuffer(this.size);
             } else {
                 this.buffer = buffer;
@@ -5649,7 +5649,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
             this.channel = get_channel(data_type)|0;
             this.cols = c|0;
             this.rows = r|0;
-            if (typeof data_buffer === "undefined") { 
+            if (typeof data_buffer === "undefined") {
                 this.allocate();
             } else {
                 this.buffer = data_buffer;
@@ -5908,12 +5908,12 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                         sum = 0.25+0.5+0.25;
                         break;
                         case 2:
-                        _kernel[0] = 0.0625, _kernel[1] = 0.25, _kernel[2] = 0.375, 
+                        _kernel[0] = 0.0625, _kernel[1] = 0.25, _kernel[2] = 0.375,
                         _kernel[3] = 0.25, _kernel[4] = 0.0625;
                         sum = 0.0625+0.25+0.375+0.25+0.0625;
                         break;
                         case 3:
-                        _kernel[0] = 0.03125, _kernel[1] = 0.109375, _kernel[2] = 0.21875, 
+                        _kernel[0] = 0.03125, _kernel[1] = 0.109375, _kernel[2] = 0.21875,
                         _kernel[3] = 0.28125, _kernel[4] = 0.21875, _kernel[5] = 0.109375, _kernel[6] = 0.03125;
                         sum = 0.03125+0.109375+0.21875+0.28125+0.21875+0.109375+0.03125;
                         break;
@@ -5993,7 +5993,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                 var Hr5 = t14;
                 var Hr6 = (-t10 + t41 + t43 - t35 + t24 - t21 - t26 + t27) * t30;
                 var Hr7 = (-t7 + t10 + t16 - t43 + t27 - t28 - t21 + t25) * t30;
-                
+
                 t1 = dst_x0;
                 t2 = dst_x2;
                 t4 = dst_y1;
@@ -6083,7 +6083,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                 stack[1] = high;
 
                 while( sp >= 0 ) {
-                
+
                     left = stack[sp<<1];
                     right = stack[(sp<<1)+1];
                     sp--;
@@ -6128,7 +6128,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
 
                             a = left, b = pivot, c = right;
                             ta = array[a],tb = array[b],tc = array[c];
-                            pivot = cmp(ta, tb) ? (cmp(tb, tc) ? b : (cmp(ta, tc) ? c : a))   
+                            pivot = cmp(ta, tb) ? (cmp(tb, tc) ? b : (cmp(ta, tc) ? c : a))
                                                : (cmp(tc, tb) ? b : (cmp(ta, tc) ? a : c));
                             if( pivot != left0 ) {
                                 t = array[pivot];
@@ -6168,7 +6168,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                                 }
 
                                 if( left > right ) break;
-                                
+
                                 t = array[left];
                                 array[left] = array[right];
                                 array[right] = t;
@@ -6302,7 +6302,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
     //
 
     var matmath = (function() {
-        
+
         return {
             identity: function(M, value) {
                 if (typeof value === "undefined") { value=1; }
@@ -6403,7 +6403,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                 for (; i < nrows; pCdiag += nrows + 1, p_A = pA, i++) {
                     pC = pCdiag;
                     pCt = pCdiag;
-                    pB = p_A; 
+                    pB = p_A;
                     for (j = i; j < nrows; pC++, pCt += nrows, j++) {
                         pA = p_A;
                         sum = 0.0;
@@ -6511,8 +6511,8 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                         md[6] * md[2] * md[4];
             },
 
-            determinant_3x3: function(M11, M12, M13, 
-                                      M21, M22, M23, 
+            determinant_3x3: function(M11, M12, M13,
+                                      M21, M22, M23,
                                       M31, M32, M33) {
                 return  M11 * M22 * M33 - M11 * M23 * M32 -
                           M21 * M12 * M33 + M21 * M13 * M32 +
@@ -6610,7 +6610,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                     if( mv < val )
                         mv = val, k = indC[i], l = i;
                 }
-                
+
                 p = A[astep*k + l];
 
                 if(Math.abs(p) <= eps) break;
@@ -6623,10 +6623,10 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                 if(y < 0)
                     s = -s, t = -t;
                 A[astep*k + l] = 0;
-                
+
                 W[k] -= t;
                 W[l] += t;
-                
+
                 // rotate rows and columns k and l
                 for (i = 0; i < k; i++) {
                     _in = (astep * i + k);
@@ -6653,7 +6653,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                     A[_in] = a0 * c - b0 * s;
                     A[_in2] = a0 * s + b0 * c;
                 }
-                
+
                 // rotate eigenvectors
                 if (V) {
                     _in = vstep * k;
@@ -6665,7 +6665,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                         V[_in2] = a0 * s + b0 * c;
                     }
                 }
-                
+
                 for(j = 0; j < 2; j++) {
                     idx = j == 0 ? k : l;
                     if(idx < n - 1) {
@@ -6721,14 +6721,14 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
 
             var W_buff = jsfeat.cache.get_buffer(n<<3);
             var W = W_buff.f64;
-            
+
             for(; i < n; i++) {
                 for(k = 0, sd = 0; k < m; k++) {
                     t = At[i*astep + k];
                     sd += t*t;
                 }
                 W[i] = sd;
-                
+
                 if(Vt) {
                     for(k = 0; k < n; k++) {
                         Vt[i*vstep + k] = 0;
@@ -6736,24 +6736,24 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                     Vt[i*vstep + i] = 1;
                 }
             }
-            
+
             for(; iter < max_iter; iter++) {
                 changed = 0;
-                
+
                 for(i = 0; i < n-1; i++) {
                     for(j = i+1; j < n; j++) {
                         Ai = (i*astep)|0, Aj = (j*astep)|0;
                         a = W[i], p = 0, b = W[j];
-                        
+
                         k = 2;
                         p += At[Ai]*At[Aj];
                         p += At[Ai+1]*At[Aj+1];
 
                         for(; k < m; k++)
                             p += At[Ai+k]*At[Aj+k];
-                        
+
                         if(Math.abs(p) <= eps*Math.sqrt(a*b)) continue;
-                        
+
                         p *= 2.0;
                         beta = a - b, gamma = hypot(p, beta);
                         if( beta < 0 ) {
@@ -6764,9 +6764,9 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                             c = Math.sqrt((gamma + beta)/(gamma*2.0));
                             s = (p/(gamma*c*2.0));
                         }
-                        
+
                         a=0.0, b=0.0;
-                        
+
                         k = 2; // unroll
                         t0 = c*At[Ai] + s*At[Aj];
                         t1 = -s*At[Ai] + c*At[Aj];
@@ -6783,14 +6783,14 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                             t0 = c*At[Ai+k] + s*At[Aj+k];
                             t1 = -s*At[Ai+k] + c*At[Aj+k];
                             At[Ai+k] = t0; At[Aj+k] = t1;
-                            
+
                             a += t0*t0; b += t1*t1;
                         }
-                        
+
                         W[i] = a; W[j] = b;
-                        
+
                         changed = 1;
-                        
+
                         if(Vt) {
                             Vi = (i*vstep)|0, Vj = (j*vstep)|0;
 
@@ -6813,7 +6813,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                 }
                 if(changed == 0) break;
             }
-            
+
             for(i = 0; i < n; i++) {
                 for(k = 0, sd = 0; k < m; k++) {
                     t = At[i*astep + k];
@@ -6821,7 +6821,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                 }
                 W[i] = Math.sqrt(sd);
             }
-            
+
             for(i = 0; i < n-1; i++) {
                 j = i;
                 for(k = i+1; k < n; k++) {
@@ -6834,18 +6834,18 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                         for(k = 0; k < m; k++) {
                             swap(At, i*astep + k, j*astep + k, t);
                         }
-                        
+
                         for(k = 0; k < n; k++) {
                             swap(Vt, i*vstep + k, j*vstep + k, t);
                         }
                     }
                 }
             }
-            
+
             for(i = 0; i < n; i++) {
                 _W[i] = W[i];
             }
-            
+
             if(!Vt) {
                 jsfeat.cache.put_buffer(W_buff);
                 return;
@@ -6854,7 +6854,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
             for(i = 0; i < n1; i++) {
 
                 sd = i < n ? W[i] : 0;
-                
+
                 while(sd <= minval) {
                     // if we got a zero singular value, then in order to get the corresponding left singular vector
                     // we generate a random vector, project it to the previously computed left singular vectors,
@@ -6890,7 +6890,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                     }
                     sd = Math.sqrt(sd);
                 }
-                
+
                 s = (1.0/sd);
                 for(k = 0; k < m; k++) {
                     At[i*astep + k] *= s;
@@ -6899,7 +6899,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
 
             jsfeat.cache.put_buffer(W_buff);
         };
-        
+
         return {
 
             lu_solve: function(A, B) {
@@ -6908,41 +6908,41 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                 var t,alpha,d,s;
 
                 for(i = 0; i < astep; i++) {
-                    k = i;                    
+                    k = i;
                     for(j = i+1; j < astep; j++) {
                         if(Math.abs(ad[j*astep + i]) > Math.abs(ad[k*astep+i])) {
                             k = j;
                         }
                     }
-                    
+
                     if(Math.abs(ad[k*astep+i]) < jsfeat.EPSILON) {
                         return 0; // FAILED
                     }
-                    
+
                     if(k != i) {
                         for(j = i; j < astep; j++ ) {
                             swap(ad, i*astep+j, k*astep+j, t);
                         }
-                        
+
                         swap(bd, i, k, t);
                         p = -p;
                     }
-                    
+
                     d = -1.0/ad[i*astep+i];
-                    
+
                     for(j = i+1; j < astep; j++) {
                         alpha = ad[j*astep+i]*d;
-                        
+
                         for(k = i+1; k < astep; k++) {
                             ad[j*astep+k] += alpha*ad[i*astep+k];
                         }
-                        
+
                         bd[j] += alpha*bd[i];
                     }
-                    
+
                     ad[i*astep+i] = -d;
                 }
-                
+
                 for(i = astep-1; i >= 0; i--) {
                     s = bd[i];
                     for(k = i+1; k < astep; k++) {
@@ -7294,7 +7294,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
     	var T1 = new jsfeat.matrix_t(3, 3, jsfeat.F32_t|jsfeat.C1_t);
     	var AtA = new jsfeat.matrix_t(6, 6, jsfeat.F32_t|jsfeat.C1_t);
     	var AtB = new jsfeat.matrix_t(6, 1, jsfeat.F32_t|jsfeat.C1_t);
-    	
+
     	var affine2d = (function () {
 
 	        function affine2d() {
@@ -7415,16 +7415,16 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
 				    sMy += Math.abs(from[i].y - cMy);
 				}
 
-			    if( Math.abs(smx) < jsfeat.EPSILON 
-			    	|| Math.abs(smy) < jsfeat.EPSILON 
-			    	|| Math.abs(sMx) < jsfeat.EPSILON 
+			    if( Math.abs(smx) < jsfeat.EPSILON
+			    	|| Math.abs(smy) < jsfeat.EPSILON
+			    	|| Math.abs(sMx) < jsfeat.EPSILON
 			    	|| Math.abs(sMy) < jsfeat.EPSILON ) return 0;
 
 			    smx = count/smx; smy = count/smy;
 			    sMx = count/sMx; sMy = count/sMy;
 
-			    t0d[0] = sMx; 	t0d[1] = 0; 	t0d[2] = -cMx*sMx; 
-			    t0d[3] = 0; 	t0d[4] = sMy; 	t0d[5] = -cMy*sMy; 
+			    t0d[0] = sMx; 	t0d[1] = 0; 	t0d[2] = -cMx*sMx;
+			    t0d[3] = 0; 	t0d[4] = sMy; 	t0d[5] = -cMy*sMy;
 			    t0d[6] = 0; 	t0d[7] = 0; 	t0d[8] = 1;
 
 				t1d[0] = 1.0/smx; 	t1d[1] = 0; 		t1d[2] = cmx;
@@ -7853,7 +7853,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
 
 			        numinliers = find_inliers(kernel, model, from, to, count, sigma, err, curr_mask.data);
 			        if(mask) curr_mask.copy_to(mask);
-			        
+
 			        result = numinliers >= model_points;
 			    }
 
@@ -7908,7 +7908,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
 
                 if(sx1 > fsx1) {
                     xofs[k++] = (dx * ch)|0;
-                    xofs[k++] = ((sx1 - 1)*ch)|0; 
+                    xofs[k++] = ((sx1 - 1)*ch)|0;
                     xofs[k++] = ((sx1 - fsx1) * 0x100)|0;
                     xofs_count++;
                 }
@@ -8002,7 +8002,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                 for(sx = sx1; sx < sx2; sx++){
                     xofs_count++;
                     xofs[k++] = (sx * ch)|0;
-                    xofs[k++] = (dx * ch)|0; 
+                    xofs[k++] = (dx * ch)|0;
                     xofs[k++] = scale;
                 }
                 if(fsx2 - sx2 > 1e-3) {
@@ -8046,7 +8046,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                     dy++;
                 } else {
                     for(dx = 0; dx < nw * ch; dx++) {
-                        sum[dx] += buf[dx]; 
+                        sum[dx] += buf[dx];
                         buf[dx] = 0;
                     }
                 }
@@ -8060,7 +8060,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
             var i=0,j=0,k=0,sp=0,dp=0,sum=0,sum1=0,sum2=0,sum3=0,f0=filter[0],fk=0;
             var w2=w<<1,w3=w*3,w4=w<<2;
             // hor pass
-            for (; i < h; ++i) { 
+            for (; i < h; ++i) {
                 sum = src_d[sp];
                 for (j = 0; j < half_kernel; ++j) {
                     buf[j] = sum;
@@ -8077,7 +8077,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                     buf[j + half_kernel] = sum;
                 }
                 for (j = 0; j <= w-4; j+=4) {
-                    sum = buf[j] * f0, 
+                    sum = buf[j] * f0,
                     sum1 = buf[j+1] * f0,
                     sum2 = buf[j+2] * f0,
                     sum3 = buf[j+3] * f0;
@@ -8123,8 +8123,8 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                     buf[j + half_kernel] = sum;
                 }
                 dp = i;
-                for (j = 0; j <= h-4; j+=4, dp+=w4) { 
-                    sum = buf[j] * f0, 
+                for (j = 0; j <= h-4; j+=4, dp+=w4) {
+                    sum = buf[j] * f0,
                     sum1 = buf[j+1] * f0,
                     sum2 = buf[j+2] * f0,
                     sum3 = buf[j+3] * f0;
@@ -8154,7 +8154,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
             var i=0,j=0,k=0,sp=0,dp=0,sum=0.0,sum1=0.0,sum2=0.0,sum3=0.0,f0=filter[0],fk=0.0;
             var w2=w<<1,w3=w*3,w4=w<<2;
             // hor pass
-            for (; i < h; ++i) { 
+            for (; i < h; ++i) {
                 sum = src_d[sp];
                 for (j = 0; j < half_kernel; ++j) {
                     buf[j] = sum;
@@ -8171,7 +8171,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                     buf[j + half_kernel] = sum;
                 }
                 for (j = 0; j <= w-4; j+=4) {
-                    sum = buf[j] * f0, 
+                    sum = buf[j] * f0,
                     sum1 = buf[j+1] * f0,
                     sum2 = buf[j+2] * f0,
                     sum3 = buf[j+3] * f0;
@@ -8217,8 +8217,8 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                     buf[j + half_kernel] = sum;
                 }
                 dp = i;
-                for (j = 0; j <= h-4; j+=4, dp+=w4) { 
-                    sum = buf[j] * f0, 
+                for (j = 0; j <= h-4; j+=4, dp+=w4) {
+                    sum = buf[j] * f0,
                     sum1 = buf[j+1] * f0,
                     sum2 = buf[j+2] * f0,
                     sum3 = buf[j+3] * f0;
@@ -8309,7 +8309,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                 dst.resize(w, h, src.channel);
 
                 // first pass
-                // no need to scale 
+                // no need to scale
                 //data_u8 = src.data;
                 //data_i32 = tmp;
                 for (y = 0; y < h; ++y) {
@@ -8345,7 +8345,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                         nextPixelIndex ++;
                         previousPixelIndex ++;
                     }
-                    
+
                     hold = data_u8[nextPixelIndex-1];
                     for(; x < w; ++x, dstIndex += h) {
                         data_i32[dstIndex] = sum;
@@ -8739,7 +8739,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                 jsfeat.cache.put_buffer(buf1_node);
             },
 
-            // please note: 
+            // please note:
             // dst_(type) size should be cols = src.cols+1, rows = src.rows+1
             compute_integral_image: function(src, dst_sum, dst_sqsum, dst_tilted) {
                 var w0=src.cols|0,h0=src.rows|0,src_d=src.data;
@@ -8876,7 +8876,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                 var w=src.cols,h=src.rows,src_d=src.data;
 
                 dst.resize(w, h, src.channel);
-                
+
                 var dst_d=dst.data;
                 var i=0,j=0,grad=0,w2=w<<1,_grad=0,suppress=0,f=0,x=0,y=0,s=0;
                 var tg22x=0,tg67x=0;
@@ -8886,7 +8886,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                 var buf_node = jsfeat.cache.get_buffer((3 * (w + 2))<<2);
                 var map_node = jsfeat.cache.get_buffer(((h+2) * (w + 2))<<2);
                 var stack_node = jsfeat.cache.get_buffer((h * w)<<2);
-                
+
 
                 var buf = buf_node.i32;
                 var map = map_node.i32;
@@ -9100,7 +9100,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                     }
                 }
             },
-            
+
             // Basic RGB Skin detection filter
             // from http://popscan.blogspot.fr/2012/08/skin-detection-in-digital-images.html
             skindetector: function(src,dst) {
@@ -9119,7 +9119,7 @@ var jsfeat = jsfeat || { REVISION: 'ALPHA' };
                     } else {
                         dst[i] = 0;
                     }
-                }                
+                }
             }
         };
     })();
@@ -9138,7 +9138,7 @@ The references are:
  * Machine learning for high-speed corner detection,
    E. Rosten and T. Drummond, ECCV 2006
  * Faster and better: A machine learning approach to corner detection
-   E. Rosten, R. Porter and T. Drummond, PAMI, 2009  
+   E. Rosten, R. Porter and T. Drummond, PAMI, 2009
 */
 
 (function(global) {
@@ -9215,7 +9215,7 @@ The references are:
                 }
                 return _threshold;
             },
-            
+
             detect: function(src, corners, border) {
                 if (typeof border === "undefined") { border = 3; }
 
@@ -9271,36 +9271,36 @@ The references are:
                     cornerpos = (m3*(w+1))|0;
                     for (j = 0; j < w; ++j) buf[curr+j] = 0;
                     ncorners = 0;
-                    
+
                     if( i < (ey - 1) ) {
                         j = sx;
-                        
+
                         for( ; j < ex; ++j, ++ptr ) {
                             v = img[ptr];
                             tab = ( - v + 255 );
                             d = ( thresh_tab[tab+img[ptr+pixel0]] | thresh_tab[tab+img[ptr+pixel8]] );
-                            
+
                             if( d == 0 ) {
                                 continue;
                             }
-                            
+
                             d &= ( thresh_tab[tab+img[ptr+pixel2]] | thresh_tab[tab+img[ptr+pixel10]] );
                             d &= ( thresh_tab[tab+img[ptr+pixel4]] | thresh_tab[tab+img[ptr+pixel12]] );
                             d &= ( thresh_tab[tab+img[ptr+pixel6]] | thresh_tab[tab+img[ptr+pixel14]] );
-                            
+
                             if( d == 0 ) {
                                 continue;
                             }
-                            
+
                             d &= ( thresh_tab[tab+img[ptr+pixel1]] | thresh_tab[tab+img[ptr+pixel9]] );
                             d &= ( thresh_tab[tab+img[ptr+pixel3]] | thresh_tab[tab+img[ptr+pixel11]] );
                             d &= ( thresh_tab[tab+img[ptr+pixel5]] | thresh_tab[tab+img[ptr+pixel13]] );
                             d &= ( thresh_tab[tab+img[ptr+pixel7]] | thresh_tab[tab+img[ptr+pixel15]] );
-                            
+
                             if( d & 1 ) {
                                 vt = (v - threshold);
                                 _count = 0;
-                                
+
                                 for( k = 0; k < N; ++k ) {
                                     x = img[(ptr+pixel[k])];
                                     if(x < vt) {
@@ -9317,11 +9317,11 @@ The references are:
                                     }
                                 }
                             }
-                            
+
                             if( d & 2 ) {
                                 vt = (v + threshold);
                                 _count = 0;
-                                
+
                                 for( k = 0; k < N; ++k ) {
                                     x = img[(ptr+pixel[k])];
                                     if(x > vt) {
@@ -9340,13 +9340,13 @@ The references are:
                             }
                         }
                     }
-                    
+
                     cpbuf[cornerpos+w] = ncorners;
-            
+
                     if ( i == sy ) {
                         continue;
                     }
-                    
+
                     m3 = (i - 4 + 3)%3;
                     prev = (m3*w)|0;
                     cornerpos = (m3*(w+1))|0;
@@ -9354,7 +9354,7 @@ The references are:
                     pprev = (m3*w)|0;
 
                     ncorners = cpbuf[cornerpos+w];
-                    
+
                     for( k = 0; k < ncorners; ++k ) {
                         j = cpbuf[cornerpos+k];
                         jp1 = (j+1)|0;
@@ -9394,7 +9394,7 @@ The references are:
     //
 
     var yape06 = (function() {
-        
+
         var compute_laplacian = function(src, dst, w, h, Dxx, Dyy, sx,sy, ex,ey) {
             var y=0,x=0,yrow=(sy*w+sx)|0,row=yrow;
 
@@ -9668,7 +9668,7 @@ The references are:
                     B1 = B2; b++; B2 = I[x+dirs[b]];
                 if ((B2 > Ip)) { Scores[x] = 0; return; }
                   { score -= A + B1; state = 8; break; }
-              } 
+              }
               // A ~ I0
               if ((B1 <= Ip)) { Scores[x] = 0; return; }
                 if ((B2 <= Ip)) { Scores[x] = 0; return; }
@@ -9705,7 +9705,7 @@ The references are:
               {
                 if ((B2 > Ip)) { Scores[x] = 0; return; }
                   { score -= A + B1; state = 4; break; }
-              } 
+              }
               // A ~ I0
               if ((B2 > Ip)) { score -= A + B1; state = 7; break; };
               if ((B2 < Im)) { score -= A + B1; state = 2; break; };
@@ -9814,7 +9814,7 @@ The references are:
             }
             return lev_table_t;
         })();
-        
+
         return {
 
             level_tables: [],
@@ -10211,39 +10211,39 @@ The references are:
 					// describe the patch
 					patt = 0;
 					for (b = 0; b < DESCR_SIZE; ++b) {
-			            
+
 			            t0 = patch_d[patch_off + bit_pattern_31_[patt+1] * 32 + bit_pattern_31_[patt]]; patt += 2;
 			            t1 = patch_d[patch_off + bit_pattern_31_[patt+1] * 32 + bit_pattern_31_[patt]]; patt += 2;
 			            val = (t0 < t1)|0;
-			            
+
 			            t0 = patch_d[patch_off + bit_pattern_31_[patt+1] * 32 + bit_pattern_31_[patt]]; patt += 2;
 			            t1 = patch_d[patch_off + bit_pattern_31_[patt+1] * 32 + bit_pattern_31_[patt]]; patt += 2;
 			            val |= (t0 < t1) << 1;
-			            
+
 			            t0 = patch_d[patch_off + bit_pattern_31_[patt+1] * 32 + bit_pattern_31_[patt]]; patt += 2;
 			            t1 = patch_d[patch_off + bit_pattern_31_[patt+1] * 32 + bit_pattern_31_[patt]]; patt += 2;
 			            val |= (t0 < t1) << 2;
-			            
+
 			            t0 = patch_d[patch_off + bit_pattern_31_[patt+1] * 32 + bit_pattern_31_[patt]]; patt += 2;
 			            t1 = patch_d[patch_off + bit_pattern_31_[patt+1] * 32 + bit_pattern_31_[patt]]; patt += 2;
 			            val |= (t0 < t1) << 3;
-			            
+
 			            t0 = patch_d[patch_off + bit_pattern_31_[patt+1] * 32 + bit_pattern_31_[patt]]; patt += 2;
 			            t1 = patch_d[patch_off + bit_pattern_31_[patt+1] * 32 + bit_pattern_31_[patt]]; patt += 2;
 			            val |= (t0 < t1) << 4;
-			            
+
 			            t0 = patch_d[patch_off + bit_pattern_31_[patt+1] * 32 + bit_pattern_31_[patt]]; patt += 2;
 			            t1 = patch_d[patch_off + bit_pattern_31_[patt+1] * 32 + bit_pattern_31_[patt]]; patt += 2;
 			            val |= (t0 < t1) << 5;
-			            
+
 			            t0 = patch_d[patch_off + bit_pattern_31_[patt+1] * 32 + bit_pattern_31_[patt]]; patt += 2;
 			            t1 = patch_d[patch_off + bit_pattern_31_[patt+1] * 32 + bit_pattern_31_[patt]]; patt += 2;
 			            val |= (t0 < t1) << 6;
-			            
+
 			            t0 = patch_d[patch_off + bit_pattern_31_[patt+1] * 32 + bit_pattern_31_[patt]]; patt += 2;
 			            t1 = patch_d[patch_off + bit_pattern_31_[patt+1] * 32 + bit_pattern_31_[patt]]; patt += 2;
 			            val |= (t0 < t1) << 7;
-			            
+
 			            descr_d[descr_off+b] = val;
 			        }
 			        descr_off += DESCR_SIZE;
@@ -10330,7 +10330,7 @@ The references are:
                     dstep = lw << 1;
                     img_prev = prev_imgs[level].data;
                     img_next = next_imgs[level].data;
-                    
+
                     brd_r = (lw - win_size)|0;
                     brd_b = (lh - win_size)|0;
 
@@ -10523,7 +10523,7 @@ The references are:
                    r2.width <= (r1.width * 1.5 + 0.5)|0 &&
                    (r2.width * 1.5 + 0.5)|0 >= r1.width;
         };
-        
+
         return {
 
             edges_density: 0.07,
@@ -10549,14 +10549,14 @@ The references are:
                     ii_a = y * w1;
                     for(x = 0; x < ex; x += step_x, ii_a += step_x) {
 
-                        mean =    int_sum[ii_a] 
+                        mean =    int_sum[ii_a]
                                 - int_sum[ii_a+ii_b]
                                 - int_sum[ii_a+ii_c]
                                 + int_sum[ii_a+ii_d];
 
                         // canny prune
                         if(int_canny_sum) {
-                            edge_dens = (int_canny_sum[ii_a] 
+                            edge_dens = (int_canny_sum[ii_a]
                                         - int_canny_sum[ii_a+ii_b]
                                         - int_canny_sum[ii_a+ii_c]
                                         + int_canny_sum[ii_a+ii_d]);
@@ -10567,7 +10567,7 @@ The references are:
                         }
 
                         mean *= inv_area;
-                        variance = (int_sqsum[ii_a] 
+                        variance = (int_sqsum[ii_a]
                                     - int_sqsum[ii_a+ii_b]
                                     - int_sqsum[ii_a+ii_c]
                                     + int_sqsum[ii_a+ii_d]) * inv_area - mean * mean;
@@ -10610,7 +10610,7 @@ The references are:
                                         fh = ~~(feature[3] * scale);
                                         fi_c = fh * w1;
 
-                                        tree_sum += (int_sum[fi_a] 
+                                        tree_sum += (int_sum[fi_a]
                                                     - int_sum[fi_a+fw]
                                                     - int_sum[fi_a+fi_c]
                                                     + int_sum[fi_a+fi_c+fw]) * feature[4];
@@ -10623,7 +10623,7 @@ The references are:
                                 break;
                             }
                         }
-                        
+
                         if(found) {
                             rects.push({"x" : x,
                                         "y" : y,
@@ -10717,7 +10717,7 @@ The references are:
                     }
                     idx_seq[i] = j;
                 }
-                
+
                 var comps = [];
                 for (i = 0; i < class_idx+1; ++i) {
                     comps[i] = {"neighbors" : 0,
@@ -10964,8 +10964,8 @@ The references are:
                     u8[0] = pyr[i4].data; u8[1] = pyr[i4 + (next<<2)].data;
                     for (q = 0; q < 4; q++) {
                         u8[2] = pyr[i4 + (next<<3) + q].data;
-                        u8o[0] = (dx[q]*bpp2) + dy[q] * (pyr[i4].cols*bpp2); 
-                        u8o[1] = (dx[q]*bpp) + dy[q] * (pyr[i4 + (next<<2)].cols*bpp); 
+                        u8o[0] = (dx[q]*bpp2) + dy[q] * (pyr[i4].cols*bpp2);
+                        u8o[1] = (dx[q]*bpp) + dy[q] * (pyr[i4 + (next<<2)].cols*bpp);
                         u8o[2] = 0;
                         for (y = 0; y < qh; y++) {
                             for (x = 0; x < qw; x++) {
@@ -11110,7 +11110,7 @@ The references are:
                     }
                     idx_seq[i] = j;
                 }
-                
+
                 var comps = [];
                 for (i = 0; i < class_idx+1; ++i) {
                     comps[i] = {"neighbors" : 0,
@@ -14911,7 +14911,7 @@ var clm = {
 				params = pv.slice(0);
 			}
 
-			var cc = canvas.getContext('2d');
+			var cc = canvas.getContext ? canvas.getContext() : canvas.drawingContext;
 			cc.fillStyle = 'rgb(200,200,200)';
 			cc.strokeStyle = 'rgb(130,255,50)';
 			//cc.lineWidth = 1;

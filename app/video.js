@@ -3,8 +3,6 @@ document.addEventListener("DOMContentLoaded", function() {
   vid = document.getElementById('videoel');
   vidWidth = vid.width;
   vidHeight = vid.height;
-  overlay = document.getElementById('overlay');
-  overlayCC = overlay.getContext('2d');
   width = vid.offsetWidth;
   height = vid.offsetHeight;
 
@@ -28,7 +26,6 @@ document.addEventListener("DOMContentLoaded", function() {
     var proportion = vid.videoWidth/vid.videoHeight;
     vidWidth = Math.round(vidHeight * proportion);
     vid.width = vidWidth;
-    overlay.width = vidWidth;
   }
 
   // gum = get user media

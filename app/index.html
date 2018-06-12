@@ -11,7 +11,6 @@
 			<div id="container">
 				<video id="videoel" width="750" height="600" preload="auto" loop playsinline autoplay muted>
 				</video>
-				<canvas id="overlay" width="750" height="600"></canvas>
         <video id="recorded" class="hide" loop controls></video>
 			</div>
 			<br/>
@@ -25,11 +24,14 @@
         <ul id="instruments"></ul>
         <button class="hide" id="calibrate" disabled>Set All</button>
       </div>
+    <script src="/video.js"></script>
     <script src="clmtrackr.js"></script>
+    <script src="/p5.js"></script>
+    <script src="/p5.dom.js"></script>
+    <script src="/Tone.min.js"></script>
     <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
     <script src="/utils.js"></script>
-    <script src="/Tone.min.js"></script>
-    <script src="/video.js"></script>
+    <script src="/visualizer.js"></script>
     <script src="/record.js"></script>
     <script src="/script.js"></script>
   </body>

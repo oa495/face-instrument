@@ -34,7 +34,7 @@ video {
   display : block;
 }
 
-#overlay {
+.p5Canvas {
   position: absolute;
   -o-transform : scaleX(-1);
   -webkit-transform : scaleX(-1);
