@@ -71,9 +71,8 @@ document.addEventListener("DOMContentLoaded", function() {
       //initializing our squares with random values
       //to ensure they don't follow the same path
       for (var i = 0; i < 3; i++) {
-          var xInc = Math.random() / 10;
-          var yInc = Math.random() / 10;
-          funkySquare[i].init(xInc, yInc, 0, 0, 30);
+          var squarePos = funkySquare[i].update(SYNTH.voices[i].getLevelAtTime());
+          p.rect(squarePos.xPos, squarePos.yPos, squarePos.radius/10, squarePos.radius*3);
       }
     };
 

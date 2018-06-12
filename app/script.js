@@ -176,11 +176,11 @@ document.addEventListener("DOMContentLoaded", function() {
         if (!this.active) {
           return;
         }
-
         // console.log("DEACTIVATING TOGGLE FOR", this.p1, this.p2);
         this.active = false;
         synth.triggerRelease([`${this.getNote()}${this.getOctave()}`]);
       }
+
 
       this.getOctave = function() {
         return octave;
@@ -246,7 +246,8 @@ document.addEventListener("DOMContentLoaded", function() {
     // CAN SWAP THESE TO SWITCH BETEWEN MONO AND POLY SYNTH
     const monosynth = new Tone.AMSynth().toMaster();
     const polysynth = new Tone.PolySynth(4, Tone.Synth).toMaster();
-    synth = new Tone.PolySynth(4, Tone.Synth).toMaster();
+    const synth = new Tone.PolySynth(4, Tone.Synth).toMaster();
+    window.SYNTH = synth;
 
     var octave = 3;
     var volume = 1;
