@@ -1,8 +1,11 @@
 /* Setup of video/webcam and checking for webGL support */
 function enablestart() {
-  var startbutton = document.getElementById('startbutton');
-  startbutton.value = "Start";
-  startbutton.disabled = null;
+  var startbutton = document.getElementById("start");
+  var loadingIcon = startbutton.querySelector('svg.loading');
+  loadingIcon.classList.add('hide');
+  var playIcon = startbutton.querySelector('svg.play');
+  playIcon.classList.remove('hide');
+  startbutton.disabled = false;
   startbutton.addEventListener("click", startVideo);
 }
 

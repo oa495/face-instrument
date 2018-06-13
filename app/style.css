@@ -1,25 +1,93 @@
-body {
-  font-family: 'Lato';
-  background-color: #f0f0f0;
-  margin: 0px auto;
+html, body {
+  margin: 0;
   padding: 0;
+  height: 100%;
 }
 
-button {
-  font-family: 'Lato';
-  font-size: 12px;
+body {
+  font-family: 'Lato', sans-serif;
+  background-color: #f0f0f0;
 }
 
-h2 {
-  font-weight : 400;
+header {
+  width: 100%;
+  background: #FD66E0;
+  height: 40%;
+  position: absolute;
+  display: flex;
+  z-index: -1;
+}
+
+h1 {
+  font-family: 'Anton', sans-serif;
+  text-transform: uppercase;
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  right: 0;
+  -webkit-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+  align-self: center;
 }
 
 ul {
   list-style: none;
 }
 
-video {
-   align-self: flex-end;
+video, .p5Canvas {
+   align-self: center;
+   position: absolute;
+   width: 70% !important;
+}
+
+.webcam {
+  width: 100%;
+  flex-direction: column-reverse;
+}
+
+.webcam .controls {
+  position: absolute;
+  bottom: 0;
+  height: 100px;
+  align-self: center;
+}
+
+.controls button {
+  background: transparent;
+  border: none;
+}
+
+.controls svg {
+  margin: 0 20px;
+  width: 40px;
+  height: 40px;
+}
+
+.icon {
+  pointer-events: all;
+  fill: black;
+}
+
+button svg {
+  transition: 200ms;
+  transition-timing-function: ease-in-out;
+  -webkit-transition: 200ms;
+  -webkit-transition-timing-function: ease-in-out;
+}
+
+button svg:hover path, button svg:focus path {
+  fill: #FE94EA;
+}
+
+.webcam + section {
+  width: 30%;
+  align-items: center;
+}
+
+.webcam, .webcam + section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .active {
@@ -33,8 +101,11 @@ video {
   display : block;
 }
 
+.instructions {
+  max-width: 80%;
+}
+
 .p5Canvas {
-  position: absolute;
   -o-transform : scaleX(-1);
   -webkit-transform : scaleX(-1);
   transform : scaleX(-1);
@@ -54,6 +125,10 @@ video#recorded {
   width: 375px;
   height: 300px;
   margin-left: 20px;
+}
+
+#container {
+  height: 100%;
 }
 
 #container, .controls {

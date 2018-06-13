@@ -47,14 +47,14 @@ document.addEventListener("DOMContentLoaded", function() {
       cap = p.createCapture(function() {
         vid = cap.elt;
         vid.addEventListener('canplay', enablestart, false);
-        canvas = p.createCanvas(750, 600);
+        canvas = p.createCanvas((0.6 * p.windowWidth), 600);
         vid.id = 'videoel';
         vid.muted = true;
         height = vid.offsetHeight;
         width = vid.offsetWidth;
         setupRecording();
       });
-      cap.size(750, 600);
+      cap.size((0.6 * p.windowWidth), 600);
       vidWidth = cap.width;
       vidHeight = cap.height;
 
@@ -77,6 +77,7 @@ document.addEventListener("DOMContentLoaded", function() {
       ctrack.stop();
       ctrack.reset();
       ctrack.start(vid);
+      vid.width = Math.round(0.6 * p5.windowWidth);
       p.resizeCanvas(vid.offsetWidth, vid.offsetHeight);
     };
 
@@ -113,5 +114,5 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     }
   };
-  myp5 = new p5(s, 'container');
+  myp5 = new p5(s, window.document.querySelector('.webcam'));
 });

@@ -14913,7 +14913,7 @@ var clm = {
 
 			var cc = canvas.getContext ? canvas.getContext() : canvas.drawingContext;
 			cc.fillStyle = 'rgb(200,200,200)';
-			cc.strokeStyle = 'rgb(130,255,50)';
+			cc.strokeStyle = 'rgb(253, 102, 224)';
 			//cc.lineWidth = 1;
 
 			var paths;
