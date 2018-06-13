@@ -1,4 +1,4 @@
-var vid, canvas, vidHeight, vidWidth, cap, myp5;
+var vid, canvas, vidHeight, vidWidth, cap, myp5, width, height;
 document.addEventListener("DOMContentLoaded", function() {
   var s = function( p ) {
     function FunkyShape() {}
@@ -47,22 +47,17 @@ document.addEventListener("DOMContentLoaded", function() {
       cap = p.createCapture(function() {
         vid = cap.elt;
         vid.addEventListener('canplay', enablestart, false);
-        vid.onresize = function() {
-          if (trackingStarted) {
-            ctrack.stop();
-            ctrack.reset();
-            ctrack.start(video);
-          }
-        }
+        canvas = p.createCanvas(750, 600);
         vid.id = 'videoel';
         vid.muted = true;
-        canvas = p.createCanvas(750, 600);
+        height = vid.offsetHeight;
+        width = vid.offsetWidth;
         setupRecording();
       });
       cap.size(750, 600);
       vidWidth = cap.width;
       vidHeight = cap.height;
-      console.log(cap.width, cap.height);
+
       //no fill
       p.fill(255);
       p.strokeWeight(1);
@@ -78,10 +73,17 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     };
 
+    p.windowResized = function () {
+      ctrack.stop();
+      ctrack.reset();
+      ctrack.start(vid);
+      p.resizeCanvas(vid.offsetWidth, vid.offsetHeight);
+    };
+
     var phase = 0;
     p.draw = function() {
       if (trackingStarted) {
-        p.image(cap, 0, 0, vidWidth, vidHeight);
+        p.image(cap, 0, 0, vid.offsetWidth, vid.offsetHeight);
         p.stroke(0);
         //drawing the kick wave at the bottom
         //it is composed of a simple sine wave that
