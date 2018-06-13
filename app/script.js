@@ -1,6 +1,7 @@
 /* global clm, Tone, requestAnimFrame */
 var ctrack, trackingStarted, bass, snare, kick, synth;
 document.addEventListener("DOMContentLoaded", function() {
+    var CUR_CHORD;
     /** Code for face tracking **/
     ctrack = new clm.tracker();
     ctrack.init();
@@ -159,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function() {
       this.p2 = p2;
       this.minX = minX;
       this.minY = minY;
-      this.noteToPlay = options.note || 'a';
+      this.noteToPlay = options.note || 1
       this.duration = options.duration || '8n';
       // 1 = start of animation, 0 end/not animating
       this.animation = 0;
@@ -169,7 +170,20 @@ document.addEventListener("DOMContentLoaded", function() {
       this.debug = false;
 
       this.getNote = function() {
-        return this.noteToPlay;
+        var chord = teoria.chord(CUR_CHORD);
+        var root = chord.notes()[0].name()
+        var quality = chord.quality();
+        if (quality.indexOf("dim") != -1) {
+          quality = "minor";
+        } else if (quality.indexOf("aug") != -1 || quality.indexOf("dom") != -1) {
+          quality = "major";
+        }
+
+
+        var scale = teoria.scale(root, quality).scale;
+        var interval = scale[this.noteToPlay % 7];
+        var note = teoria.note(root);
+        return note.interval(interval).name();
       };
 
       this.getColor = function() {
@@ -196,7 +210,9 @@ document.addEventListener("DOMContentLoaded", function() {
         // console.log("TRIGGERING TOGGLE FOR", this.p1, this.p2);
 
         if (faceIsStable) {
-          synth.triggerAttackRelease(`${this.getNote()}${this.getOctave()}`, this.duration, Tone.now(), volume);
+          var note = `${this.getNote()}${this.getOctave()}`
+          console.log("TRIGGERING", note);
+          synth.triggerAttackRelease(note, this.duration, Tone.now(), volume);
         }
       }
 
@@ -211,7 +227,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
       this.getOctave = function() {
-        return octave;
+        return octave || 5;
       }
 
       this.setThreshold = function() {
@@ -301,12 +317,12 @@ document.addEventListener("DOMContentLoaded", function() {
     var face = {};
 
     // these numbers are relative to nose height. 1 = one nose height
-    face.mouth = new ToggleInstrument('upperMouth', 'lowerMouth', -1, 0.65, { note: 'a'});
-    face.pupilLeft = new ToggleInstrument('bridge', 'pupilLeft', 0.12, -1, { note: 'f' });
-    face.pupilRight = new ToggleInstrument('bridge', 'pupilRight', 0.12, -1, { note: 'b' });
-    face.eyebrowLeft = new ToggleInstrument('eyebrowLeft', 'pupilLeft', -1, 0.60, { note: 'd'});
-    face.eyebrowRight = new ToggleInstrument('eyebrowRight', 'pupilRight', -1, 0.60, { note: 'e'});
-    face.lip = new ToggleInstrument('upperLip', 'lowerLip', -1, 0.8, { note: 'g'});
+    face.mouth = new ToggleInstrument('upperMouth', 'lowerMouth', -1, 0.65, { note: 1});
+    face.pupilLeft = new ToggleInstrument('bridge', 'pupilLeft', 0.12, -1, { note: 2 });
+    face.pupilRight = new ToggleInstrument('bridge', 'pupilRight', 0.12, -1, { note: 3 });
+    face.eyebrowLeft = new ToggleInstrument('eyebrowLeft', 'pupilLeft', -1, 0.60, { note: 4});
+    face.eyebrowRight = new ToggleInstrument('eyebrowRight', 'pupilRight', -1, 0.60, { note: 5});
+    face.lip = new ToggleInstrument('upperLip', 'lowerLip', -1, 0.8, { note: 6});
     face.bridge = new SliderInstrument('bridge');
 
 
@@ -387,7 +403,6 @@ document.addEventListener("DOMContentLoaded", function() {
         ctrack.draw(canvas);
         var positions = ctrack.getCurrentPosition();
         var faceWithPositions = positionsToFace(positions);
-        console.log(faceWithPositions);
         var normalizedPositions = normalizeFace(positions);
         var faceHeight = positions[7][1] - positions[33][1];
         var distanceFromScreen = faceHeight / vidHeight;
@@ -494,13 +509,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // VOLUME for the bass part is lowered so we can hear
         // the main notes
-        bass.volume.value = -10;
+//        bass.volume.value = -10;
 
         function makeSequence(chord, cb) {
           var notes = teoria.chord(chord).notes();
           var part = new Tone.Sequence(function(time, note){
             //console.log("TIME", time, event);
-            cb && cb(note.name() + "1");
+            cb && cb(note.name() + "2");
           }, notes, "8n");
 
           return part;
@@ -525,15 +540,17 @@ document.addEventListener("DOMContentLoaded", function() {
           var newPart = makeSequence(chord, playBass);
           swapParts(bassPart, newPart);
           bassPart = newPart;
+          CUR_CHORD = chord;
         }
 
-        var CHORDS = [ "Em", "Gm", "A7", "Bdim", "Caug" ];
+        var CHORDS = [ "Em", "Gm", "A7", "Bdim", "D7" ];
+
         var c = 0;
         setInterval(function() {
           console.log("SWITCHING TO CHORD", CHORDS[c]);
           newChord(CHORDS[c]);
           c = (c + 1) % (CHORDS.length)
-        }, 4000);
+        }, 2000);
 
 
         Tone.Transport.start("+0.1");
