@@ -447,27 +447,46 @@ document.addEventListener("DOMContentLoaded", function() {
         // the main notes
         bass.volume.value = -10;
 
-  			// TODO: automatic bassline generation, i think it would be interesting (using music theory)
-  			var bassPart = new Tone.Part(function(time, event){
-          //console.log("TIME", time, event);
-  				if (Math.random() < event.prob){
-  					bass.triggerAttackRelease(event.note, event.dur, time);
-  				}
-  			}, [{time : "0:0", note : "E1", dur : "4n.", prob: 1},
-  					{time : "0:.5", note : "E2", dur : "8n", prob : 0.6},
-  					{time : "0:1", note : "D1", dur : "8n", prob : 0.4},
-  					{time : "0:1.5", note : "F2", dur : "8n", prob : 0.9},
-  					{time : "0:2", note : "B2", dur : "4n.", prob : 1},
-  					{time : "0:2.5", note : "F2", dur : "8n", prob : 0.6},
-  					{time : "0:3", note : "E2", dur : "8n", prob : 0.4},
-  					{time : "0:3.5", note : "A2", dur : "8n", prob : 0.9},
-  			]).start(0);
-  			bassPart.loop = true;
-  			bassPart.loopEnd = "4m";
+        function makeSequence(chord, cb) {
+          var notes = teoria.chord(chord).notes();
+          var part = new Tone.Sequence(function(time, note){
+            //console.log("TIME", time, event);
+            cb && cb(note.name() + "1");
+          }, notes, "8n");
 
-  			bassPart.start(0);
+          return part;
+        }
+
+        function playBass(note) {
+          bass.triggerAttackRelease(note);
+
+        }
+
+        function swapParts(oldPart, newPart) {
+          oldPart.stop();
+          newPart.start(0);
+        }
+
+
+        function newChord(chord) {
+          var newPart = makeSequence(chord, playBass);
+          swapParts(bassPart, newPart);
+          bassPart = newPart;
+        }
+
+        var CHORDS = [ "Em", "Gm", "A7", "Bdim", "Caug" ];
+        var c = 0;
+        setInterval(function() {
+          console.log("SWITCHING TO CHORD", CHORDS[c]);
+          newChord(CHORDS[c]);
+          c = (c + 1) % (CHORDS.length)
+        }, 4000);
+
 
         Tone.Transport.start("+0.1");
+        var bassPart = makeSequence("Am", playBass);
+        bassPart.start(0);
+
 
   	}
 
