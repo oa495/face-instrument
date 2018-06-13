@@ -72,8 +72,9 @@ document.addEventListener("DOMContentLoaded", function() {
       //initializing our squares with random values
       //to ensure they don't follow the same path
       for (var i = 0; i < 3; i++) {
-          var squarePos = funkySquare[i].update(SYNTH.voices[i].getLevelAtTime());
-          p.rect(squarePos.xPos, squarePos.yPos, squarePos.radius/10, squarePos.radius*3);
+          var xInc = Math.random() / 10;
+          var yInc = Math.random() / 10;
+          funkySquare[i].init(xInc, yInc, 0, 0, 30);
       }
     };
 
@@ -101,10 +102,10 @@ document.addEventListener("DOMContentLoaded", function() {
         //bass and bleep envelope values
         var circlePos = funkyCircle.update(bass.getLevelAtTime());
         //circlePos returns x and y positions as an object
-        p.ellipse(circlePos.xPos, circlePos.yPos, circlePos.radius/10, circlePos.radius);
+        p.ellipse(circlePos.xPos, circlePos.yPos, circlePos.radius/5, circlePos.radius);
         p.stroke('red');
         for (var i = 0; i < 3; i++) {
-            var squarePos = funkySquare[i].update(snare.volume.value);
+            var squarePos = funkySquare[i].update(SYNTH.voices[i].getLevelAtTime() * 5);
             p.rect(squarePos.xPos, squarePos.yPos, squarePos.radius/10, squarePos.radius);
         }
       }
