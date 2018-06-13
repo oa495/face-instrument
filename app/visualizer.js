@@ -57,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function() {
         vid.id = 'videoel';
         vid.muted = true;
         canvas = p.createCanvas(750, 600);
+        setupRecording();
       });
       cap.size(750, 600);
       vidWidth = cap.width;

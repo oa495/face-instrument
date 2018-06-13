@@ -18,9 +18,15 @@ window.getCenterOfElement = function(el) {
   };
 }
 
+function initAudioStream() {
+  navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(function(stream) {
+    aStream = stream;
+  });
+}
+
+
 function startVideo() {
-  // start video
-  vid.play();
+  initAudioStream();
   // start tracking
   ctrack.start(vid);
   trackingStarted = true;
