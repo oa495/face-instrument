@@ -143,6 +143,17 @@ document.addEventListener("DOMContentLoaded", function() {
       };
     }
 
+    var COLORS = {}
+
+    function getRandomColor() {
+      var r = parseInt(Math.random() * 255);
+      var g = parseInt(Math.random() * 255);
+      var b = parseInt(Math.random() * 255);
+
+      return [r,g,b];
+
+    }
+
     function ToggleInstrument(p1, p2, minX, minY, options) {
       this.p1 = p1;
       this.p2 = p2;
@@ -150,6 +161,8 @@ document.addEventListener("DOMContentLoaded", function() {
       this.minY = minY;
       this.noteToPlay = options.note || 'a';
       this.duration = options.duration || '8n';
+      // 1 = start of animation, 0 end/not animating
+      this.animation = 0;
 
       this.toggle = true
 
@@ -159,12 +172,27 @@ document.addEventListener("DOMContentLoaded", function() {
         return this.noteToPlay;
       };
 
+      this.getColor = function() {
+        if (!COLORS[this.noteToPlay]) {
+          var colors = getRandomColor();
+          COLORS[this.noteToPlay] = colors;
+        } else {
+          var colors = COLORS[this.noteToPlay];
+        }
+        var with_alpha = colors.concat([this.animation]);
+        return "rgba(" + with_alpha.join(",") + ")";
+      };
+
       this.activate = function() {
         if (this.active) {
+          if (this.animation < 0.2) {
+            this.animation = 1;
+          }
           return;
         }
 
         this.active = true;
+        this.animation = 1;
         // console.log("TRIGGERING TOGGLE FOR", this.p1, this.p2);
 
         if (faceIsStable) {
@@ -235,10 +263,29 @@ document.addEventListener("DOMContentLoaded", function() {
       }
 
       this.update = function(face, normalizedFace) {
+        if (this.animation > 0) {
+          this.animation = this.animation / 1.05;
+        }
         if (this.checkDelta(normalizedFace)) {
           this.activate();
         } else {
           this.deactivate();
+        }
+      }
+
+      this.draw = function(face, canvas) {
+        if (this.animation > .1) {
+          var points = face[this.p1].concat(face[this.p2]);
+          for (var p in points) {
+            var x = points[p][0]
+            var y = points[p][1]
+            canvasContext = canvas.drawingContext;
+            canvasContext.fillStyle = this.getColor();
+            canvasContext.beginPath();
+            canvasContext.arc(x, y, 20*this.animation, 0, Math.PI*2, true);
+            canvasContext.closePath();
+            canvasContext.fill();
+          }
         }
       }
     }
@@ -340,6 +387,7 @@ document.addEventListener("DOMContentLoaded", function() {
         ctrack.draw(canvas);
         var positions = ctrack.getCurrentPosition();
         var faceWithPositions = positionsToFace(positions);
+        console.log(faceWithPositions);
         var normalizedPositions = normalizeFace(positions);
         var faceHeight = positions[7][1] - positions[33][1];
         var distanceFromScreen = faceHeight / vidHeight;
@@ -350,6 +398,7 @@ document.addEventListener("DOMContentLoaded", function() {
         for (facePart in face) {
           var ff = face[facePart];
           if (ff) {
+            if (ff.draw) ff.draw(faceWithPositions, canvas);
             ff.update(faceWithPositions, normalizedPositions);
           }
         }
@@ -459,7 +508,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
         function playBass(note) {
           bass.triggerAttackRelease(note);
-
+          for (var part in face) {
+            if (face[part].active) {
+              face[part].animation = 1;
+            }
+          }
         }
 
         function swapParts(oldPart, newPart) {

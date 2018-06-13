@@ -15270,14 +15270,14 @@ var clm = {
 				i = path[p]*2;
 				x = meanShape[i/2][0];
 				y = meanShape[i/2][1];
-				for (var j = 0;j < numParameters;j++) {
-					x += model.shapeModel.eigenVectors[i][j]*dp[j+4];
-					y += model.shapeModel.eigenVectors[i+1][j]*dp[j+4];
-				}
-				a = dp[0]*x - dp[1]*y + dp[2];
-				b = dp[0]*y + dp[1]*x + dp[3];
-				x += a;
-				y += b;
+                                for (var j = 0;j < numParameters;j++) {
+                                        x += model.shapeModel.eigenVectors[i][j]*dp[j+4];
+                                        y += model.shapeModel.eigenVectors[i+1][j]*dp[j+4];
+                                }
+                                a = dp[0]*x - dp[1]*y + dp[2];
+                                b = dp[0]*y + dp[1]*x + dp[3];
+                                x += a;
+                                y += b;
 
 				if (i == 0) {
 					canvasContext.moveTo(x,y);
