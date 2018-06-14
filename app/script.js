@@ -3,8 +3,9 @@ var ctrack, trackingStarted, bass, snare, kick, synth;
 document.addEventListener("DOMContentLoaded", function() {
     var CUR_CHORD;
 
-    var CHORD_MODE = true;
-    var LEAD_MODE = false;
+    var CHORD_MODE = false;
+    var LEAD_MODE = true;
+    var MINOR_MODE = false;
 
     /** Code for face tracking **/
     ctrack = new clm.tracker();
@@ -162,8 +163,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (faceIsStable) {
           var note = `${this.getNote()}${this.getOctave()}`
-          console.log("TRIGGERING", note);
           if (LEAD_MODE) {
+            console.log("TRIGGERING", note);
             synth.triggerAttackRelease(note, this.duration, Tone.now(), volume);
           }
         }
@@ -286,6 +287,38 @@ document.addEventListener("DOMContentLoaded", function() {
     var instruments = document.getElementById("instruments");
     var calibrate = document.getElementById('calibrate');
     calibrate.addEventListener('click', setThreshold, false);
+
+    var chordEl = document.getElementById('playing_chord');
+
+    var modeEl = document.getElementById('music_mode');
+    var modes = [ "LEAD", "CHORDS", "CHORDS (m)", "LEAD + CHORDS" ];
+    var mode = 0;
+    modeEl.addEventListener('click', function() {
+      mode++;
+      mode %= modes.length;
+      modeEl.innerText = modes[mode];
+      if (mode == 0) {
+        LEAD_MODE = true;
+        CHORD_MODE = false;
+        MINOR_MODE = false;
+      } else if (mode == 1) {
+        LEAD_MODE = false;
+        CHORD_MODE = true;
+
+      } else if (mode == 2) {
+        MINOR_MODE = true;
+
+      } else if (mode == 3) {
+        LEAD_MODE = true;
+        CHORD_MODE = true;
+
+      }
+
+
+
+
+    });
+
     for (var f in face) { face[f].setContainer(instruments); }
 
     window.FACE = face;
@@ -431,8 +464,9 @@ document.addEventListener("DOMContentLoaded", function() {
       var chord = tonnetz[ty][tx];
       // TODO: flavor major or minor, but how?
       if (CHORD_MODE) {
-        if (ry > ry) {
+        if (ry * (0.5) > rx && MINOR_MODE) {
           chord = chord + "m";
+          console.log("MAKING MINOR COHRD", chord);
         }
 
         newChord(chord);
@@ -614,6 +648,9 @@ document.addEventListener("DOMContentLoaded", function() {
           if (chord == CUR_CHORD) {
             return;
           }
+          console.log("SWITCHING TO CHORD", chord);
+
+          chordEl.innerHTML = chord;
 
           var newPart = makeSequence(chord, playBass);
           swapParts(bassPart, newPart);
@@ -625,7 +662,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         var c = 0;
         setInterval(function() {
-          if (LEAD_MODE) {
+          if (!CHORD_MODE) {
             console.log("SWITCHING TO CHORD", CHORDS[c]);
             newChord(CHORDS[c]);
             c = (c + 1) % (CHORDS.length)
