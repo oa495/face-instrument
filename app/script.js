@@ -2,6 +2,10 @@
 var ctrack, trackingStarted, bass, snare, kick, synth;
 document.addEventListener("DOMContentLoaded", function() {
     var CUR_CHORD;
+
+    var CHORD_MODE = true;
+    var LEAD_MODE = false;
+
     /** Code for face tracking **/
     ctrack = new clm.tracker();
     ctrack.init();
@@ -159,7 +163,9 @@ document.addEventListener("DOMContentLoaded", function() {
         if (faceIsStable) {
           var note = `${this.getNote()}${this.getOctave()}`
           console.log("TRIGGERING", note);
-          synth.triggerAttackRelease(note, this.duration, Tone.now(), volume);
+          if (LEAD_MODE) {
+            synth.triggerAttackRelease(note, this.duration, Tone.now(), volume);
+          }
         }
       }
 
@@ -211,7 +217,7 @@ document.addEventListener("DOMContentLoaded", function() {
         this.$el.append(span);
         this.$el.append(button);
         list.append(this.$el);
-      }
+      };
 
       this.render = function() {
         var delta = this.$el.querySelector('span');
@@ -366,6 +372,101 @@ document.addEventListener("DOMContentLoaded", function() {
       for (facePart in face) { face[facePart].render(); }
     }
 
+    var chordMatrix = [
+      [1,-8],
+      [2,-7],
+      [3,-6],
+      [4,-5],
+      [5,-4],
+      [6,-3],
+      [7,-2],
+      [8,-1],
+    ];
+
+    function analyzeChord(face) {
+      var mat = makeMatrix(face.length, 2);
+      var facePart;
+      var index = 0;
+
+      var rowX = [];
+      var rowY = [];
+      for (var fp in face) {
+        facePart = face[fp];
+        if (facePart.toggle) {
+          rowX.push(facePart.deltaX || 0);
+          rowY.push(facePart.deltaY || 0);
+        } else {
+          rowX.push(0);
+          rowY.push(0);
+        }
+        index++;
+      }
+
+      mat = [rowX, rowY];
+
+      var ret = matrixMultiply(mat, chordMatrix);
+
+      var chord1 = ret[0];
+      var chord2 = ret[1];
+
+      var bucket = 2;
+
+      var chord1x = chord1[0];
+      var chord1y = chord1[1];
+
+
+      // the tonnetz is 4x3
+      var tx = chord1x / bucket;
+      var ty = chord1y / bucket;
+
+      tx = (tx % 4 + 4) % 4;
+      ty = (ty % 3 + 3) % 3;
+
+      var rx = tx % 1.0;
+      var ry = ty % 1.0;
+
+      tx = Math.floor(tx);
+      ty = Math.floor(ty);
+
+      var chord = tonnetz[ty][tx];
+      // TODO: flavor major or minor, but how?
+      if (CHORD_MODE) {
+        if (ry > ry) {
+          chord = chord + "m";
+        }
+
+        newChord(chord);
+      }
+    }
+
+
+    // to simulate a tonnetz we will
+    // use a 4x3 lattice, each square
+    // is broken up into two triangles.
+    // the upper left triangle and the bottom right
+    var tonnetz = [
+      [
+        'Bb',
+        'Db',
+        'E',
+        'G',
+      ],
+      [
+        'F#',
+        'A',
+        'C',
+        'Eb',
+      ],
+      [
+        'D',
+        'F',
+        'Ab',
+        'B',
+      ],
+    ];
+
+
+
     window.drawLoop = function() {
       requestAnimFrame(drawLoop);
 
@@ -388,6 +489,8 @@ document.addEventListener("DOMContentLoaded", function() {
             ff.update(faceWithPositions, normalizedPositions);
           }
         }
+
+        analyzeChord(face);
       } else {
         POSITIONS = null;
       }
@@ -508,6 +611,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
         function newChord(chord) {
+          if (chord == CUR_CHORD) {
+            return;
+          }
+
           var newPart = makeSequence(chord, playBass);
           swapParts(bassPart, newPart);
           bassPart = newPart;
@@ -518,15 +625,19 @@ document.addEventListener("DOMContentLoaded", function() {
 
         var c = 0;
         setInterval(function() {
-          console.log("SWITCHING TO CHORD", CHORDS[c]);
-          newChord(CHORDS[c]);
-          c = (c + 1) % (CHORDS.length)
+          if (LEAD_MODE) {
+            console.log("SWITCHING TO CHORD", CHORDS[c]);
+            newChord(CHORDS[c]);
+            c = (c + 1) % (CHORDS.length)
+          }
         }, 2000);
 
 
         Tone.Transport.start("+0.1");
         var bassPart = makeSequence("Am", playBass);
         bassPart.start(0);
+
+        window.newChord = newChord;
 
 
   	}
