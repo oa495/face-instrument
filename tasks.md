@@ -16,20 +16,21 @@ features:
 - [ ] add instructions for what to do
 - [ ] recording GIFs
 - [ ] toggling different visualization layers
+- [ ] pause button appears (after play is pressed)
 
 ## now
 
-- [ ] implement calibration controls for the different instruments
-- [ ] pick a set of good sounding chords (1,6,4,5 according to elad)
 - [ ] implement chords based on face arrangement
 
-## soon
+## todo
 
-- [ ] get feedback
+- [ ] add image of a "note" to the visualization (instead of square rects)
+- [ ] implement calibration controls for the different instruments
+- [ ] pick a set of good sounding chords (1,6,4,5 according to elad)
+- [ ] add input box for the chord progression to be entered
+- [ ] get feedback (at thursday demos)
 - [ ] Footer with icon attributions
-
-## later
-
+- [ ] turn off MIC input (or use it to inform music?)
 - [ ] add eyes as instruments (in addition to eyebrows)
 - [ ] angle of eyes / face controls a slider
 - [ ] quantize notes to have different rhythms

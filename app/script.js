@@ -29,6 +29,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         face.upperMouth = positions.slice(59, 62) // slice is not inclusive
         face.lowerMouth = positions.slice(56, 59) // slice is not inclusive
+        face.rightMouth = [positions[44]];
+        face.leftMouth = [positions[50]];
         face.pupilLeft = [positions[27]];
         face.pupilRight = [positions[32]];
 
@@ -47,70 +49,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
         face.positions = positions;
         return face;
-    }
-
-    function getVariance(points, avg) {
-      // do we make variance a single number or two numbers?
-      var xSse = 0;
-      var ySse = 0;
-      for (var p in points) {
-          xSse += Math.pow(points[p][0] - avg[0], 2)
-          ySse += Math.pow(points[p][1] - avg[1], 2)
-
-      }
-
-      xSse /= points.length;
-      ySse /= points.length;
-
-      return [xSse, ySse];
-
-    }
-
-    function getAverage(points) {
-      if (points.length == 1) {
-        return points[0];
-      }
-
-      var x = 0;
-      var y = 0;
-
-      for (var n in points) {
-        x += points[n][0];
-        y += points[n][1];
-      }
-
-      x /= points.length;
-      y /= points.length;
-
-      return [x,y];
-
-    }
-
-    var prevFace = {};
-    function calcDeltas(face, center) {
-      var faceDelta = {};
-
-      if (prevFace) {
-        for (var field in face) {
-            if (!prevFace[field]) {
-                continue;
-            }
-            // each part of face is actually an array.
-            // maybe we should take the center of mass for each face
-            // position
-
-            var f = getAverage(face[field]);
-
-
-            faceDelta[field] = [center[0] - f[0], center[1] - f[1]];
-
-        }
-
-      }
-      prevFace = face;
-
-      return faceDelta;
-
     }
 
     function setThreshold() {
@@ -140,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function() {
         this.deltaY = Math.floor(centerY - avg[1]);
 
         var bucket = Math.floor(this.deltaX / bucketSize);
-        octave = bucket + 5;
+        octave = bucket;
       };
     }
 
@@ -172,6 +110,7 @@ document.addEventListener("DOMContentLoaded", function() {
       this.duration = options.duration || '8n';
       // 1 = start of animation, 0 end/not animating
       this.animation = 0;
+      var display_both = options.display_both;
 
       this.toggle = true
 
@@ -299,7 +238,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
       this.draw = function(face, canvas) {
         if (this.animation > .1) {
-          var points = face[this.p1].concat(face[this.p2]);
+          var points = face[this.p2];
+          if (display_both) {
+            points = points.concat(face[this.p1]);
+          }
           for (var p in points) {
             var x = points[p][0]
             var y = points[p][1]
@@ -326,11 +268,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // these numbers are relative to nose height. 1 = one nose height
     face.mouth = new ToggleInstrument('upperMouth', 'lowerMouth', -1, 0.65, { note: 1});
-    face.pupilLeft = new ToggleInstrument('bridge', 'pupilLeft', 0.12, -1, { note: 2 });
-    face.pupilRight = new ToggleInstrument('bridge', 'pupilRight', 0.12, -1, { note: 3 });
-    face.eyebrowLeft = new ToggleInstrument('eyebrowLeft', 'pupilLeft', -1, 0.60, { note: 4});
-    face.eyebrowRight = new ToggleInstrument('eyebrowRight', 'pupilRight', -1, 0.60, { note: 5});
-    face.lip = new ToggleInstrument('upperLip', 'lowerLip', -1, 0.8, { note: 6});
+    face.smile = new ToggleInstrument('leftMouth', 'rightMouth', 1.40, -1, { note: 2, display_both: 1});
+    face.pupilLeft = new ToggleInstrument('bridge', 'pupilLeft', 0.12, -1, { note: 3 });
+    face.pupilRight = new ToggleInstrument('bridge', 'pupilRight', 0.12, -1, { note: 4 });
+    face.eyebrowLeft = new ToggleInstrument('pupilLeft', 'eyebrowLeft', -1, 0.60, { note: 5});
+    face.eyebrowRight = new ToggleInstrument('pupilRight', 'eyebrowRight', -1, 0.60, { note: 6});
+    face.lip = new ToggleInstrument('lowerLip', 'upperLip', -1, 0.8, { note: 7});
     face.bridge = new SliderInstrument('bridge');
 
 
@@ -343,6 +286,26 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // detect face stability
     var prevSize;
+
+    function getAverage(points) {
+      if (points.length == 1) {
+        return points[0];
+      }
+
+      var x = 0;
+      var y = 0;
+
+      for (var n in points) {
+        x += points[n][0];
+        y += points[n][1];
+      }
+
+      x /= points.length;
+      y /= points.length;
+
+      return [x,y];
+
+    }
 
     // returns the size of the face as a function of the nose bridge
     function getSize(positions) {
