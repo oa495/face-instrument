@@ -16,6 +16,7 @@ header {
   position: absolute;
   display: flex;
   z-index: -1;
+  justify-content: flex-end;
 }
 
 h1 {
@@ -24,32 +25,45 @@ h1 {
   position: absolute;
   margin: 0;
   padding: 0;
-  right: 0;
   -webkit-transform: rotate(-90deg);
   transform: rotate(-90deg);
   align-self: center;
+  font-size: 10em;
+  line-height: 90%;
+  max-width: 40%;
 }
 
 ul {
   list-style: none;
 }
 
-video, .p5Canvas {
+#videoel, .p5Canvas {
    align-self: center;
    position: absolute;
-   width: 70% !important;
+   top: 5%;
+   -o-transform : scaleX(-1);
+   -webkit-transform : scaleX(-1);
+   transform : scaleX(-1);
+   -ms-filter : fliph; /*IE*/
+   filter : fliph; /*IE*/
 }
 
 .webcam {
-  width: 100%;
+  width: 60%;
+  top: 0;
+  justify-content: center;
   flex-direction: column-reverse;
 }
 
 .webcam .controls {
   position: absolute;
   bottom: 0;
-  height: 100px;
   align-self: center;
+  z-index: 100;
+}
+
+.controls {
+  margin: 10px 0;
 }
 
 .controls button {
@@ -57,10 +71,10 @@ video, .p5Canvas {
   border: none;
 }
 
-.controls svg {
+svg {
   margin: 0 20px;
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
 }
 
 .icon {
@@ -75,19 +89,20 @@ button svg {
   -webkit-transition-timing-function: ease-in-out;
 }
 
-button svg:hover path, button svg:focus path {
+button svg:hover .icon, button svg:focus .icon {
   fill: #FE94EA;
 }
 
-.webcam + section {
-  width: 30%;
-  align-items: center;
+.webcam ~ section {
+  width: 40%;
+  height: 90%;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-self: center;
 }
 
-.webcam, .webcam + section {
+.webcam, .webcam ~ section {
   display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .active {
@@ -95,45 +110,41 @@ button svg:hover path, button svg:focus path {
 }
 
 .hide {
-  display : none;
+  display: none !important;
 }
+
 .nohide {
   display : block;
 }
 
 .instructions {
-  max-width: 80%;
+  max-width: 85%;
+  font-size: 20px;
 }
 
-.p5Canvas {
-  -o-transform : scaleX(-1);
-  -webkit-transform : scaleX(-1);
-  transform : scaleX(-1);
-  -ms-filter : fliph; /*IE*/
-  filter : fliph; /*IE*/
-}
-
-#videoel {
-  -o-transform : scaleX(-1);
-  -webkit-transform : scaleX(-1);
-  transform : scaleX(-1);
-  -ms-filter : fliph; /*IE*/
-  filter : fliph; /*IE*/
+.instructions, video#recorded {
+  align-self: center;
+  justify-content: flex-end;
 }
 
 video#recorded {
   width: 375px;
   height: 300px;
-  margin-left: 20px;
+  background: #C7FCEC;
 }
 
-#container {
-  height: 100%;
+#page1 {
+  height: 95%;
 }
 
-#container, .controls {
+#page1, #page2, .controls {
   display: flex;
   justify-content: center;
+}
+
+#page2 {
+  flex-direction: column;
+  align-items: center;
 }
 
 #instruments {

@@ -147,12 +147,20 @@ document.addEventListener("DOMContentLoaded", function() {
     var COLORS = {}
 
     function getRandomColor() {
-      var r = parseInt(Math.random() * 255);
-      var g = parseInt(Math.random() * 255);
-      var b = parseInt(Math.random() * 255);
-
-      return [r,g,b];
-
+      var colors = [
+        [255, 106, 179],
+        [255, 213, 92],
+        [0, 251, 255],
+        [241, 134, 12],
+        [0, 197, 255],
+        [255, 213, 92],
+        [0, 142, 255],
+        [142, 99, 255],
+        [0, 244, 243],
+        [211, 254, 61],
+        [221, 255, 103]
+      ];
+      return colors[Math.floor(Math.random(colors.length))];
     }
 
     function ToggleInstrument(p1, p2, minX, minY, options) {

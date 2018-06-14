@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Hello!</title>
+    <title>Face The Music</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,7 +11,7 @@
   </head>
   <body>
     <header><h1>Face the Music</h1></header>
-			<div id="container">
+			<div id="page1">
         <section class="webcam">
           <section class="controls">
             <button disabled id="start">
@@ -34,14 +34,17 @@
               </svg>
           </button>
             <button id="record">
-              <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+              <svg class="start-recording" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
               	 width="8px" height="10px" viewBox="-211 212 8 10" style="enable-background:new -211 212 8 10;" xml:space="preserve">
                  <path class="icon" d="M-207,213c1.7,0,3,1.3,3,3s-1.3,3-3,3s-3-1.3-3-3S-208.7,213-207,213L-207,213z"/>
+              </svg>
+              <svg class="stop-recording hide" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px"
+                viewBox="0 0 100 125" enable-background="new 0 0 100 100" xml:space="preserve"><rect class="icon" x="6" y="6" width="88" height="88"/>
               </svg>
             </button>
           </section>
         </section>
-        <section>
+        <section class="instructions-container">
           <p class="instructions">
             Welcome to Face the Music. At vero eos et
             accusamus et iusto odio dignissimos ducimus qui blanditiis
@@ -50,34 +53,42 @@
             similique sunt in culpa qui officia deserunt mollitia animi,
             id est laborum et dolorum fuga.
           </p>
-          <section class="recording hide">
-            <section class="controls">
-              <button id="play" disabled>
-                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-              	 width="100px" height="125px" viewBox="-165 154 100 125" style="enable-background:new -165 154 100 125;" xml:space="preserve">
-                 <path class="icon" d="M-78.4,198.5l-66.9-38.6c-3.1-1.8-7-0.7-8.7,2.3c-0.6,1-0.9,2.1-0.9,3.2v77.2c0,3.5,2.9,6.4,6.4,6.4c1.1,0,2.2-0.3,3.2-0.9
-              	l66.9-38.6c3.1-1.8,4.1-5.7,2.3-8.7C-76.6,199.8-77.4,199-78.4,198.5z"/>
-                </svg>
-              </button>
-              <button id="download" disabled>
-                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                	 width="16px" height="20px" viewBox="-207 207 16 20" style="enable-background:new -207 207 16 20;" xml:space="preserve">
-                <g class="icon">
-                	<path d="M-191,223h-16v-6h2v4h12v-4h2V223z M-199,219c-0.3,0-0.5-0.1-0.7-0.3l-4-4c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l3.3,3.3
-                		l3.3-3.3c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4l-4,4C-198.5,218.9-198.7,219-199,219z M-199,219c-0.6,0-1-0.4-1-1v-10c0-0.6,0.4-1,1-1
-                		s1,0.4,1,1v10C-198,218.6-198.4,219-199,219z"/>
-                </g>
-                </svg>
-              </button>
-            </section>
-            <video id="recorded" loop controls></video>
-          </section>
         </section>
         <section class="calibrations hide">
           <ul id="instruments"></ul>
           <button id="calibrate" disabled>Set All</button>
         </section>
 			</div>
+      <div id="page2" class="hide">
+        <svg xmlns:x="http://ns.adobe.com/Extensibility/1.0/" xmlns:i="http://ns.adobe.com/AdobeIllustrator/10.0/" xmlns:graph="http://ns.adobe.com/Graphs/1.0/" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 100 125" style="enable-background:new 0 0 100 100;" xml:space="preserve"><switch><foreignObject requiredExtensions="http://ns.adobe.com/AdobeIllustrator/10.0/" x="0" y="0" width="1" height="1"/><g i:extraneous="self"><polygon points="27.53937,55.58179 39.25995,67.30237 49.2243,77.26672 59.18866,67.30237 72.46063,54.0304 72.46063,34.10168     56.2702,50.29218 56.2702,22.73328 42.17847,22.73328 42.17847,50.29218 27.53937,35.65308   "/></g></switch></svg>
+        <section class="recording">
+            <video id="recorded" loop controls></video>
+            <section class="controls">
+              <button id="play">
+                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                 width="100px" height="125px" viewBox="-165 154 100 125" style="enable-background:new -165 154 100 125;" xml:space="preserve">
+                 <path class="icon" d="M-78.4,198.5l-66.9-38.6c-3.1-1.8-7-0.7-8.7,2.3c-0.6,1-0.9,2.1-0.9,3.2v77.2c0,3.5,2.9,6.4,6.4,6.4c1.1,0,2.2-0.3,3.2-0.9
+                l66.9-38.6c3.1-1.8,4.1-5.7,2.3-8.7C-76.6,199.8-77.4,199-78.4,198.5z"/>
+                </svg>
+              </button>
+              <button id="download">
+                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                   width="16px" height="20px" viewBox="-207 207 16 20" style="enable-background:new -207 207 16 20;" xml:space="preserve">
+                <g class="icon">
+                  <path d="M-191,223h-16v-6h2v4h12v-4h2V223z M-199,219c-0.3,0-0.5-0.1-0.7-0.3l-4-4c-0.4-0.4-0.4-1,0-1.4s1-0.4,1.4,0l3.3,3.3
+                    l3.3-3.3c0.4-0.4,1-0.4,1.4,0s0.4,1,0,1.4l-4,4C-198.5,218.9-198.7,219-199,219z M-199,219c-0.6,0-1-0.4-1-1v-10c0-0.6,0.4-1,1-1
+                    s1,0.4,1,1v10C-198,218.6-198.4,219-199,219z"/>
+                </g>
+                </svg>
+              </button>
+            </section>
+          </section>
+      </div>
+      <footer>
+        <p>Icons from the <a> Noun Project </a> Record icon by Muhamad Ulum.
+          Play icon by Jae Deasigner. Loading by mikicon. Stop by Joms.
+          Down arrow by mikicon </p>
+      </footer>
     <script src="clmtrackr.js"></script>
     <script src="/p5.js"></script>
     <script src="/p5.dom.js"></script>

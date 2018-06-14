@@ -47,19 +47,19 @@ document.addEventListener("DOMContentLoaded", function() {
       cap = p.createCapture(function() {
         vid = cap.elt;
         vid.addEventListener('canplay', enablestart, false);
-        canvas = p.createCanvas((0.6 * p.windowWidth), 600);
+        canvas = p.createCanvas(750, 600);
         vid.id = 'videoel';
         vid.muted = true;
         height = vid.offsetHeight;
         width = vid.offsetWidth;
         setupRecording();
       });
-      cap.size((0.6 * p.windowWidth), 600);
+      cap.size(750, 600);
       vidWidth = cap.width;
       vidHeight = cap.height;
 
       //no fill
-      p.fill(255);
+      p.stroke(241, 134, 12);
       p.strokeWeight(1);
       p.rectMode(p.CENTER);
       //initializing our funky circle
@@ -77,7 +77,6 @@ document.addEventListener("DOMContentLoaded", function() {
       ctrack.stop();
       ctrack.reset();
       ctrack.start(vid);
-      vid.width = Math.round(0.6 * p5.windowWidth);
       p.resizeCanvas(vid.offsetWidth, vid.offsetHeight);
     };
 
@@ -85,7 +84,8 @@ document.addEventListener("DOMContentLoaded", function() {
     p.draw = function() {
       if (trackingStarted) {
         p.image(cap, 0, 0, vid.offsetWidth, vid.offsetHeight);
-        p.stroke(0);
+        p.fill(249, 248, 113);
+        p.strokeWeight(snare.volume.value);
         //drawing the kick wave at the bottom
         //it is composed of a simple sine wave that
         //changes in height with the kick envelope
@@ -105,8 +105,8 @@ document.addEventListener("DOMContentLoaded", function() {
         //bass and bleep envelope values
         var circlePos = funkyCircle.update(bass.getLevelAtTime());
         //circlePos returns x and y positions as an object
-        p.ellipse(circlePos.xPos, circlePos.yPos, circlePos.radius/5, circlePos.radius);
-        p.stroke('red');
+        p.ellipse(circlePos.xPos, circlePos.yPos, circlePos.radius, circlePos.radius);
+        p.fill(199, 252, 236);
         for (var i = 0; i < 3; i++) {
             var squarePos = funkySquare[i].update(SYNTH.voices[i].getLevelAtTime() * 5);
             p.rect(squarePos.xPos, squarePos.yPos, squarePos.radius/10, squarePos.radius);

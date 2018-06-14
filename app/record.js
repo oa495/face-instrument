@@ -2,6 +2,9 @@ var aStream, recordedVideo, mediaRecorder, recordedBlobs, sourceBuffer, mediaSou
 var recordButton = document.querySelector('button#record');
 var playButton = document.querySelector('button#play');
 var downloadButton = document.querySelector('button#download');
+var startButton = recordButton.querySelector('svg.start-recording');
+var stopButton = recordButton.querySelector('svg.stop-recording');
+
 recordButton.onclick = toggleRecording;
 playButton.onclick = play;
 downloadButton.onclick = download;
@@ -47,14 +50,13 @@ function handleStop(event) {
 }
 
 function toggleRecording() {
-  if (recordButton.textContent === 'Start Recording') {
+    if (stopButton.classList.contains('hide')) {
     startRecording();
   } else {
     stopRecording();
-    recordButton.textContent = 'Start Recording';
-    playButton.disabled = false;
-    downloadButton.disabled = false;
   }
+  startButton.classList.toggle('hide');
+  stopButton.classList.toggle('hide');
 }
 
 function startRecording() {
@@ -85,9 +87,6 @@ function startRecording() {
   }
 
   console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
-  recordButton.textContent = 'Stop Recording';
-  playButton.disabled = true;
-  downloadButton.disabled = true;
   mediaRecorder.onstop = handleStop;
   mediaRecorder.ondataavailable = handleDataAvailable;
   mediaRecorder.start(10); // collect 10ms of data
@@ -97,7 +96,8 @@ function startRecording() {
 function stopRecording() {
   mediaRecorder.stop();
   console.log('Recorded Blobs: ', recordedBlobs);
-  recordedVideo.classList.remove('hide');
+  var recordSection = document.getElementById('page2');
+  recordSection.classList.remove('hide');
   recordedVideo.controls = true;
 }
 
