@@ -77,13 +77,12 @@ document.addEventListener("DOMContentLoaded", function() {
       ctrack.stop();
       ctrack.reset();
       ctrack.start(vid);
-      p.resizeCanvas(vid.offsetWidth, vid.offsetHeight);
     };
 
     var phase = 0;
     p.draw = function() {
       if (trackingStarted) {
-        p.image(cap, 0, 0, vid.offsetWidth, vid.offsetHeight);
+        p.image(cap, 0, 0, vid.width, vid.height);
         p.fill(249, 248, 113);
         p.strokeWeight(snare.volume.value);
         //drawing the kick wave at the bottom

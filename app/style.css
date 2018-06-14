@@ -68,6 +68,7 @@ ul {
 
 .webcam {
   width: 60%;
+  height: 100vh;
   top: 0;
   justify-content: center;
   flex-direction: column-reverse;
@@ -121,14 +122,14 @@ ul {
 }
 
 #videoel, .p5Canvas {
-   align-self: center;
    position: absolute;
-   top: 5%;
    -o-transform : scaleX(-1);
    -webkit-transform : scaleX(-1);
    transform : scaleX(-1);
    -ms-filter : fliph; /*IE*/
    filter : fliph; /*IE*/
+   width: inherit !important;
+   height: auto !important;
 }
 
 .instructions, video#recorded {
@@ -149,4 +150,39 @@ video#recorded {
 
 #instruments {
   position: absolute;
+}
+
+/* media queries */
+
+@media screen and (max-width: 800px) {
+  #page1, #page2 { flex-direction: column; }
+
+  .webcam, .webcam ~ section {
+    width: 100%;
+  }
+
+  .webcam {
+    height: 100%;
+  }
+
+  .webcam ~ section {
+    position: absolute;
+    justify-content: center;
+    height: 20%;
+    top: 10%;
+  }
+
+  header {
+    height: 10%;
+  }
+
+  header h1 {
+    font-size: 40px;
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  .instructions {
+    font-size: 18px;
+  }
 }
