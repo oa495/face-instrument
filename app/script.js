@@ -77,13 +77,19 @@ document.addEventListener("DOMContentLoaded", function() {
       };
 
       this.update = function(facePositions) {
+        var bucketSize = vidWidth / k;
         let { centerX, centerY } = getCenterOfElement(vid);
         var avg = getAverage(facePositions[part]);
         this.deltaX = Math.floor(centerX - avg[0]);
         this.deltaY = Math.floor(centerY - avg[1]);
 
+
         var bucket = Math.floor(this.deltaX / bucketSize);
-        octave = bucket;
+        if (bucket <= 0) {
+          bucket = -bucket
+        }
+
+        OCTAVE = bucket || 2;
       };
     }
 
@@ -181,7 +187,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
       this.getOctave = function() {
-        return octave || 5;
+        if (LEAD_MODE) {
+          return 5;
+        }
+
+        return OCTAVE || 2;
       }
 
       this.setThreshold = function() {
@@ -269,7 +279,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const synth = new Tone.PolySynth(4, Tone.Synth).toMaster();
     window.SYNTH = synth;
 
-    var octave = 3;
+    var OCTAVE = 3;
     var volume = 1;
     var face = {};
 
@@ -623,7 +633,7 @@ document.addEventListener("DOMContentLoaded", function() {
           var notes = teoria.chord(chord).notes();
           var part = new Tone.Sequence(function(time, note){
             //console.log("TIME", time, event);
-            cb && cb(note.name() + "2");
+            cb && cb(note.name() + OCTAVE);
           }, notes, "8n");
 
           return part;
