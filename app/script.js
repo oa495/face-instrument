@@ -298,6 +298,17 @@ document.addEventListener("DOMContentLoaded", function() {
     var calibrate = document.getElementById('calibrate');
     calibrate.addEventListener('click', setThreshold, false);
 
+    var progressionEl = document.getElementById("chord_progression");
+    progressionEl.addEventListener("blur", function() {
+      var chords = progressionEl.value.split(" ");
+      if (chords && chords.length) {
+        CHORDS = chords;
+      } else {
+        CHORDS = DEFAULT_CHORDS;
+      }
+      console.log("CHORD STR IS", chords);
+    });
+
     var chordEl = document.getElementById('playing_chord');
 
     var modeEl = document.getElementById('music_mode');
@@ -668,13 +679,16 @@ document.addEventListener("DOMContentLoaded", function() {
           CUR_CHORD = chord;
         }
 
-        var CHORDS = [ "Em", "Gm", "A7", "Bdim", "D7" ];
+        var DEFAULT_CHORDS = [ "Em", "Gm", "A7", "Bdim", "D7" ];
+        CHORDS = DEFAULT_CHORDS;
 
         var c = 0;
         setInterval(function() {
           if (!CHORD_MODE) {
-            console.log("SWITCHING TO CHORD", CHORDS[c]);
-            newChord(CHORDS[c]);
+            if (CHORDS[c]) {
+              newChord(CHORDS[c]);
+            }
+
             c = (c + 1) % (CHORDS.length)
           }
         }, 2000);
