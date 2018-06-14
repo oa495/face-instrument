@@ -13,23 +13,20 @@ features:
 
 - [ ] calibration controls
 - [ ] styling for calibration box (sidebar)
-- [ ] styling for whole page (black background? lots of white space?)
 - [ ] add instructions for what to do
-- [ ] make the buttons work in a flow (instead of 4 always there)
 - [ ] recording GIFs
 - [ ] toggling different visualization layers
 
 ## now
 
-- [ ] record visualizations
 - [ ] implement calibration controls for the different instruments
-- [ ] visuals / style the page (something big and bold?)
 - [ ] pick a set of good sounding chords (1,6,4,5 according to elad)
 - [ ] implement chords based on face arrangement
 
 ## soon
 
 - [ ] get feedback
+- [ ] Footer with icon attributions
 
 ## later
 
@@ -43,8 +40,6 @@ features:
 - [ ] test in different browsers
 - [ ] add slider instrument that maps to distortion. (perhaps eyebrows to mouth)
 - [ ] adjustable backing beats
-- [ ] record overlay and visualization for playback
-
 
 ## done-ish
 - [x] visualizer skeleton
@@ -62,6 +57,11 @@ features:
 - [X] implement meters for the different instruments
 - [X] record sounds with .webm
 - [X] can download as .webm file
+- [X] record visualizations
+- [X] visuals / style the page (something big and bold?)
+- [X] make the buttons work in a flow (instead of 4 always there)
+- [X] styling for whole page (black background? lots of white space?)
+- [X] record overlay and visualization for playback
 
 ## punted
 
