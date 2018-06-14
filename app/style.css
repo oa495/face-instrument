@@ -33,19 +33,37 @@ h1 {
   max-width: 40%;
 }
 
+svg {
+  margin: 0 20px;
+  width: 60px;
+  height: 60px;
+}
+
+button svg {
+  transition: 200ms;
+  transition-timing-function: ease-in-out;
+  -webkit-transition: 200ms;
+  -webkit-transition-timing-function: ease-in-out;
+}
+
+button svg:hover .icon, button svg:focus .icon {
+  fill: #FE94EA;
+}
+
 ul {
   list-style: none;
 }
 
-#videoel, .p5Canvas {
-   align-self: center;
-   position: absolute;
-   top: 5%;
-   -o-transform : scaleX(-1);
-   -webkit-transform : scaleX(-1);
-   transform : scaleX(-1);
-   -ms-filter : fliph; /*IE*/
-   filter : fliph; /*IE*/
+.webcam ~ section {
+  width: 40%;
+  height: 90%;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-self: center;
+}
+
+.webcam, .webcam ~ section {
+  display: flex;
 }
 
 .webcam {
@@ -71,42 +89,18 @@ ul {
   border: none;
 }
 
-svg {
-  margin: 0 20px;
-  width: 60px;
-  height: 60px;
-}
-
 .icon {
   pointer-events: all;
   fill: black;
 }
 
-button svg {
-  transition: 200ms;
-  transition-timing-function: ease-in-out;
-  -webkit-transition: 200ms;
-  -webkit-transition-timing-function: ease-in-out;
-}
-
-button svg:hover .icon, button svg:focus .icon {
-  fill: #FE94EA;
-}
-
-.webcam ~ section {
-  width: 40%;
-  height: 90%;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-self: center;
-}
-
-.webcam, .webcam ~ section {
-  display: flex;
-}
-
 .active {
   background-color: #050;
+}
+
+.instructions {
+  max-width: 85%;
+  font-size: 20px;
 }
 
 .hide {
@@ -117,9 +111,24 @@ button svg:hover .icon, button svg:focus .icon {
   display : block;
 }
 
-.instructions {
-  max-width: 85%;
-  font-size: 20px;
+#page1 {
+  height: 95%;
+}
+
+#page1, #page2, .controls {
+  display: flex;
+  justify-content: center;
+}
+
+#videoel, .p5Canvas {
+   align-self: center;
+   position: absolute;
+   top: 5%;
+   -o-transform : scaleX(-1);
+   -webkit-transform : scaleX(-1);
+   transform : scaleX(-1);
+   -ms-filter : fliph; /*IE*/
+   filter : fliph; /*IE*/
 }
 
 .instructions, video#recorded {
@@ -131,15 +140,6 @@ video#recorded {
   width: 375px;
   height: 300px;
   background: #C7FCEC;
-}
-
-#page1 {
-  height: 95%;
-}
-
-#page1, #page2, .controls {
-  display: flex;
-  justify-content: center;
 }
 
 #page2 {
