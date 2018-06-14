@@ -84,7 +84,6 @@ document.addEventListener("DOMContentLoaded", function() {
       if (trackingStarted) {
         p.image(cap, 0, 0, vid.width, vid.height);
         p.fill(249, 248, 113);
-        p.strokeWeight(snare.volume.value);
         //drawing the kick wave at the bottom
         //it is composed of a simple sine wave that
         //changes in height with the kick envelope
