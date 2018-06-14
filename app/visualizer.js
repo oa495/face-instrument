@@ -52,11 +52,11 @@ document.addEventListener("DOMContentLoaded", function() {
         vid.muted = true;
         height = vid.offsetHeight;
         width = vid.offsetWidth;
+        vidWidth = vid.width;
+        vidHeight = vid.height;
         setupRecording();
       });
       cap.size(750, 600);
-      vidWidth = cap.width;
-      vidHeight = cap.height;
 
       //no fill
       p.stroke(241, 134, 12);
@@ -82,11 +82,14 @@ document.addEventListener("DOMContentLoaded", function() {
     var phase = 0;
     p.draw = function() {
       if (trackingStarted) {
+        var snareVol = Math.round(Math.abs(snare.volume.value));
         p.image(cap, 0, 0, vid.width, vid.height);
         p.fill(249, 248, 113);
         //drawing the kick wave at the bottom
         //it is composed of a simple sine wave that
         //changes in height with the kick envelope
+        p.stroke(255, 213, 92);
+        p.strokeWeight(snareVol);
         for (var i = 0; i < vidWidth; i++) {
           //scaling kickEnvelope value by 200
           //since default is 0-1
@@ -94,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function() {
           //multiplying this value to scale the sine wave
           //depending on x position
           var yDot = Math.sin((i / 60) + phase) * kickValue;
-          p.point(i, vidHeight -150 + yDot);
+          p.point(i, vid.height- 100 + yDot);
         }
         //increasing phase means that the kick wave will
         //not be standing and looks more dynamic
@@ -103,11 +106,14 @@ document.addEventListener("DOMContentLoaded", function() {
         //bass and bleep envelope values
         var circlePos = funkyCircle.update(bass.getLevelAtTime());
         //circlePos returns x and y positions as an object
+        p.stroke(241, 134, 12);
+        p.strokeWeight(2);
         p.ellipse(circlePos.xPos, circlePos.yPos, circlePos.radius, circlePos.radius);
         p.fill(199, 252, 236);
+        p.stroke(199, 252, 236);
         for (var i = 0; i < 3; i++) {
             var squarePos = funkySquare[i].update(SYNTH.voices[i].getLevelAtTime() * 5);
-            p.rect(squarePos.xPos, squarePos.yPos, squarePos.radius/10, squarePos.radius);
+            p.rect(squarePos.xPos, squarePos.yPos, squarePos.radius, squarePos.radius);
         }
       }
     }

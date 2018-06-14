@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function() {
         [211, 254, 61],
         [221, 255, 103]
       ];
-      return colors[Math.floor(Math.random(colors.length))];
+      return colors[Math.floor(Math.random()*colors.length)];
     }
 
     function ToggleInstrument(p1, p2, minX, minY, options) {
