@@ -90,6 +90,8 @@ select {
 .controls {
   width: inherit;
   align-self: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
   margin: 10px 0;
 }
 
@@ -162,6 +164,22 @@ video#recorded {
 
 #instruments {
   position: absolute;
+}
+
+#chord_progression {
+  margin-left: 20px;
+  padding-left: 20px;
+  font-size: 20px;
+  height: 40px;
+}
+
+#music_mode {
+  cursor: pointer;
+}
+
+#playing_chord {
+  padding-left: 20px;
+  font-size: 48px;
 }
 
 /* media queries */
