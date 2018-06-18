@@ -21,6 +21,23 @@ header {
   grid-template-rows: 20% 20% 20% 20%;
 }
 
+footer {
+  width: 100%;
+  background: #FD66E0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+footer p {
+    max-width: 60%;
+}
+
+footer a {
+    
+}
+
 h1 {
   font-family: 'Anton', sans-serif;
   text-transform: uppercase;
@@ -63,6 +80,10 @@ select {
   font-size: 20px;
 }
 
+.webcam, .webcam ~ section, footer {
+  display: flex;
+}
+
 .webcam ~ section {
   grid-column-start: 2;
   flex-direction: column;
@@ -70,10 +91,6 @@ select {
   position: relative;
   display: flex;
   margin-bottom: 20px;
-}
-
-.webcam, .webcam ~ section {
-  display: flex;
 }
 
 .webcam {
