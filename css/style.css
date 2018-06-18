@@ -211,7 +211,7 @@ video#recorded {
 @media screen and (max-width: 800px) {
   #page1 {
     grid-template-columns: 100%;
-    grid-template-rows: 25% 75%;
+    grid-template-rows: 25% 50%;;
     top: 10%;
   }
 
