@@ -23,7 +23,6 @@ header {
 
 footer {
   width: 100%;
-  background: #00fbff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,10 +33,12 @@ footer {
 footer p {
     max-width: 60%;
     word-spacing: 0.1vw;
+    line-height: 1.5em;
 }
 
 footer a {
   color: #00fbff;
+  text-decoration: none;
 }
 
 h1 {
