@@ -7,6 +7,7 @@ html, body {
 body {
   font-family: 'Oswald', sans-serif;
   background-color: #f0f0f0;
+  overflow-x: hidden;
 }
 
 header {
@@ -14,9 +15,10 @@ header {
   background: #FD66E0;
   height: 40%;
   position: absolute;
-  display: flex;
   z-index: -1;
-  justify-content: flex-end;
+  display: grid;
+  grid-template-columns: 60% 40%;
+  grid-template-rows: 20% 20% 20% 20%;
 }
 
 h1 {
@@ -27,14 +29,14 @@ h1 {
   padding: 0;
   -webkit-transform: rotate(-90deg);
   transform: rotate(-90deg);
+  font-size: 14vw;
+  grid-column-start: 2;
+  grid-row-start: 3;
   align-self: center;
-  font-size: 10em;
   line-height: 90%;
-  max-width: 40%;
 }
 
 svg {
-  margin: 0 20px;
   width: 60px;
   height: 60px;
 }
@@ -62,12 +64,12 @@ select {
 }
 
 .webcam ~ section {
-  width: 40%;
+  grid-column-start: 2;
   flex-direction: column;
-  justify-content: flex-end;
   align-self: flex-end;
-  height: fit-content;
   position: relative;
+  display: flex;
+  margin-bottom: 20px;
 }
 
 .webcam, .webcam ~ section {
@@ -75,21 +77,19 @@ select {
 }
 
 .webcam {
-  width: 60%;
-  height: 100vh;
-  top: 0;
-  justify-content: center;
-  flex-direction: column-reverse;
+  align-self: center;
+  width: 100%;
+  height: 90vh;
+  position: relative;
 }
 
 .webcam .controls {
-  align-self: center;
   z-index: 100;
-  position: relative;
-  top: 45%
 }
 
 .controls {
+  width: inherit;
+  align-self: flex-end;
   margin: 10px 0;
 }
 
@@ -121,10 +121,14 @@ select {
 }
 
 #page1 {
-  height: 95%;
+  display: grid;
+  grid-template-columns: 60% 40%;
+  grid-template-rows: auto;
+  position: relative;
+  top: 10%;
 }
 
-#page1, #page2, .controls {
+#page2, .controls {
   display: flex;
   justify-content: center;
 }
@@ -163,20 +167,27 @@ video#recorded {
 /* media queries */
 
 @media screen and (max-width: 800px) {
-  .webcam, .webcam ~ section {
-    width: 60%;
+  #page1 {
+    grid-template-columns: 100%;
+    grid-template-rows: 40% 60%;
+  }
+
+  .webcam ~ section {
+    grid-row-start: 1;
+    grid-column-start: unset;
   }
 
   .webcam {
-    height: 100%;
+    grid-row-start: 2;
   }
 
   header {
     height: 10%;
+    display: flex;
+    justify-content: center;
   }
 
   header h1 {
-    font-size: 40px;
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
@@ -184,15 +195,5 @@ video#recorded {
   .instructions {
     max-width: 95%;
     font-size: 18px;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  #page1 { flex-direction: column; }
-  .webcam, .webcam ~ section {
-    width: 100%;
-  }
-  .webcam ~ section {
-    height: 50%;
   }
 }
