@@ -37,8 +37,9 @@ footer p {
 }
 
 footer a {
-  color: #00fbff;
-  text-decoration: none;
+  background: rgb(0, 244, 243);
+  color: black;
+  padding: 3px;
 }
 
 h1 {
