@@ -23,19 +23,21 @@ header {
 
 footer {
   width: 100%;
-  background: #FD66E0;
+  background: #00fbff;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  margin-top: 15%;
 }
 
 footer p {
     max-width: 60%;
+    word-spacing: 0.1vw;
 }
 
 footer a {
-    
+  color: #00fbff;
 }
 
 h1 {
