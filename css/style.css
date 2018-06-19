@@ -37,8 +37,9 @@ footer p {
 }
 
 footer a {
-  color: #00fbff;
-  text-decoration: none;
+  background: rgb(0, 244, 243);
+  color: black;
+  padding: 3px;
 }
 
 h1 {
@@ -210,7 +211,7 @@ video#recorded {
 @media screen and (max-width: 800px) {
   #page1 {
     grid-template-columns: 100%;
-    grid-template-rows: 25% 75%;
+    grid-template-rows: 25% 50%;;
     top: 10%;
   }
 
