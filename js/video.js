@@ -43,6 +43,8 @@ function startVideo() {
 
   // start loop to draw face
   drawLoop();
+  // start music
+  makeLoops();
 }
 
 function removeClass(el, c) {

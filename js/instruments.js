@@ -551,7 +551,7 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     }
 
-  	function makeLoops() {
+  	window.makeLoops = function() {
         var vol = new Tone.Volume(-12);
 
   			//DRUMS//
@@ -702,7 +702,4 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
   	}
-
-  	makeLoops();
-
 });
