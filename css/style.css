@@ -62,13 +62,6 @@ svg {
   height: 60px;
 }
 
-button svg {
-  transition: 200ms;
-  transition-timing-function: ease-in-out;
-  -webkit-transition: 200ms;
-  -webkit-transition-timing-function: ease-in-out;
-}
-
 button svg:hover .icon, button svg:focus .icon {
   fill: #FE94EA;
 }
@@ -95,6 +88,7 @@ select {
   position: relative;
   display: flex;
   margin-bottom: 20px;
+  height: 30%;
 }
 
 .webcam {
@@ -124,7 +118,7 @@ select {
 
 .icon {
   pointer-events: all;
-  fill: black;
+  fill: white;
 }
 
 .active {

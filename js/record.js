@@ -5,7 +5,6 @@ var downloadButton = document.querySelector('button#download');
 var startButton = recordButton.querySelector('svg.start-recording');
 var stopButton = recordButton.querySelector('svg.stop-recording');
 var stopButton = recordButton.querySelector('svg.stop-recording');
-var formatOptions = document.querySelector('.format-options');
 var format = 'video/webm';
 recordButton.onclick = toggleRecording;
 playButton.onclick = play;
@@ -23,7 +22,6 @@ function setupRecording() {
 
     mediaSource = new MediaSource();
     mediaSource.addEventListener('sourceopen', handleSourceOpen, false);
-    formatOptions.addEventListener('change', changeFormat, false);
 
     recordedVideo.addEventListener('error', function(ev) {
       console.error('MediaRecording.recordedMedia.error()');
@@ -34,10 +32,6 @@ function setupRecording() {
   else {
     console.log("The Media Source Extensions API is not supported.")
   }
-}
-
-function changeFormat() {
-  format = this.value;
 }
 
 function handleSourceOpen(event) {
@@ -58,43 +52,39 @@ function handleStop(event) {
 
 function toggleRecording() {
     if (stopButton.classList.contains('hide')) {
-      formatOptions.disabled = true;
       startRecording();
   } else {
       stopRecording();
-      formatOptions.disabled = false;
   }
   startButton.classList.toggle('hide');
   stopButton.classList.toggle('hide');
 }
 
 function startRecording() {
-    if (format !== 'image/gif') {
-      recordedBlobs = [];
-      var options = {mimeType: format + ';codecs=vp9'};
+    recordedBlobs = [];
+    var options = {mimeType: format + ';codecs=vp9'};
+    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+      console.log(options.mimeType + ' is not Supported');
+      options = {mimeType:  format+ ';codecs=vp8'};
       if (!MediaRecorder.isTypeSupported(options.mimeType)) {
         console.log(options.mimeType + ' is not Supported');
-        options = {mimeType:  format+ ';codecs=vp8'};
+        options = {mimeType: format};
         if (!MediaRecorder.isTypeSupported(options.mimeType)) {
           console.log(options.mimeType + ' is not Supported');
-          options = {mimeType: format};
-          if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-            console.log(options.mimeType + ' is not Supported');
-            options = {mimeType: ''};
-          }
+          options = {mimeType: ''};
         }
       }
-      try {
-        var stream = canvas.elt.captureStream(); // frames per second
-        stream.addTrack(aStream.getAudioTracks()[0]);
-        console.log('Started stream capture from canvas element: ', stream);
-        mediaRecorder = new MediaRecorder(stream, options);
-      } catch (e) {
-        console.error('Exception while creating MediaRecorder: ' + e);
-        alert('Exception while creating MediaRecorder: '
-          + e + '. mimeType: ' + options.mimeType);
-        return;
-      }
+    }
+    try {
+      var stream = canvas.elt.captureStream(); // frames per second
+      stream.addTrack(aStream.getAudioTracks()[0]);
+      console.log('Started stream capture from canvas element: ', stream);
+      mediaRecorder = new MediaRecorder(stream, options);
+    } catch (e) {
+      console.error('Exception while creating MediaRecorder: ' + e);
+      alert('Exception while creating MediaRecorder: '
+        + e + '. mimeType: ' + options.mimeType);
+      return;
     }
     console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
     mediaRecorder.onstop = handleStop;
