@@ -109,6 +109,11 @@ select {
   align-items: center;
   flex-wrap: wrap;
   margin: 10px 0;
+  color: white;
+}
+
+.webcam .icon {
+  fill: white;
 }
 
 .controls button {
@@ -118,7 +123,7 @@ select {
 
 .icon {
   pointer-events: all;
-  fill: white;
+  fill: black;
 }
 
 .active {
